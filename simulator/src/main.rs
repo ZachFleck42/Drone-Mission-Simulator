@@ -18,6 +18,7 @@ struct Tile {
 struct Target {
     x: usize,
     y: usize,
+    name: Option<String>,
 }
 
 struct Grid {
@@ -29,7 +30,11 @@ impl Grid {
     fn new(size: usize) -> Self {
         let mut grid = Grid {
             tiles: Vec::with_capacity(size),
-            target: Target { x: 0, y: 0 },
+            target: Target {
+                x: 0,
+                y: 0,
+                name: None,
+            },
         };
 
         let mut rng = rand::thread_rng();
@@ -41,12 +46,13 @@ impl Grid {
             let mut row = Vec::with_capacity(size);
             for y in 0..size {
                 let is_safe = rng.gen_range(0..10) < 9;
+                let has_target = x == grid.target.x && y == grid.target.y;
 
                 let tile = Tile {
                     x,
                     y,
                     is_safe,
-                    has_target: (x == grid.target.x && y == grid.target.y),
+                    has_target,
                 };
                 row.push(tile);
             }
@@ -88,6 +94,10 @@ impl Grid {
                 self.tiles[self.target.x][self.target.y].has_target = true;
             }
         }
+    }
+
+    fn set_target_name(&mut self, name: String) {
+        self.target.name = Some(name);
     }
 
     fn print(&self) {
