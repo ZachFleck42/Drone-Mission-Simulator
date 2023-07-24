@@ -105,7 +105,6 @@ impl Grid {
             }
             println!();
         }
-        println!();
     }
 }
 
@@ -120,5 +119,6 @@ fn main() {
             tick, grid.target.x, grid.target.y
         );
         grid.print();
+        println!();
     }
 }
