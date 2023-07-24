@@ -1,12 +1,5 @@
 use rand::Rng;
 
-struct Tile {
-    x: usize,
-    y: usize,
-    is_safe: bool,
-    has_target: bool,
-}
-
 #[derive(Clone, Copy)]
 enum Direction {
     Up,
@@ -15,80 +8,92 @@ enum Direction {
     Right,
 }
 
-fn generate_grid() -> (Vec<Vec<Tile>>, (usize, usize)) {
-    let mut grid = Vec::with_capacity(16);
-
-    let mut rng = rand::thread_rng();
-
-    let target_pos = (rng.gen_range(0..16), rng.gen_range(0..16));
-
-    for x in 0..16 {
-        let mut row = Vec::with_capacity(16);
-        for y in 0..16 {
-            let is_safe = if rng.gen_range(0..10) < 1 {
-                false
-            } else {
-                true
-            };
-
-            let tile = Tile {
-                x,
-                y,
-                is_safe,
-                has_target: (x, y) == target_pos,
-            };
-            row.push(tile);
-        }
-        grid.push(row);
-    }
-
-    (grid, target_pos)
+struct Tile {
+    x: usize,
+    y: usize,
+    is_safe: bool,
+    has_target: bool,
 }
 
-fn move_target(grid: &mut Vec<Vec<Tile>>, target: &mut (usize, usize)) {
-    let mut rng = rand::thread_rng();
-    if rng.gen_range(0..10) < 3 {
-        let mut valid_directions = Vec::new();
+struct Target {
+    x: usize,
+    y: usize,
+}
 
-        if target.0 > 0 {
-            valid_directions.push(Direction::Up);
-        }
-        if target.0 < 15 {
-            valid_directions.push(Direction::Down);
-        }
-        if target.1 > 0 {
-            valid_directions.push(Direction::Left);
-        }
-        if target.1 < 15 {
-            valid_directions.push(Direction::Right);
+struct Grid {
+    tiles: Vec<Vec<Tile>>,
+    target: Target,
+}
+
+impl Grid {
+    fn new(size: usize) -> Self {
+        let mut grid = Grid {
+            tiles: Vec::with_capacity(size*size),
+            target: Target { x: 0, y: 0 },
+        };
+
+        let mut rng = rand::thread_rng();
+
+        grid.target.x = rng.gen_range(0..size);
+        grid.target.y = rng.gen_range(0..size);
+
+        for x in 0..size {
+            let mut row = Vec::with_capacity(size);
+            for y in 0..size {
+                let is_safe = rng.gen_range(0..10) < 9;
+
+                let tile = Tile {
+                    x,
+                    y,
+                    is_safe,
+                    has_target: (x == grid.target.x && y == grid.target.y),
+                };
+                row.push(tile);
+            }
+            grid.tiles.push(row);
         }
 
-        if !valid_directions.is_empty() {
-            grid[target.0][target.1].has_target = false;
-            let direction = valid_directions[rng.gen_range(0..valid_directions.len())];
+        grid
+    }
 
-            match direction {
-                Direction::Up => target.0 -= 1,
-                Direction::Down => target.0 += 1,
-                Direction::Left => target.1 -= 1,
-                Direction::Right => target.1 += 1,
+    fn move_target(&mut self) {
+        let mut rng = rand::thread_rng();
+        if rng.gen_range(0..10) < 3 {
+            let mut valid_directions = Vec::new();
+
+            if self.target.x > 0 {
+                valid_directions.push(Direction::Up);
+            }
+            if self.target.x < self.tiles.len() - 1 {
+                valid_directions.push(Direction::Down);
+            }
+            if self.target.y > 0 {
+                valid_directions.push(Direction::Left);
+            }
+            if self.target.y < self.tiles[0].len() - 1 {
+                valid_directions.push(Direction::Right);
             }
 
-            grid[target.0][target.1].has_target = true;
+            if !valid_directions.is_empty() {
+                self.tiles[self.target.x][self.target.y].has_target = false;
+                let direction = valid_directions[rng.gen_range(0..valid_directions.len())];
+
+                match direction {
+                    Direction::Up => self.target.x -= 1,
+                    Direction::Down => self.target.x += 1,
+                    Direction::Left => self.target.y -= 1,
+                    Direction::Right => self.target.y += 1,
+                }
+
+                self.tiles[self.target.x][self.target.y].has_target = true;
+            }
         }
     }
-}
 
-fn main() {
-    let (mut grid, mut target) = generate_grid();
-
-    // Simulate target movement for 10 ticks
-    for tick in 1..=10 {
-        move_target(&mut grid, &mut target);
-        println!("Tick {}: Target is at ({}, {})", tick, target.0, target.1);
-        for i in 0..16 {
-            for j in 0..16 {
-                let tile = &grid[i][j];
+    fn print(&self) {
+        for i in 0..self.tiles.len() {
+            for j in 0..self.tiles[0].len() {
+                let tile = &self.tiles[i][j];
                 let symbol = if tile.has_target {
                     'T'
                 } else if tile.is_safe {
@@ -101,5 +106,19 @@ fn main() {
             println!();
         }
         println!();
+    }
+}
+
+fn main() {
+    let mut grid = Grid::new(16);
+
+    // Simulate target movement for 10 ticks
+    for tick in 1..=10 {
+        grid.move_target();
+        println!(
+            "Tick {}: Target is at ({}, {})",
+            tick, grid.target.x, grid.target.y
+        );
+        grid.print();
     }
 }
