@@ -1,3 +1,3 @@
-# Drone simulator
+# Drone simulation
 
 WIP
