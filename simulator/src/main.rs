@@ -28,7 +28,7 @@ struct Grid {
 impl Grid {
     fn new(size: usize) -> Self {
         let mut grid = Grid {
-            tiles: Vec::with_capacity(size*size),
+            tiles: Vec::with_capacity(size),
             target: Target { x: 0, y: 0 },
         };
 
@@ -58,7 +58,7 @@ impl Grid {
 
     fn move_target(&mut self) {
         let mut rng = rand::thread_rng();
-        if rng.gen_range(0..10) < 3 {
+        if rng.gen_range(0..10) < 10 {
             let mut valid_directions = Vec::new();
 
             if self.target.x > 0 {
@@ -110,7 +110,7 @@ impl Grid {
 }
 
 fn main() {
-    let mut grid = Grid::new(16);
+    let mut grid = Grid::new(8);
 
     // Simulate target movement for 10 ticks
     for tick in 1..=10 {
