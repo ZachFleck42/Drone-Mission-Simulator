@@ -23,14 +23,7 @@ impl Simulation {
 
     pub fn tick(&mut self) {
         self.environment.move_target();
-        println!("Tick {}", self.tick);
-        println!(
-            "Target is at ({}, {})",
-            self.environment.target.x, self.environment.target.y
-        );
-        println!("Drone is at ({}, {})", self.drone.x, self.drone.y);
         self.print();
-        println!();
     }
 
     pub fn run(&mut self) {
@@ -53,6 +46,13 @@ impl Simulation {
         let target = &self.environment.target;
         let drone = &self.drone;
 
+        println!("Tick {}", self.tick);
+        println!(
+            "Target is at ({}, {})",
+            self.environment.target.x, self.environment.target.y
+        );
+        println!("Drone is at ({}, {})", self.drone.x, self.drone.y);
+
         for i in 0..size {
             for j in 0..size {
                 let tile = &self.environment.terrain.tiles[i][j];
@@ -69,5 +69,6 @@ impl Simulation {
             }
             println!();
         }
+        println!();
     }
 }
