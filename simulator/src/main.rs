@@ -1,6 +1,6 @@
 mod drone;
 mod env;
-mod sim;
+mod simulation;
 mod utils;
 
 fn main() {
@@ -16,7 +16,7 @@ fn main() {
     let mut drone = drone::Drone::new(entry_point_x, entry_point_y, visibility_range);
 
     // Create simulation
-    let mut sim = sim::Simulation::new(environment, drone);
+    let mut sim = simulation::Simulation::new(environment, drone, None);
 
     // Print initial environment
     println!(
