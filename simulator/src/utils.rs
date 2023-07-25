@@ -9,6 +9,14 @@ pub enum Direction {
 }
 
 pub fn coin_flip() -> usize {
-    let mut rng = rand::thread_rng();
-    rng.gen_range(0..=1)
+    rand::thread_rng().gen_range(0..=1)
+}
+
+pub fn random_direction() -> Direction {
+    match rand::thread_rng().gen_range(0..4) {
+        0 => Direction::Up,
+        1 => Direction::Down,
+        2 => Direction::Left,
+        _ => Direction::Right,
+    }
 }
