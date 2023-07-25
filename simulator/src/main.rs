@@ -1,13 +1,12 @@
+// mod drone;
 mod env;
 
 fn main() {
-    // Define terrain variables and generate terrain accordingly
+    // Define default values for environment and generate
     let grid_size = 8;
     let hostile_rate = 10;
-    let terrain = env::Terrain::new(grid_size, hostile_rate);
-
-    // Randomly place a target within the terrain and track both in environment
-    let mut environment = env::Environment::new(terrain);
+    let target_move_rate = 80;
+    let mut environment = env::generate_environment(grid_size, hostile_rate, target_move_rate);
 
     // Print initial environment
     println!(

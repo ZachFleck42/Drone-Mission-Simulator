@@ -68,14 +68,14 @@ impl Terrain {
 }
 
 impl Environment {
-    pub fn new(terrain: Terrain) -> Self {
+    pub fn new(terrain: Terrain, target_move_rate: usize) -> Self {
         let mut rng = rand::thread_rng();
         let mut environment = Environment {
             terrain,
             target: Target {
                 x: 0,
                 y: 0,
-                move_rate: 50,
+                move_rate: target_move_rate,
                 name: None,
             },
         };
@@ -134,4 +134,12 @@ impl Environment {
             println!();
         }
     }
+}
+
+pub fn generate_environment(
+    grid_size: usize,
+    hostile_rate: usize,
+    target_move_rate: usize,
+) -> Environment {
+    return Environment::new(Terrain::new(grid_size, hostile_rate), target_move_rate);
 }
