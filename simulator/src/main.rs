@@ -1,4 +1,4 @@
-// mod drone;
+mod drone;
 mod env;
 
 fn main() {

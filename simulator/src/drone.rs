@@ -14,7 +14,7 @@ struct Drone {
     x: usize,
     y: usize,
     visibility_range: usize,
-    status: String,
+    status: Status,
 }
 
 struct Tile {
@@ -24,3 +24,16 @@ struct Tile {
 }
 
 struct Grid {}
+
+impl Drone {
+    fn new() -> Self {
+        let mut drone = Drone {
+            x: 0,
+            y: 0,
+            visibility_range: 2,
+            status: Status::Searching,
+        };
+
+        drone
+    }
+}
