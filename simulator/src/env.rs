@@ -1,5 +1,5 @@
+use crate::utils::random_in_range;
 use crate::utils::Direction;
-use rand::Rng;
 
 pub struct Tile {
     pub x: usize,
@@ -37,7 +37,7 @@ impl Terrain {
         for x in 0..size {
             let mut row = Vec::with_capacity(size);
             for y in 0..size {
-                let hostile = rng.gen_range(0..100) < terrain.hostile_rate;
+                let hostile = random_in_range(0, 100) < terrain.hostile_rate;
 
                 let tile = Tile { x, y, hostile };
                 row.push(tile);
@@ -73,15 +73,15 @@ impl Environment {
             },
         };
 
-        environment.target.x = rng.gen_range(0..environment.terrain.size);
-        environment.target.y = rng.gen_range(0..environment.terrain.size);
+        environment.target.x = random_in_range(0, environment.terrain.size);
+        environment.target.y = random_in_range(0, environment.terrain.size);
 
         environment
     }
 
     pub fn move_target(&mut self) {
         let mut rng = rand::thread_rng();
-        if rng.gen_range(0..100) < self.target.move_rate {
+        if random_in_range(0, self.terrain.size) < self.target.move_rate {
             let mut valid_directions = Vec::new();
 
             if self.target.x > 0 {
@@ -98,7 +98,7 @@ impl Environment {
             }
 
             if !valid_directions.is_empty() {
-                let direction = valid_directions[rng.gen_range(0..valid_directions.len())];
+                let direction = valid_directions[random_in_range(0, valid_directions.len())];
 
                 match direction {
                     Direction::Up => self.target.x -= 1,
