@@ -33,10 +33,10 @@ struct Environment {
 }
 
 impl Terrain {
-    fn new(size: usize) -> Self {
+    fn new(size: usize, hostile_rate: usize) -> Self {
         let mut terrain = Terrain {
             size,
-            hostile_rate: 10,
+            hostile_rate,
             tiles: Vec::with_capacity(size),
         };
 
@@ -137,7 +137,12 @@ impl Environment {
 }
 
 fn main() {
-    let terrain = Terrain::new(8);
+    // Define terrain variables and generate terrain accordingly
+    let grid_size = 8;
+    let hostile_rate = 10;
+    let terrain = Terrain::new(grid_size, hostile_rate);
+
+    // Randomly place a target within the terrain and track both in environment
     let mut environment = Environment::new(terrain);
 
     // Print initial environment
