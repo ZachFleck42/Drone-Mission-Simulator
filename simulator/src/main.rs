@@ -8,7 +8,7 @@ fn main() {
     let grid_size = 8;
     let hostile_rate = 10;
     let target_move_rate = 80;
-    let mut environment = env::generate_environment(grid_size, hostile_rate, target_move_rate);
+    let mut environment = env::Environment::new(grid_size, hostile_rate, target_move_rate);
 
     // Define default values for drone and generate
     let visibility_range = 2;

@@ -16,7 +16,7 @@ pub struct Tile {
     pub hostile: Hostile,
 }
 
-pub struct DroneData {
+pub struct EnvData {
     grid: Vec<Vec<Tile>>,
     last_target_pos: Option<(usize, usize)>,
 }
@@ -27,7 +27,7 @@ pub struct Drone {
     pub grid_size: usize,
     pub visibility_range: usize,
     status: Status,
-    data: DroneData,
+    env_data: EnvData,
 }
 
 impl Drone {
@@ -46,7 +46,7 @@ impl Drone {
             grid.push(row);
         }
 
-        let data = DroneData {
+        let env_data = EnvData {
             grid,
             last_target_pos: None,
         };
@@ -57,7 +57,7 @@ impl Drone {
             grid_size,
             visibility_range,
             status: Status::Searching,
-            data,
+            env_data,
         }
     }
 

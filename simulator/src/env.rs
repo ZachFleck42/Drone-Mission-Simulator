@@ -57,22 +57,16 @@ impl Terrain {
 }
 
 impl Environment {
-    pub fn new(terrain: Terrain, target_move_rate: usize) -> Self {
-        let mut rng = rand::thread_rng();
-        let mut environment = Environment {
-            terrain,
-            target: Target {
-                x: 0,
-                y: 0,
-                move_rate: target_move_rate,
-                name: None,
-            },
+    pub fn new(grid_size: usize, hostile_rate: usize, target_move_rate: usize) -> Self {
+        let terrain = Terrain::new(grid_size, hostile_rate);
+        let target = Target {
+            x: rand::thread_rng().gen_range(0..terrain.size),
+            y: rand::thread_rng().gen_range(0..terrain.size),
+            move_rate: target_move_rate,
+            name: None,
         };
 
-        environment.target.x = rng.gen_range(0..environment.terrain.size);
-        environment.target.y = rng.gen_range(0..environment.terrain.size);
-
-        environment
+        Environment { terrain, target }
     }
 
     /// Randomly selects and returns the coordinates of a non-hostile,
@@ -149,12 +143,4 @@ impl Environment {
             println!();
         }
     }
-}
-
-pub fn generate_environment(
-    grid_size: usize,
-    hostile_rate: usize,
-    target_move_rate: usize,
-) -> Environment {
-    Environment::new(Terrain::new(grid_size, hostile_rate), target_move_rate)
 }
