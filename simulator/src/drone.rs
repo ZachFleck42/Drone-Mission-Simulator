@@ -1,4 +1,4 @@
-enum Status {
+pub enum Status {
     Searching,
     Monitoring,
     Fleeing,
@@ -10,15 +10,21 @@ pub enum Hostile {
     Unknown,
 }
 
+pub enum TileContent {
+    Empty,
+    Target,
+}
+
 pub struct Tile {
     pub x: usize,
     pub y: usize,
     pub hostile: Hostile,
+    pub content: TileContent,
 }
 
 pub struct EnvData {
-    grid: Vec<Vec<Tile>>,
-    last_target_pos: Option<(usize, usize)>,
+    pub grid: Vec<Vec<Tile>>,
+    pub last_target_pos: Option<(usize, usize)>,
 }
 
 pub struct Drone {
@@ -26,8 +32,8 @@ pub struct Drone {
     pub y: usize,
     pub grid_size: usize,
     pub visibility_range: usize,
-    status: Status,
-    env_data: EnvData,
+    pub status: Status,
+    pub env_data: EnvData,
 }
 
 impl Drone {
@@ -40,6 +46,7 @@ impl Drone {
                     x,
                     y,
                     hostile: Hostile::Unknown,
+                    content: TileContent::Empty,
                 };
                 row.push(tile);
             }

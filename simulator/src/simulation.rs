@@ -1,4 +1,6 @@
 use crate::drone::Drone;
+use crate::drone::Hostile;
+use crate::drone::TileContent;
 use crate::env::Environment;
 
 pub struct Simulation {
@@ -42,7 +44,26 @@ impl Simulation {
         }
     }
 
-    pub fn aqcuire_drone_data(&mut self) {}
+    pub fn aqcuire_drone_data(&mut self) {
+        let visible_tiles = self.drone.get_visible_tiles();
+        let drone_grid = &mut self.drone.env_data.grid;
+
+        for tile in visible_tiles {
+            let (x, y) = (tile.0, tile.1);
+            let env_tile = &self.environment.terrain.grid[x][y];
+
+            if env_tile.hostile {
+                drone_grid[x][y].hostile = Hostile::True;
+            } else {
+                drone_grid[x][y].hostile = Hostile::False;
+            }
+
+            if x == self.environment.target.x && y == self.environment.target.y {
+                drone_grid[x][y].content = TileContent::Target;
+                self.drone.env_data.last_target_pos = Some((x, y));
+            }
+        }
+    }
 
     pub fn print(&self) {
         let size = self.environment.terrain.size;
