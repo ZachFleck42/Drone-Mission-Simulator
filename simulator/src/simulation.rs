@@ -1,41 +1,21 @@
-pub enum Hostile {
-    True,
-    False,
-    Unknown,
-}
-
-pub struct Tile {
-    pub x: usize,
-    pub y: usize,
-    pub hostile: Hostile,
-}
-
-pub struct Grid {
-    grid: Vec<Vec<Tile>>,
-    last_target_pos: (usize, usize),
-}
+use crate::drone::Drone;
+use crate::env::Environment;
 
 pub struct Simulation {
-    pub environment: crate::env::Environment,
-    pub drone: crate::drone::Drone,
+    pub environment: Environment,
+    pub drone: Drone,
     pub max_ticks: Option<usize>,
     pub tick: usize,
 }
 
 impl Simulation {
-    pub fn new(
-        environment: crate::env::Environment,
-        drone: crate::drone::Drone,
-        max_ticks: Option<usize>,
-    ) -> Self {
-        let mut simulation = Simulation {
+    pub fn new(environment: Environment, drone: Drone, max_ticks: Option<usize>) -> Self {
+        Simulation {
             environment,
             drone,
             max_ticks,
             tick: 0,
-        };
-
-        simulation
+        }
     }
 
     pub fn tick(&mut self) {
