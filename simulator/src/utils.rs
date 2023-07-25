@@ -20,7 +20,3 @@ pub fn random_direction() -> Direction {
         _ => Direction::Right,
     }
 }
-
-pub fn random_in_range(lower: usize, upper: usize) -> usize {
-    rand::thread_rng().gen_range(lower..upper)
-}
