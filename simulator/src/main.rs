@@ -1,5 +1,6 @@
 mod drone;
 mod env;
+mod sim;
 mod utils;
 
 fn main() {
@@ -14,23 +15,29 @@ fn main() {
     let (entry_point_x, entry_point_y) = environment.generate_entry_point();
     let mut drone = drone::Drone::new(entry_point_x, entry_point_y, visibility_range);
 
+    // Create simulation
+    let mut sim = sim::Simulation::new(environment, drone);
+
     // Print initial environment
     println!(
         "Initial: Target is at ({}, {})",
-        environment.target.x, environment.target.y
+        sim.environment.target.x, sim.environment.target.y
     );
-    environment.print();
+    sim.environment.print();
     println!();
 
     // Simulate target movement for 10 ticks
     for tick in 1..=10 {
-        environment.move_target();
+        sim.environment.move_target();
         println!(
             "Tick {}: Target is at ({}, {})",
-            tick, environment.target.x, environment.target.y
+            tick, sim.environment.target.x, sim.environment.target.y
         );
-        println!("Tick {}: Drone is at ({}, {})", tick, drone.x, drone.y);
-        environment.print();
+        println!(
+            "Tick {}: Drone is at ({}, {})",
+            tick, sim.drone.x, sim.drone.y
+        );
+        sim.environment.print();
         println!();
     }
 }
