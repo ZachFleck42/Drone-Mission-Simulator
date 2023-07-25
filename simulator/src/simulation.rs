@@ -1,8 +1,8 @@
 pub struct Simulation {
     pub environment: crate::env::Environment,
     pub drone: crate::drone::Drone,
-    pub tick: usize,
     pub max_ticks: Option<usize>,
+    pub tick: usize,
 }
 
 impl Simulation {
@@ -14,8 +14,8 @@ impl Simulation {
         let mut simulation = Simulation {
             environment,
             drone,
-            tick: 0,
             max_ticks,
+            tick: 0,
         };
 
         simulation
@@ -23,6 +23,10 @@ impl Simulation {
 
     pub fn tick(&mut self) {
         self.environment.move_target();
+        // Update drone status
+        // Move drone based on status
+        // Collect new data
+        // Repeat
         self.print();
     }
 
