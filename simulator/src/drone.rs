@@ -88,7 +88,7 @@ impl Drone {
         visible_tiles
     }
 
-    fn print_grid(&self) {
+    pub fn print_grid(&self) {
         for i in 0..self.grid_size {
             for j in 0..self.grid_size {
                 let tile = &self.env_data.grid[i][j];
@@ -98,6 +98,11 @@ impl Drone {
                     Hostile::True => 'X',
                     Hostile::False => 'O',
                 };
+
+                if tile.x == self.x && tile.y == self.y {
+                    print!("D");
+                    continue;
+                }
 
                 if let Some((target_x, target_y)) = self.env_data.last_target_pos {
                     if tile.x == target_x && tile.y == target_y {
