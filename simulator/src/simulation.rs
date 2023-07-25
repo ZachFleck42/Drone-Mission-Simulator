@@ -45,6 +45,26 @@ impl Simulation {
         }
     }
 
+    pub fn get_drone_tiles(&self) -> Vec<(usize, usize)> {
+        let max_bound = self.environment.terrain.size - 1;
+        let vis_range = self.drone.visibility_range;
+
+        // Calculate the boundaries for the visible range around the drone
+        let min_x = self.drone.x.saturating_sub(vis_range);
+        let max_x = usize::min(self.drone.x + vis_range, max_bound);
+        let min_y = self.drone.y.saturating_sub(vis_range);
+        let max_y = usize::min(self.drone.y + vis_range, max_bound);
+
+        let mut visible_tiles = Vec::new();
+        for i in min_x..=max_x {
+            for j in min_y..=max_y {
+                visible_tiles.push((i, j));
+            }
+        }
+
+        visible_tiles
+    }
+
     pub fn print(&self) {
         let size = self.environment.terrain.size;
         let target = &self.environment.target;
