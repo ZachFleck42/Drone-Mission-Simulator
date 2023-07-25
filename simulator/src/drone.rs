@@ -4,23 +4,11 @@ enum Status {
     Fleeing,
 }
 
-enum Hostile {
-    True,
-    False,
-    Unknown,
-}
-
 pub struct Drone {
     pub x: usize,
     pub y: usize,
     pub visibility_range: usize,
     status: Status,
-}
-
-struct Tile {
-    x: usize,
-    y: usize,
-    hostile: Hostile,
 }
 
 struct Grid {}

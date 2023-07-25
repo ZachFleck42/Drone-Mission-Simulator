@@ -1,3 +1,20 @@
+pub enum Hostile {
+    True,
+    False,
+    Unknown,
+}
+
+pub struct Tile {
+    pub x: usize,
+    pub y: usize,
+    pub hostile: Hostile,
+}
+
+pub struct Grid {
+    grid: Vec<Vec<Tile>>,
+    last_target_pos: (usize, usize),
+}
+
 pub struct Simulation {
     pub environment: crate::env::Environment,
     pub drone: crate::drone::Drone,
@@ -64,6 +81,8 @@ impl Simulation {
 
         visible_tiles
     }
+
+    pub fn aqcuire_drone_data(&mut self) {}
 
     pub fn print(&self) {
         let size = self.environment.terrain.size;
