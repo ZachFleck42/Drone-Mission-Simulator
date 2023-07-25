@@ -13,7 +13,7 @@ fn main() {
     // Define default values for drone and generate
     let visibility_range = 2;
     let (entry_point_x, entry_point_y) = environment.generate_entry_point();
-    let mut drone = drone::Drone::new(entry_point_x, entry_point_y, visibility_range);
+    let mut drone = drone::Drone::new(entry_point_x, entry_point_y, grid_size, visibility_range);
 
     // Define default values for simulation and generate
     let max_ticks = Some(10);

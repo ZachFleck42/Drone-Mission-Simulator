@@ -24,24 +24,41 @@ pub struct DroneData {
 pub struct Drone {
     pub x: usize,
     pub y: usize,
+    pub grid_size: usize,
     pub visibility_range: usize,
     status: Status,
-    // data: DroneData,
+    data: DroneData,
 }
 
-struct Grid {}
-
 impl Drone {
-    pub fn new(x: usize, y: usize, visibility_range: usize) -> Self {
-        let mut drone = Drone {
-            x,
-            y,
-            visibility_range,
-            status: Status::Searching,
-            // data:
+    pub fn new(x: usize, y: usize, grid_size: usize, visibility_range: usize) -> Self {
+        let mut grid = Vec::with_capacity(grid_size);
+        for x in 0..grid_size {
+            let mut row = Vec::with_capacity(grid_size);
+            for y in 0..grid_size {
+                let tile = Tile {
+                    x,
+                    y,
+                    hostile: Hostile::Unknown,
+                };
+                row.push(tile);
+            }
+            grid.push(row);
+        }
+
+        let data = DroneData {
+            grid,
+            last_target_pos: None,
         };
 
-        drone
+        Drone {
+            x,
+            y,
+            grid_size,
+            visibility_range,
+            status: Status::Searching,
+            data,
+        }
     }
 
     fn update_status(&mut self) {}
