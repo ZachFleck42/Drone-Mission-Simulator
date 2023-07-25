@@ -22,6 +22,7 @@ struct Terrain {
 struct Target {
     x: usize,
     y: usize,
+    move_rate: usize,
     name: Option<String>,
 }
 
@@ -72,6 +73,7 @@ impl Environment {
             target: Target {
                 x: 0,
                 y: 0,
+                move_rate: 5,
                 name: None,
             },
         };
@@ -84,7 +86,7 @@ impl Environment {
 
     fn move_target(&mut self) {
         let mut rng = rand::thread_rng();
-        if rng.gen_range(0..10) < 5 {
+        if rng.gen_range(0..10) < self.target.move_rate {
             let mut valid_directions = Vec::new();
 
             if self.target.x > 0 {
@@ -115,6 +117,10 @@ impl Environment {
 
     fn set_target_name(&mut self, name: String) {
         self.target.name = Some(name);
+    }
+
+    fn set_target_move_rate(&mut self, rate: usize) {
+        self.target.move_rate = rate;
     }
 
     fn print(&self) {
