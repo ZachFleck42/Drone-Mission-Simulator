@@ -1,12 +1,5 @@
+use crate::utils::Direction;
 use rand::Rng;
-
-#[derive(Clone, Copy)]
-pub enum Direction {
-    Up,
-    Down,
-    Left,
-    Right,
-}
 
 pub struct Tile {
     pub x: usize,
