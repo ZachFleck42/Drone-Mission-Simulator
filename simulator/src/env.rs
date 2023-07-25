@@ -141,5 +141,5 @@ pub fn generate_environment(
     hostile_rate: usize,
     target_move_rate: usize,
 ) -> Environment {
-    return Environment::new(Terrain::new(grid_size, hostile_rate), target_move_rate);
+    Environment::new(Terrain::new(grid_size, hostile_rate), target_move_rate)
 }
