@@ -80,21 +80,25 @@ impl Environment {
         environment
     }
 
+    /// Randomly selects and returns a point on the edge of the terrain
     pub fn generate_entry_point(&self) -> (usize, usize) {
-        let mut rng = rand::thread_rng();
-        let fifty_fifty = [true, false][coin_flip()];
         let max_bound = self.terrain.size - 1;
+        let mut rng = rand::thread_rng();
+        let mut x_coord = 0;
+        let mut y_coord = 0;
 
-        if fifty_fifty {
-            let x_coord = [0, max_bound][coin_flip()];
-            let y_coord = rng.gen_range(0..max_bound);
+        loop {
+            if [true, false][coin_flip()] {
+                x_coord = [0, max_bound][coin_flip()];
+                y_coord = rng.gen_range(0..max_bound);
+            } else {
+                x_coord = rng.gen_range(0..max_bound);
+                y_coord = [0, max_bound][coin_flip()];
+            }
 
-            (x_coord, y_coord)
-        } else {
-            let x_coord = rng.gen_range(0..max_bound);
-            let y_coord = [0, max_bound][coin_flip()];
-
-            (x_coord, y_coord)
+            if !self.terrain.tiles[x_coord][y_coord].hostile {
+                return (x_coord, y_coord);
+            }
         }
     }
 
