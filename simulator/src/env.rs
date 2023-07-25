@@ -1,4 +1,4 @@
-use crate::utils::coin_flip;
+use crate::utils::random_choice;
 use crate::utils::Direction;
 use rand::Rng;
 
@@ -80,7 +80,8 @@ impl Environment {
         environment
     }
 
-    /// Randomly selects and returns a point on the edge of the terrain
+    /// Randomly selects and returns the coordinates of a non-hotile tile on
+    /// the edge of the environment's terrain
     pub fn generate_entry_point(&self) -> (usize, usize) {
         let max_bound = self.terrain.size - 1;
         let mut rng = rand::thread_rng();
@@ -88,12 +89,12 @@ impl Environment {
         let mut y_coord = 0;
 
         loop {
-            if [true, false][coin_flip()] {
-                x_coord = [0, max_bound][coin_flip()];
+            if random_choice(&[true, false]) {
+                x_coord = random_choice(&[0, max_bound]);
                 y_coord = rng.gen_range(0..max_bound);
             } else {
                 x_coord = rng.gen_range(0..max_bound);
-                y_coord = [0, max_bound][coin_flip()];
+                y_coord = random_choice(&[0, max_bound]);
             }
 
             if !self.terrain.tiles[x_coord][y_coord].hostile {
