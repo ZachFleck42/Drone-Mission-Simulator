@@ -80,26 +80,29 @@ impl Environment {
         environment
     }
 
-    /// Randomly selects and returns the coordinates of a non-hotile tile on
-    /// the edge of the environment's terrain
+    /// Randomly selects and returns the coordinates of a non-hostile,
+    /// non-target tile on the edge of the environment's terrain.
     pub fn generate_entry_point(&self) -> (usize, usize) {
         let max_bound = self.terrain.size - 1;
         let mut rng = rand::thread_rng();
-        let mut x_coord = 0;
-        let mut y_coord = 0;
+        let mut x;
+        let mut y;
 
         loop {
             if random_choice(&[true, false]) {
-                x_coord = random_choice(&[0, max_bound]);
-                y_coord = rng.gen_range(0..max_bound);
+                x = random_choice(&[0, max_bound]);
+                y = rng.gen_range(0..max_bound);
             } else {
-                x_coord = rng.gen_range(0..max_bound);
-                y_coord = random_choice(&[0, max_bound]);
+                x = rng.gen_range(0..max_bound);
+                y = random_choice(&[0, max_bound]);
             }
 
-            if !self.terrain.tiles[x_coord][y_coord].hostile {
-                return (x_coord, y_coord);
+            let tile = &self.terrain.tiles[x][y];
+            if tile.hostile || (self.target.x == x && self.target.y == y) {
+                continue;
             }
+
+            return (x, y);
         }
     }
 
