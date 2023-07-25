@@ -115,14 +115,6 @@ impl Environment {
         }
     }
 
-    fn set_target_name(&mut self, name: String) {
-        self.target.name = Some(name);
-    }
-
-    fn set_target_move_rate(&mut self, rate: usize) {
-        self.target.move_rate = rate;
-    }
-
     fn print(&self) {
         for i in 0..self.terrain.size {
             for j in 0..self.terrain.size {
@@ -143,7 +135,7 @@ impl Environment {
 }
 
 fn main() {
-    let mut terrain = Terrain::new(8);
+    let terrain = Terrain::new(8);
     let mut environment = Environment::new(terrain);
 
     // Print initial environment
