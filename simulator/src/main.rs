@@ -8,6 +8,8 @@ fn main() {
     let target_move_rate = 80;
     let mut environment = env::generate_environment(grid_size, hostile_rate, target_move_rate);
 
+    // Define default values for drone and generate
+
     // Print initial environment
     println!(
         "Initial: Target is at ({}, {})",
