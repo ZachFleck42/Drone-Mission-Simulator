@@ -1,5 +1,6 @@
 mod drone;
 mod env;
+mod utils;
 
 fn main() {
     // Define default values for environment and generate
@@ -9,6 +10,8 @@ fn main() {
     let mut environment = env::generate_environment(grid_size, hostile_rate, target_move_rate);
 
     // Define default values for drone and generate
+    let visibility_range = 2;
+    let mut drone = drone::Drone::new(visibility_range);
 
     // Print initial environment
     println!(
@@ -25,6 +28,7 @@ fn main() {
             "Tick {}: Target is at ({}, {})",
             tick, environment.target.x, environment.target.y
         );
+        println!("Tick {}: Drone is at ({}, {})", tick, drone.x, drone.y);
         environment.print();
         println!();
     }

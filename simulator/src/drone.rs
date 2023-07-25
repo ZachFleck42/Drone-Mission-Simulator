@@ -1,3 +1,5 @@
+use crate::utils;
+
 enum Status {
     Searching,
     Monitoring,
@@ -10,9 +12,9 @@ enum Hostile {
     Unknown,
 }
 
-struct Drone {
-    x: usize,
-    y: usize,
+pub struct Drone {
+    pub x: usize,
+    pub y: usize,
     visibility_range: usize,
     status: Status,
 }
@@ -26,14 +28,16 @@ struct Tile {
 struct Grid {}
 
 impl Drone {
-    fn new() -> Self {
+    pub fn new(visibility_range: usize) -> Self {
         let mut drone = Drone {
             x: 0,
             y: 0,
-            visibility_range: 2,
+            visibility_range,
             status: Status::Searching,
         };
 
         drone
     }
+
+    fn monitor(&mut self) {}
 }
