@@ -1,5 +1,3 @@
-use crate::utils;
-
 enum Status {
     Searching,
     Monitoring,
