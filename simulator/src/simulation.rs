@@ -21,18 +21,53 @@ impl Simulation {
         simulation
     }
 
+    pub fn tick(&mut self) {
+        self.environment.move_target();
+        println!("Tick {}", self.tick);
+        println!(
+            "Target is at ({}, {})",
+            self.environment.target.x, self.environment.target.y
+        );
+        println!("Drone is at ({}, {})", self.drone.x, self.drone.y);
+        self.print();
+        println!();
+    }
+
     pub fn run(&mut self) {
         match self.max_ticks {
             Some(max_ticks) => {
                 for _ in 0..max_ticks {
                     self.tick += 1;
-                    // Tick logic
+                    self.tick();
                 }
             }
             None => loop {
                 self.tick += 1;
-                // Tick logic
+                self.tick();
             },
+        }
+    }
+
+    pub fn print(&self) {
+        let size = self.environment.terrain.size;
+        let target = &self.environment.target;
+        let drone = &self.drone;
+
+        for i in 0..size {
+            for j in 0..size {
+                let tile = &self.environment.terrain.tiles[i][j];
+                let symbol = if tile.x == drone.x && tile.y == drone.y {
+                    'D'
+                } else if tile.x == target.x && tile.y == target.y {
+                    'T'
+                } else if tile.hostile {
+                    'X'
+                } else {
+                    'O'
+                };
+                print!("{} ", symbol);
+            }
+            println!();
         }
     }
 }
