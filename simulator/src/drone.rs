@@ -28,10 +28,10 @@ struct Tile {
 struct Grid {}
 
 impl Drone {
-    pub fn new(visibility_range: usize) -> Self {
+    pub fn new(x: usize, y: usize, visibility_range: usize) -> Self {
         let mut drone = Drone {
-            x: 0,
-            y: 0,
+            x,
+            y,
             visibility_range,
             status: Status::Searching,
         };

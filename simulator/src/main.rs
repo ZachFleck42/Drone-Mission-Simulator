@@ -11,7 +11,8 @@ fn main() {
 
     // Define default values for drone and generate
     let visibility_range = 2;
-    let mut drone = drone::Drone::new(visibility_range);
+    let (entry_point_x, entry_point_y) = environment.generate_entry_point();
+    let mut drone = drone::Drone::new(entry_point_x, entry_point_y, visibility_range);
 
     // Print initial environment
     println!(

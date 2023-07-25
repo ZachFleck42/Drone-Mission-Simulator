@@ -1,3 +1,4 @@
+use crate::utils::coin_flip;
 use crate::utils::Direction;
 use rand::Rng;
 
@@ -77,6 +78,24 @@ impl Environment {
         environment.target.y = rng.gen_range(0..environment.terrain.size);
 
         environment
+    }
+
+    pub fn generate_entry_point(&self) -> (usize, usize) {
+        let mut rng = rand::thread_rng();
+        let fifty_fifty = [true, false][coin_flip()];
+        let max_bound = self.terrain.size - 1;
+
+        if fifty_fifty {
+            let x_coord = [0, max_bound][coin_flip()];
+            let y_coord = rng.gen_range(0..max_bound);
+
+            (x_coord, y_coord)
+        } else {
+            let x_coord = rng.gen_range(0..max_bound);
+            let y_coord = [0, max_bound][coin_flip()];
+
+            (x_coord, y_coord)
+        }
     }
 
     pub fn move_target(&mut self) {
