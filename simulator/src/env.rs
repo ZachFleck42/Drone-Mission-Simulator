@@ -10,8 +10,7 @@ pub struct Tile {
 
 pub struct Terrain {
     pub size: usize,
-    pub hostile_rate: usize,
-    pub tiles: Vec<Vec<Tile>>,
+    pub grid: Vec<Vec<Tile>>,
 }
 
 pub struct Target {
@@ -28,31 +27,27 @@ pub struct Environment {
 
 impl Terrain {
     pub fn new(size: usize, hostile_rate: usize) -> Self {
-        let mut terrain = Terrain {
-            size,
-            hostile_rate,
-            tiles: Vec::with_capacity(size),
-        };
-
         let mut rng = rand::thread_rng();
+        let mut grid = Vec::with_capacity(size);
+
         for x in 0..size {
             let mut row = Vec::with_capacity(size);
             for y in 0..size {
-                let hostile = rng.gen_range(0..100) < terrain.hostile_rate;
+                let hostile = rng.gen_range(0..100) < hostile_rate;
 
                 let tile = Tile { x, y, hostile };
                 row.push(tile);
             }
-            terrain.tiles.push(row);
+            grid.push(row);
         }
 
-        terrain
+        Terrain { size, grid }
     }
 
     pub fn print(&self) {
-        for i in 0..self.tiles.len() {
-            for j in 0..self.tiles[0].len() {
-                let tile = &self.tiles[i][j];
+        for i in 0..self.grid.len() {
+            for j in 0..self.grid[0].len() {
+                let tile = &self.grid[i][j];
                 let symbol = if tile.hostile { 'X' } else { 'O' };
                 print!("{} ", symbol);
             }
@@ -97,7 +92,7 @@ impl Environment {
                 y = random_choice(&[0, max_bound]);
             }
 
-            let tile = &self.terrain.tiles[x][y];
+            let tile = &self.terrain.grid[x][y];
             if tile.hostile || (self.target.x == x && self.target.y == y) {
                 continue;
             }
@@ -140,7 +135,7 @@ impl Environment {
     pub fn print(&self) {
         for i in 0..self.terrain.size {
             for j in 0..self.terrain.size {
-                let tile = &self.terrain.tiles[i][j];
+                let tile = &self.terrain.grid[i][j];
 
                 let symbol = if tile.x == self.target.x && tile.y == self.target.y {
                     'T'

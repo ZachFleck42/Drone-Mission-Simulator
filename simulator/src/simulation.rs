@@ -78,7 +78,7 @@ impl Simulation {
 
         for i in 0..size {
             for j in 0..size {
-                let tile = &self.environment.terrain.tiles[i][j];
+                let tile = &self.environment.terrain.grid[i][j];
                 let symbol = if tile.x == drone.x && tile.y == drone.y {
                     'D'
                 } else if tile.x == target.x && tile.y == target.y {
