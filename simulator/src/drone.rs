@@ -88,5 +88,21 @@ impl Drone {
         visible_tiles
     }
 
-    fn update_status(&mut self) {}
+    fn print_grid(&self) {
+        for i in 0..self.grid_size {
+            for j in 0..self.grid_size {
+                let tile = &self.env_data.grid[i][j];
+                let target = self.env_data.last_target_pos;
+
+                let symbol = match tile.hostile {
+                    Hostile::Unknown => '?',
+                    Hostile::True => 'X',
+                    Hostile::False => 'O',
+                };
+                print!("{}", symbol);
+            }
+            println!();
+        }
+        println!();
+    }
 }

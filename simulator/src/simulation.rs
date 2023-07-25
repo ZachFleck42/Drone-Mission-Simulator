@@ -24,8 +24,7 @@ impl Simulation {
         self.environment.move_target();
         // Update drone status
         // Move drone based on status
-        // Collect new data
-        // Repeat
+        self.aqcuire_drone_data();
         self.print();
     }
 
