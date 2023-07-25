@@ -16,6 +16,7 @@ struct Tile {
 
 struct Terrain {
     size: usize,
+    hostile_rate: usize,
     tiles: Vec<Vec<Tile>>,
 }
 
@@ -35,6 +36,7 @@ impl Terrain {
     fn new(size: usize) -> Self {
         let mut terrain = Terrain {
             size,
+            hostile_rate: 10,
             tiles: Vec::with_capacity(size),
         };
 
@@ -42,7 +44,7 @@ impl Terrain {
         for x in 0..size {
             let mut row = Vec::with_capacity(size);
             for y in 0..size {
-                let hostile = rng.gen_range(0..10) < 1;
+                let hostile = rng.gen_range(0..100) < terrain.hostile_rate;
 
                 let tile = Tile { x, y, hostile };
                 row.push(tile);
@@ -73,7 +75,7 @@ impl Environment {
             target: Target {
                 x: 0,
                 y: 0,
-                move_rate: 5,
+                move_rate: 50,
                 name: None,
             },
         };
@@ -86,7 +88,7 @@ impl Environment {
 
     fn move_target(&mut self) {
         let mut rng = rand::thread_rng();
-        if rng.gen_range(0..10) < self.target.move_rate {
+        if rng.gen_range(0..100) < self.target.move_rate {
             let mut valid_directions = Vec::new();
 
             if self.target.x > 0 {
