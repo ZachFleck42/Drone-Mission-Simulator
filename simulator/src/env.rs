@@ -70,7 +70,7 @@ impl Environment {
     }
 
     /// Randomly selects and returns the coordinates of a non-hostile,
-    /// non-target tile on the edge of the environment's terrain.
+    /// empty tile on the edge of the environment's terrain.
     pub fn generate_entry_point(&self) -> (usize, usize) {
         let max_bound = self.terrain.size - 1;
         let mut rng = rand::thread_rng();

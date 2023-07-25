@@ -111,7 +111,7 @@ impl Drone {
                     }
                 }
 
-                print!("{}", symbol);
+                print!("{} ", symbol);
             }
             println!();
         }
