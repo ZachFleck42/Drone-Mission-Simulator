@@ -92,13 +92,20 @@ impl Drone {
         for i in 0..self.grid_size {
             for j in 0..self.grid_size {
                 let tile = &self.env_data.grid[i][j];
-                let target = self.env_data.last_target_pos;
 
                 let symbol = match tile.hostile {
                     Hostile::Unknown => '?',
                     Hostile::True => 'X',
                     Hostile::False => 'O',
                 };
+
+                if let Some((target_x, target_y)) = self.env_data.last_target_pos {
+                    if tile.x == target_x && tile.y == target_y {
+                        print!("T");
+                        continue;
+                    }
+                }
+
                 print!("{}", symbol);
             }
             println!();
