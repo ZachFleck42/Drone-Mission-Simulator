@@ -1,3 +1,5 @@
+use crate::utils::DIRECTIONS;
+
 pub enum Status {
     Searching,
     Monitoring,
@@ -86,6 +88,30 @@ impl Drone {
         }
 
         visible_tiles
+    }
+
+    pub fn get_valid_moves(&self) -> Vec<(usize, usize)> {
+        let mut valid_moves = Vec::new();
+        let max_bound = self.grid_size as i32;
+
+        for (dx, dy) in DIRECTIONS {
+            let new_x = self.x as i32 + dx;
+            let new_y = self.y as i32 + dy;
+
+            if new_x >= 0 && new_x < max_bound && new_y >= 0 && new_y < max_bound {
+                let x = new_x as usize;
+                let y = new_y as usize;
+                let tile = &self.env_data.grid[x][y];
+
+                if matches!(tile.hostile, Hostile::False)
+                    && matches!(tile.content, TileContent::Empty)
+                {
+                    valid_moves.push((x, y));
+                }
+            }
+        }
+
+        valid_moves
     }
 
     pub fn update_status(&mut self) {}

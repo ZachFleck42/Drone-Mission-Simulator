@@ -100,7 +100,7 @@ impl Environment {
             let mut valid_moves = Vec::new();
             let max_bound = self.terrain.size as i32;
 
-            for (dx, dy) in &DIRECTIONS {
+            for (dx, dy) in DIRECTIONS {
                 let new_x = self.target.x as i32 + dx;
                 let new_y = self.target.y as i32 + dy;
 
