@@ -45,7 +45,7 @@ impl Simulation {
 
     pub fn drone_acquire_data(&mut self) {
         let visible_tiles = self.drone.get_visible_tiles(self.drone.x, self.drone.y);
-        let drone_grid = &mut self.drone.env_data.grid;
+        let drone_grid = &mut self.drone.data.grid;
 
         for tile in visible_tiles {
             let (x, y) = (tile.0, tile.1);
@@ -59,7 +59,7 @@ impl Simulation {
 
             if x == self.environment.target.x && y == self.environment.target.y {
                 drone_grid[x][y].content = TileContent::Target;
-                self.drone.env_data.last_target_pos = Some((x, y));
+                self.drone.data.last_target_pos = Some((x, y));
             }
         }
     }

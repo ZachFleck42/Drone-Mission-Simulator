@@ -26,6 +26,7 @@ pub struct Tile {
 }
 
 pub struct EnvData {
+    pub grid_size: usize,
     pub grid: Vec<Vec<Tile>>,
     pub last_target_pos: Option<(usize, usize)>,
 }
@@ -33,10 +34,9 @@ pub struct EnvData {
 pub struct Drone {
     pub x: usize,
     pub y: usize,
-    pub grid_size: usize,
     pub visibility_range: usize,
     pub status: Status,
-    pub env_data: EnvData,
+    pub data: EnvData,
 }
 
 impl Drone {
@@ -56,7 +56,8 @@ impl Drone {
             grid.push(row);
         }
 
-        let env_data = EnvData {
+        let data = EnvData {
+            grid_size,
             grid,
             last_target_pos: None,
         };
@@ -64,15 +65,14 @@ impl Drone {
         Drone {
             x,
             y,
-            grid_size,
             visibility_range,
             status: Status::Searching,
-            env_data,
+            data,
         }
     }
 
     pub fn get_visible_tiles(&self, x: usize, y: usize) -> Vec<(usize, usize)> {
-        let max_bound = self.grid_size - 1;
+        let max_bound = self.data.grid_size - 1;
         let vis_range = self.visibility_range;
 
         // Calculate the boundaries for the visible range around the drone
@@ -93,7 +93,7 @@ impl Drone {
 
     pub fn get_valid_moves(&self) -> Vec<(usize, usize)> {
         let mut valid_moves = Vec::new();
-        let max_bound = self.grid_size as i32;
+        let max_bound = self.data.grid_size as i32;
 
         for (dx, dy) in DIRECTIONS {
             let new_x = self.x as i32 + dx;
@@ -102,7 +102,7 @@ impl Drone {
             if new_x >= 0 && new_x < max_bound && new_y >= 0 && new_y < max_bound {
                 let x = new_x as usize;
                 let y = new_y as usize;
-                let tile = &self.env_data.grid[x][y];
+                let tile = &self.data.grid[x][y];
 
                 if tile.hostile == Hostile::False && tile.content == TileContent::Empty {
                     valid_moves.push((x, y));
@@ -124,21 +124,29 @@ impl Drone {
     }
 
     fn search(&mut self) {
-        let valid_moves = self.get_valid_moves();
-        let best_move: (usize, usize);
-        let best_move_score = 0;
+        let mut best_move_score = 0;
+        let mut best_move = (self.x, self.y);
 
-        for potential_move in valid_moves {
-            let mut move_score = 0;
+        for potential_move in self.get_valid_moves() {
             let (x, y) = (potential_move.0, potential_move.1);
-            let revealed_tiles = self.get_visible_tiles(x, y);
 
-            for tile in revealed_tiles {
-                if self.env_data.grid[x][y].hostile == Hostile::Unknown {
+            let mut move_score = 0;
+            for _now_visible_tile in self.get_visible_tiles(x, y) {
+                if self.data.grid[x][y].hostile == Hostile::Unknown {
                     move_score += 1;
                 }
             }
+
+            if move_score < best_move_score {
+                continue;
+            } else if move_score > best_move_score {
+                best_move_score = move_score;
+                best_move = potential_move;
+            } else {
+            }
         }
+
+        (self.x, self.y) = (best_move.0, best_move.1);
     }
 
     fn monitor(&mut self) {}
@@ -146,9 +154,9 @@ impl Drone {
     fn flee(&mut self) {}
 
     pub fn print_grid(&self) {
-        for i in 0..self.grid_size {
-            for j in 0..self.grid_size {
-                let tile = &self.env_data.grid[i][j];
+        for i in 0..self.data.grid_size {
+            for j in 0..self.data.grid_size {
+                let tile = &self.data.grid[i][j];
 
                 let symbol = match tile.hostile {
                     Hostile::Unknown => '?',
@@ -161,7 +169,7 @@ impl Drone {
                     continue;
                 }
 
-                if let Some((target_x, target_y)) = self.env_data.last_target_pos {
+                if let Some((target_x, target_y)) = self.data.last_target_pos {
                     if tile.x == target_x && tile.y == target_y {
                         print!("T ");
                         continue;
