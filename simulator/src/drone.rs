@@ -6,12 +6,13 @@ pub enum Status {
     Fleeing,
 }
 
+#[derive(PartialEq)]
 pub enum Hostile {
     True,
     False,
     Unknown,
 }
-
+#[derive(PartialEq)]
 pub enum TileContent {
     Empty,
     Target,
@@ -103,9 +104,7 @@ impl Drone {
                 let y = new_y as usize;
                 let tile = &self.env_data.grid[x][y];
 
-                if matches!(tile.hostile, Hostile::False)
-                    && matches!(tile.content, TileContent::Empty)
-                {
+                if tile.hostile == Hostile::False && tile.content == TileContent::Empty {
                     valid_moves.push((x, y));
                 }
             }
@@ -114,19 +113,33 @@ impl Drone {
         valid_moves
     }
 
-    fn get_best_search_move(&self) {}
-
     pub fn update_status(&mut self) {}
 
-    pub fn move_it(&mut self) {
+    pub fn make_move(&mut self) {
         match self.status {
             Status::Searching => self.search(),
             Status::Monitoring => self.monitor(),
             Status::Fleeing => self.flee(),
-        }
+        };
     }
 
-    fn search(&mut self) {}
+    fn search(&mut self) {
+        let valid_moves = self.get_valid_moves();
+        let best_move: (usize, usize);
+        let best_move_score = 0;
+
+        for potential_move in valid_moves {
+            let mut move_score = 0;
+            let (x, y) = (potential_move.0, potential_move.1);
+            let revealed_tiles = self.get_visible_tiles(x, y);
+
+            for tile in revealed_tiles {
+                if self.env_data.grid[x][y].hostile == Hostile::Unknown {
+                    move_score += 1;
+                }
+            }
+        }
+    }
 
     fn monitor(&mut self) {}
 
