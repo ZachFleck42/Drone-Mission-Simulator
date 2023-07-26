@@ -61,7 +61,7 @@ impl Simulation {
                 drone_grid[x][y].content = TileContent::Target;
                 self.drone.data.last_target_pos = Some((x, y));
             } else {
-                drone_grid[x][y].content = TileContent::Empty
+                drone_grid[x][y].content = TileContent::Empty;
             }
         }
     }
