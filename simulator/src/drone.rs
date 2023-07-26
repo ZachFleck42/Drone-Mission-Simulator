@@ -88,6 +88,22 @@ impl Drone {
         visible_tiles
     }
 
+    pub fn update_status(&mut self) {}
+
+    pub fn move_it(&mut self) {
+        match self.status {
+            Status::Searching => self.search(),
+            Status::Monitoring => self.monitor(),
+            Status::Fleeing => self.flee(),
+        }
+    }
+
+    fn search(&mut self) {}
+
+    fn monitor(&mut self) {}
+
+    fn flee(&mut self) {}
+
     pub fn print_grid(&self) {
         for i in 0..self.grid_size {
             for j in 0..self.grid_size {
