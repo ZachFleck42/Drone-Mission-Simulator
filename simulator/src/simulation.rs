@@ -24,7 +24,7 @@ impl Simulation {
         self.environment.move_target();
         // Update drone status
         // Move drone based on status
-        self.aqcuire_drone_data();
+        self.drone_acquire_data();
         self.print();
     }
 
@@ -43,8 +43,8 @@ impl Simulation {
         }
     }
 
-    pub fn aqcuire_drone_data(&mut self) {
-        let visible_tiles = self.drone.get_visible_tiles();
+    pub fn drone_acquire_data(&mut self) {
+        let visible_tiles = self.drone.get_visible_tiles(self.drone.x, self.drone.y);
         let drone_grid = &mut self.drone.env_data.grid;
 
         for tile in visible_tiles {
