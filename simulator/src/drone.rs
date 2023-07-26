@@ -123,10 +123,13 @@ impl Drone {
         };
     }
 
+    fn find_nearest_unrevealed_tile(&self) {}
+
     fn search(&mut self) {
         let mut best_move_score = 0;
         let mut best_move = (self.x, self.y);
 
+        // Check every possible move and determine which will reveal the most tiles
         for potential_move in self.get_valid_moves() {
             let (x, y) = (potential_move.0, potential_move.1);
 
@@ -142,8 +145,25 @@ impl Drone {
             } else if move_score > best_move_score {
                 best_move_score = move_score;
                 best_move = potential_move;
-            } else {
             }
+            // If multiple moves have the same score, prioritize any move that
+            // would allow the drone to see the edge of the terrain
+            else {
+                if x == self.visibility_range
+                    || y == self.visibility_range
+                    || x == self.data.grid_size - (self.visibility_range + 1)
+                    || y == self.data.grid_size - (self.visibility_range + 1)
+                {
+                    best_move_score = move_score;
+                    best_move = potential_move;
+                }
+            }
+        }
+
+        // If no moves will reveal additional tiles, then begin moving towards
+        // the nearest unrevealed tile
+        if best_move_score == 0 {
+            let target = self.find_nearest_unrevealed_tile();
         }
 
         (self.x, self.y) = (best_move.0, best_move.1);
