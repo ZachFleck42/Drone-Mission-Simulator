@@ -142,13 +142,13 @@ impl Drone {
                 };
 
                 if tile.x == self.x && tile.y == self.y {
-                    print!("D");
+                    print!("D ");
                     continue;
                 }
 
                 if let Some((target_x, target_y)) = self.env_data.last_target_pos {
                     if tile.x == target_x && tile.y == target_y {
-                        print!("T");
+                        print!("T ");
                         continue;
                     }
                 }
