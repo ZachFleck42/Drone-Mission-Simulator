@@ -1,5 +1,5 @@
 use crate::utils::random_choice;
-use crate::utils::Direction;
+use crate::utils::DIRECTIONS;
 use rand::Rng;
 
 pub struct Tile {
@@ -96,32 +96,23 @@ impl Environment {
     }
 
     pub fn move_target(&mut self) {
-        let mut rng = rand::thread_rng();
-        if rng.gen_range(0..100) < self.target.move_rate {
-            let mut valid_directions = Vec::new();
+        if rand::thread_rng().gen_range(0..100) < self.target.move_rate {
+            let mut valid_moves = Vec::new();
+            let max_bound = self.terrain.size as i32;
 
-            if self.target.x > 0 {
-                valid_directions.push(Direction::Up);
-            }
-            if self.target.x < self.terrain.size - 1 {
-                valid_directions.push(Direction::Down);
-            }
-            if self.target.y > 0 {
-                valid_directions.push(Direction::Left);
-            }
-            if self.target.y < self.terrain.size - 1 {
-                valid_directions.push(Direction::Right);
-            }
+            for (dx, dy) in &DIRECTIONS {
+                let new_x = self.target.x as i32 + dx;
+                let new_y = self.target.y as i32 + dy;
 
-            if !valid_directions.is_empty() {
-                let direction = valid_directions[rng.gen_range(0..valid_directions.len())];
-
-                match direction {
-                    Direction::Up => self.target.x -= 1,
-                    Direction::Down => self.target.x += 1,
-                    Direction::Left => self.target.y -= 1,
-                    Direction::Right => self.target.y += 1,
+                if new_x >= 0 && new_x < max_bound && new_y >= 0 && new_y < max_bound {
+                    valid_moves.push((dx, dy));
                 }
+            }
+
+            if !valid_moves.is_empty() {
+                let (dx, dy) = random_choice(&valid_moves);
+                self.target.x = (self.target.x as i32 + dx) as usize;
+                self.target.y = (self.target.y as i32 + dy) as usize;
             }
         }
     }

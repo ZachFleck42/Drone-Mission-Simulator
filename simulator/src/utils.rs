@@ -1,12 +1,15 @@
 use rand::Rng;
 
-#[derive(Clone, Copy)]
-pub enum Direction {
-    Up,
-    Down,
-    Left,
-    Right,
-}
+pub static DIRECTIONS: [(i32, i32); 8] = [
+    (-1, -1),
+    (-1, 0),
+    (-1, 1),
+    (0, -1),
+    (0, 1),
+    (1, -1),
+    (1, 0),
+    (1, 1),
+];
 
 /// Returns a copy of a random element in the provided data structure.
 /// Structure must implement the 'Clone' trait.
