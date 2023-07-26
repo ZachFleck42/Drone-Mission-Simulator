@@ -123,9 +123,11 @@ impl Drone {
         };
     }
 
-    fn get_all_unrevealed_tiles(&self) -> Vec<(usize, usize)> {
-        let mut unrevealed_tiles = Vec::new();
+    fn get_nearest_unrevealed_tile(&self) -> Option<(usize, usize)> {
+        let mut closest_distance = f64::MAX;
+        let mut closest_unrevealed = None;
 
+        let mut unrevealed_tiles = Vec::new();
         for x in 0..self.data.grid_size {
             for y in 0..self.data.grid_size {
                 if self.data.grid[x][y].hostile == Hostile::Unknown {
@@ -134,13 +136,16 @@ impl Drone {
             }
         }
 
-        unrevealed_tiles
-    }
+        for tile in unrevealed_tiles {
+            let dx = self.x as f64 - tile.0 as f64;
+            let dy = self.y as f64 - tile.1 as f64;
+            let distance = (dx * dx + dy * dy).sqrt();
 
-    fn get_nearest_unrevealed_tile(&self) -> Option<(usize, usize)> {
-        let unrevealed_tiles = self.get_all_unrevealed_tiles();
-        let mut closest_distance: usize;
-        let mut closest_unrevealed = None;
+            if distance < closest_distance {
+                closest_distance = distance;
+                closest_unrevealed = Some(tile);
+            }
+        }
 
         closest_unrevealed
     }
