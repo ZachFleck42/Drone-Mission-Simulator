@@ -24,7 +24,7 @@ impl Simulation {
         self.environment.move_target();
         // Update drone status
         // Move drone based on status
-        self.drone_acquire_data();
+        self.drone_scan_terrain();
         self.print();
     }
 
@@ -43,7 +43,7 @@ impl Simulation {
         }
     }
 
-    pub fn drone_acquire_data(&mut self) {
+    pub fn drone_scan_terrain(&mut self) {
         let visible_tiles = self.drone.get_visible_tiles(self.drone.x, self.drone.y);
         let drone_grid = &mut self.drone.data.grid;
 
@@ -60,6 +60,8 @@ impl Simulation {
             if x == self.environment.target.x && y == self.environment.target.y {
                 drone_grid[x][y].content = TileContent::Target;
                 self.drone.data.last_target_pos = Some((x, y));
+            } else {
+                drone_grid[x][y].content = TileContent::Empty
             }
         }
     }
