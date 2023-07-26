@@ -123,7 +123,27 @@ impl Drone {
         };
     }
 
-    fn find_nearest_unrevealed_tile(&self) {}
+    fn get_all_unrevealed_tiles(&self) -> Vec<(usize, usize)> {
+        let mut unrevealed_tiles = Vec::new();
+
+        for x in 0..self.data.grid_size {
+            for y in 0..self.data.grid_size {
+                if self.data.grid[x][y].hostile == Hostile::Unknown {
+                    unrevealed_tiles.push((x, y));
+                }
+            }
+        }
+
+        unrevealed_tiles
+    }
+
+    fn get_nearest_unrevealed_tile(&self) -> Option<(usize, usize)> {
+        let unrevealed_tiles = self.get_all_unrevealed_tiles();
+        let mut closest_distance: usize;
+        let mut closest_unrevealed = None;
+
+        closest_unrevealed
+    }
 
     fn search(&mut self) {
         let mut best_move_score = 0;
@@ -140,7 +160,7 @@ impl Drone {
                 }
             }
 
-            if move_score < best_move_score {
+            if move_score == 0 || move_score < best_move_score {
                 continue;
             } else if move_score > best_move_score {
                 best_move_score = move_score;
@@ -163,7 +183,7 @@ impl Drone {
         // If no moves will reveal additional tiles, then begin moving towards
         // the nearest unrevealed tile
         if best_move_score == 0 {
-            let target = self.find_nearest_unrevealed_tile();
+            let target = self.get_nearest_unrevealed_tile();
         }
 
         (self.x, self.y) = (best_move.0, best_move.1);
