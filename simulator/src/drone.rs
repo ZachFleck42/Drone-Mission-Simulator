@@ -81,10 +81,7 @@ impl Drone {
     }
 
     pub fn scan_environment(&mut self, environment: &Environment) {
-        let visible_tiles =
-            get_surrounding_tiles(self.data.grid_size, self.visibility_range, self.x, self.y);
-
-        for (x, y) in visible_tiles {
+        for (x, y) in self.get_visible_tiles() {
             let env_tile = &environment.terrain.grid[x][y];
 
             if env_tile.hostile {
@@ -100,6 +97,10 @@ impl Drone {
                 self.data.grid[x][y].content = TileContent::Empty;
             }
         }
+    }
+
+    fn get_visible_tiles(&self) -> Vec<(usize, usize)> {
+        get_surrounding_tiles(self.data.grid_size, self.visibility_range, self.x, self.y)
     }
 
     pub fn get_valid_moves(&self, x: usize, y: usize) -> Vec<(usize, usize)> {
@@ -123,9 +124,7 @@ impl Drone {
     }
 
     pub fn update_status(&mut self) {
-        for (x, y) in
-            get_surrounding_tiles(self.data.grid_size, self.visibility_range, self.x, self.y)
-        {
+        for (x, y) in self.get_visible_tiles() {
             if self.data.grid[x][y].content == TileContent::Target {
                 self.status = Status::Monitoring;
                 return;
@@ -207,9 +206,7 @@ impl Drone {
             let (x, y) = (potential_move.0, potential_move.1);
 
             let mut move_score = 0;
-            for (vis_x, vis_y) in
-                get_surrounding_tiles(self.data.grid_size, self.visibility_range, x, y)
-            {
+            for (vis_x, vis_y) in self.get_visible_tiles() {
                 if self.data.grid[vis_x][vis_y].hostile == Hostile::Unknown {
                     move_score += 1;
                 }
@@ -252,9 +249,7 @@ impl Drone {
         // Determine which visible tile has the target on it
         let mut target_x: usize;
         let mut target_y: usize;
-        for (x, y) in
-            get_surrounding_tiles(self.data.grid_size, self.visibility_range, self.x, self.y)
-        {
+        for (x, y) in self.get_visible_tiles() {
             if self.data.grid[x][y].content == TileContent::Target {}
             {
                 (target_x, target_y) = (x, y);
