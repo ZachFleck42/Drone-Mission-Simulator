@@ -24,7 +24,9 @@ pub fn get_surrounding_tiles(
     let mut surrounding_tiles = Vec::new();
     for i in min_x..=max_x {
         for j in min_y..=max_y {
-            surrounding_tiles.push((i, j));
+            if i != x || j != y {
+                surrounding_tiles.push((i, j));
+            }
         }
     }
 
