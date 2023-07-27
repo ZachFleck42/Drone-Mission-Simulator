@@ -136,10 +136,12 @@ impl Drone {
     }
 
     pub fn make_move(&mut self) {
-        match self.status {
+        let best_move = match self.status {
             Status::Searching => self.search(),
             Status::Monitoring => self.monitor(),
         };
+
+        (self.x, self.y) = best_move
     }
 
     fn get_nearest_unrevealed_tile(&self) -> Option<(usize, usize)> {
@@ -196,7 +198,7 @@ impl Drone {
         None
     }
 
-    fn search(&mut self) {
+    fn search(&self) -> (usize, usize) {
         let mut best_move_score = 0;
         let mut best_move = (self.x, self.y);
 
@@ -243,10 +245,24 @@ impl Drone {
             }
         }
 
-        (self.x, self.y) = (best_move.0, best_move.1);
+        best_move
     }
 
-    fn monitor(&mut self) {}
+    fn monitor(&self) -> (usize, usize) {
+        // Determine which visible tile has the target on it
+        let mut target_x: usize;
+        let mut target_y: usize;
+        for (x, y) in
+            get_surrounding_tiles(self.data.grid_size, self.visibility_range, self.x, self.y)
+        {
+            if self.data.grid[x][y].content == TileContent::Target {}
+            {
+                (target_x, target_y) = (x, y);
+            }
+        }
+
+        (0, 0)
+    }
 
     pub fn print_grid(&self) {
         for i in 0..self.data.grid_size {
