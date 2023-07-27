@@ -146,6 +146,12 @@ impl Drone {
         self.path_history.push(best_move);
     }
 
+    fn get_distance_to_tile(&self, target_x: usize, target_y: usize) -> f64 {
+        let dx = self.x as f64 - target_x as f64;
+        let dy = self.y as f64 - target_y as f64;
+        (dx * dx + dy * dy).sqrt()
+    }
+
     fn get_nearest_unrevealed_tile(&self) -> Option<(usize, usize)> {
         let mut closest_distance = f64::MAX;
         let mut closest_unrevealed = None;
@@ -160,12 +166,9 @@ impl Drone {
         }
 
         for (unrevealed_x, unrevealed_y) in unrevealed_tiles {
-            let dx = self.x as f64 - unrevealed_x as f64;
-            let dy = self.y as f64 - unrevealed_y as f64;
-            let distance = (dx * dx + dy * dy).sqrt();
-
-            if distance < closest_distance {
-                closest_distance = distance;
+            let distance_to_tile = self.get_distance_to_tile(unrevealed_x, unrevealed_y);
+            if distance_to_tile < closest_distance {
+                closest_distance = distance_to_tile;
                 closest_unrevealed = Some((unrevealed_x, unrevealed_y));
             }
         }
@@ -249,16 +252,12 @@ impl Drone {
     }
 
     fn monitor(&self) -> (usize, usize) {
-        // Determine which visible tile has the target on it
-        let mut target_x: usize;
-        let mut target_y: usize;
-        for (x, y) in self.get_visible_tiles() {
-            if self.data.grid[x][y].content == TileContent::Target {}
-            {
-                (target_x, target_y) = (x, y);
-            }
-        }
+        // Check if within one tile of target
+        // If not, get there
+        // If so, continue
 
+        // Determine which of the 8 tiles around the target drone is in
+        // Determine which tile the drone should get to next
         (0, 0)
     }
 
