@@ -122,8 +122,9 @@ impl Drone {
     }
 
     fn is_valid_move(&self, x: usize, y: usize) -> bool {
-        let tile = &self.data.grid[x][y];
-        if tile.hostile == Hostile::True || tile.content != TileContent::Empty {
+        if self.data.grid[x][y].hostile == Hostile::True
+            || self.data.grid[x][y].content != TileContent::Empty
+        {
             return false;
         }
 
@@ -247,9 +248,9 @@ impl Drone {
     }
 
     fn monitor(&self) -> (usize, usize) {
-        let best_move = (self.x, self.y);
-
+        let mut best_move = (self.x, self.y);
         let (mut target_x, mut target_y) = (0, 0);
+
         for (x, y) in self.get_visible_tiles() {
             if self.data.grid[x][y].content == TileContent::Target {
                 (target_x, target_y) = (x, y);
@@ -257,10 +258,18 @@ impl Drone {
             }
         }
 
+        let possible_moves = self.get_valid_moves();
+        let target_adjacents = get_surrounding_tiles(self.data.grid_size, 1, target_x, target_y);
+
         if self.get_distance_to(target_x, target_y) > 1.0 {
-            let target_adjacent_tiles =
-                get_surrounding_tiles(self.data.grid_size, 1, target_x, target_y);
-            return best_move;
+            let common_tiles: Vec<(usize, usize)> = target_adjacents
+                .into_iter()
+                .filter(|tile| possible_moves.contains(tile))
+                .collect();
+
+            if !common_tiles.is_empty() {
+                best_move = self.get_closest_option(common_tiles);
+            }
         }
 
         // Determine which of the 8 tiles around the target drone is in
