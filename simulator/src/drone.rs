@@ -38,14 +38,14 @@ pub struct Drone {
     pub move_range: usize,
     pub visibility_range: usize,
     pub status: Status,
-    pub data: EnvData,
     pub path_history: Vec<(usize, usize)>,
+    pub data: EnvData,
 }
 
 impl Drone {
     pub fn new(
-        drone_x: usize,
-        drone_y: usize,
+        start_x: usize,
+        start_y: usize,
         grid_size: usize,
         speed: usize,
         visibility_range: usize,
@@ -72,13 +72,13 @@ impl Drone {
         };
 
         Drone {
-            x: drone_x,
-            y: drone_y,
+            x: start_x,
+            y: start_y,
             move_range: speed,
             visibility_range,
             status: Status::Searching,
+            path_history: vec![(start_x, start_y)],
             data,
-            path_history: vec![(drone_x, drone_y)],
         }
     }
 
