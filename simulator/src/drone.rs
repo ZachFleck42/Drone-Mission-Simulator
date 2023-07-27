@@ -259,26 +259,44 @@ impl Drone {
         }
 
         // Get a list of possible moves and a list of tiles adjacent to the target
-        let possible_moves = self.get_valid_moves();
+        let valid_moves = self.get_valid_moves();
         let target_adjacents = get_surrounding_tiles(self.data.grid_size, 1, target_x, target_y);
 
         // If the target is more than one tile away...
         if self.get_distance_to(target_x, target_y) > 1.0 {
-            // Get a list of the common elements in possible_moves and target_adjacents
+            // If there's at lease one element in common between valid_moves and
+            // target_adjacents, move to the closest one.
+            // Otherwise, find the shortest path to a safe, target-adjacent tile
+            // and make the first move towards it.
             let common_tiles: Vec<(usize, usize)> = target_adjacents
                 .clone()
                 .into_iter()
-                .filter(|tile| possible_moves.contains(tile))
+                .filter(|tile| valid_moves.contains(tile))
                 .collect();
 
-            // If there's at lease one element in common, move to the closest one
             if !common_tiles.is_empty() {
                 best_move = self.get_closest_option(common_tiles);
             } else {
-                // Otherwise, find the shortest path to a target-adjacent tile
-                let mut paths: Vec<(Vec<(usize, usize)>)> = Vec::new();
+                let mut possible_paths: Vec<Vec<(usize, usize)>> = Vec::new();
                 for (x, y) in target_adjacents {
-                    let path = self.best_path_to(x, y);
+                    if !self.is_tile_safe(x, y) {
+                        continue;
+                    }
+
+                    if let Some(path) = self.best_path_to(x, y) {
+                        possible_paths.push(path);
+                    }
+                }
+
+                if !possible_paths.is_empty() {
+                    let mut shortest_path = &possible_paths[0];
+                    for path in &possible_paths {
+                        if path.len() < shortest_path.len() {
+                            shortest_path = &path;
+                        }
+                    }
+
+                    best_move = shortest_path[0];
                 }
             }
         }
