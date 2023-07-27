@@ -139,7 +139,7 @@ impl Drone {
     pub fn make_move(&mut self) {
         let best_move = match self.status {
             Status::Searching => self.search(),
-            Status::Monitoring => self.monitor(),
+            Status::Monitoring => self.search(),
         };
 
         (self.x, self.y) = best_move;
@@ -212,7 +212,9 @@ impl Drone {
             let (x, y) = (potential_move.0, potential_move.1);
 
             let mut move_score = 0;
-            for (vis_x, vis_y) in self.get_visible_tiles() {
+            for (vis_x, vis_y) in
+                get_surrounding_tiles(self.data.grid_size, self.visibility_range, x, y)
+            {
                 if self.data.grid[vis_x][vis_y].hostile == Hostile::Unknown {
                     move_score += 1;
                 }
@@ -223,18 +225,6 @@ impl Drone {
             } else if move_score > best_move_score {
                 best_move_score = move_score;
                 best_move = potential_move;
-            }
-            // If multiple moves have the same score, prioritize any move that
-            // would allow the drone to see the edge of the terrain
-            else {
-                if x <= self.visibility_range
-                    || y <= self.visibility_range
-                    || x >= self.data.grid_size - (self.visibility_range + 1)
-                    || y >= self.data.grid_size - (self.visibility_range + 1)
-                {
-                    best_move_score = move_score;
-                    best_move = potential_move;
-                }
             }
         }
 
@@ -274,19 +264,11 @@ impl Drone {
 
                 if tile.x == self.x && tile.y == self.y {
                     print!("D ");
-                    continue;
+                } else if tile.content == TileContent::Target {
+                    print!("T!");
+                } else {
+                    print!("{} ", symbol);
                 }
-
-                if tile.content == TileContent::Target {
-                    print!("T!")
-                } else if let Some((target_x, target_y)) = self.data.last_target_pos {
-                    if tile.x == target_x && tile.y == target_y {
-                        print!("T?");
-                        continue;
-                    }
-                }
-
-                print!("{} ", symbol);
             }
             println!();
         }
