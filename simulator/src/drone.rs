@@ -113,7 +113,7 @@ impl Drone {
     pub fn get_valid_moves(&self) -> Vec<(usize, usize)> {
         let mut valid_moves = Vec::new();
         for (x, y) in get_surrounding_tiles(self.data.grid_size, self.move_range, self.x, self.y) {
-            if self.is_valid_move(x, y) {
+            if self.is_tile_safe(x, y) {
                 valid_moves.push((x, y));
             }
         }
@@ -121,10 +121,9 @@ impl Drone {
         valid_moves
     }
 
-    fn is_valid_move(&self, x: usize, y: usize) -> bool {
-        if self.data.grid[x][y].hostile == Hostile::True
-            || self.data.grid[x][y].content != TileContent::Empty
-        {
+    fn is_tile_safe(&self, x: usize, y: usize) -> bool {
+        let tile = &self.data.grid[x][y];
+        if tile.hostile == Hostile::True || tile.content != TileContent::Empty {
             return false;
         }
 
@@ -195,7 +194,7 @@ impl Drone {
             for (move_x, move_y) in
                 get_surrounding_tiles(self.data.grid_size, self.move_range, current_x, current_y)
             {
-                if self.is_valid_move(move_x, move_y) && !visited.contains(&(move_x, move_y)) {
+                if self.is_tile_safe(move_x, move_y) && !visited.contains(&(move_x, move_y)) {
                     let mut new_path = path.clone();
                     new_path.push((move_x, move_y));
                     visited.insert((move_x, move_y));
