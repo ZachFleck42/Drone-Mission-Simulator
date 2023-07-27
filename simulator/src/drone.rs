@@ -1,6 +1,5 @@
 use crate::env::Environment;
 use crate::utils::get_surrounding_tiles;
-use crate::utils::DIRECTIONS;
 use std::collections::{HashSet, VecDeque};
 
 pub enum Status {
@@ -182,14 +181,14 @@ impl Drone {
                 return Some(path);
             }
 
-            for (neighboring_x, neighboring_y) in self.get_valid_moves(current_x, current_y) {
-                if self.is_valid_move(neighboring_x, neighboring_y)
-                    && !visited.contains(&(neighboring_x, neighboring_y))
-                {
+            for (move_x, move_y) in
+                get_surrounding_tiles(self.data.grid_size, self.move_range, current_x, current_y)
+            {
+                if self.is_valid_move(move_x, move_y) && !visited.contains(&(move_x, move_y)) {
                     let mut new_path = path.clone();
-                    new_path.push((neighboring_x, neighboring_y));
-                    visited.insert((neighboring_x, neighboring_y));
-                    queue.push_back((neighboring_x, neighboring_y, new_path));
+                    new_path.push((move_x, move_y));
+                    visited.insert((move_x, move_y));
+                    queue.push_back((move_x, move_y, new_path));
                 }
             }
         }
