@@ -5,7 +5,6 @@ use std::collections::{HashSet, VecDeque};
 pub enum Status {
     Searching,
     Monitoring,
-    Fleeing,
 }
 
 #[derive(PartialEq)]
@@ -152,7 +151,6 @@ impl Drone {
         match self.status {
             Status::Searching => self.search(),
             Status::Monitoring => self.monitor(),
-            Status::Fleeing => self.flee(),
         };
     }
 
@@ -184,7 +182,6 @@ impl Drone {
     }
 
     fn find_best_path(&self, target_x: usize, target_y: usize) -> Option<Vec<(usize, usize)>> {
-        println!("Attempting to path to ({}, {})", target_x, target_y);
         let mut queue: VecDeque<(usize, usize, Vec<(usize, usize)>)> = VecDeque::new();
         let mut visited: HashSet<(usize, usize)> = HashSet::new();
 
@@ -193,7 +190,6 @@ impl Drone {
 
         while let Some((current_x, current_y, path)) = queue.pop_front() {
             if current_x == target_x && current_y == target_y {
-                println!("Path found: {:?}", path);
                 return Some(path);
             }
 
@@ -209,7 +205,6 @@ impl Drone {
             }
         }
 
-        println!("No path found");
         None
     }
 
@@ -259,16 +254,10 @@ impl Drone {
             }
         }
 
-        if self.x == best_move.0 && self.y == best_move.1 {
-            println!("No moves found");
-        }
-
         (self.x, self.y) = (best_move.0, best_move.1);
     }
 
     fn monitor(&mut self) {}
-
-    fn flee(&mut self) {}
 
     pub fn print_grid(&self) {
         for i in 0..self.data.grid_size {
@@ -286,9 +275,11 @@ impl Drone {
                     continue;
                 }
 
-                if let Some((target_x, target_y)) = self.data.last_target_pos {
+                if tile.content == TileContent::Target {
+                    print!("T!")
+                } else if let Some((target_x, target_y)) = self.data.last_target_pos {
                     if tile.x == target_x && tile.y == target_y {
-                        print!("T ");
+                        print!("T?");
                         continue;
                     }
                 }
