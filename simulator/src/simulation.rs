@@ -22,8 +22,9 @@ impl Simulation {
 
     pub fn tick(&mut self) {
         self.environment.move_target();
+        self.drone_scan_terrain();
         // Update drone status
-        // Move drone based on status
+        self.drone.make_move();
         self.drone_scan_terrain();
         self.print();
     }

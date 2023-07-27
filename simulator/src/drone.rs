@@ -185,8 +185,9 @@ impl Drone {
             let (x, y) = (potential_move.0, potential_move.1);
 
             let mut move_score = 0;
-            for _now_visible_tile in self.get_visible_tiles(x, y) {
-                if self.data.grid[x][y].hostile == Hostile::Unknown {
+            for now_visible_tile in self.get_visible_tiles(x, y) {
+                let (vis_x, vis_y) = now_visible_tile;
+                if self.data.grid[vis_x][vis_y].hostile == Hostile::Unknown {
                     move_score += 1;
                 }
             }
