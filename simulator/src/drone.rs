@@ -94,24 +94,31 @@ impl Drone {
 
     pub fn get_valid_moves(&self, x: usize, y: usize) -> Vec<(usize, usize)> {
         let mut valid_moves = Vec::new();
-        let max_bound = self.data.grid_size as i32;
-
         for (dx, dy) in DIRECTIONS {
             let new_x = x as i32 + dx;
             let new_y = y as i32 + dy;
 
-            if new_x >= 0 && new_x < max_bound && new_y >= 0 && new_y < max_bound {
-                let newer_x = new_x as usize;
-                let newer_y = new_y as usize;
-                let tile = &self.data.grid[newer_x][newer_y];
-
-                if tile.hostile == Hostile::False && tile.content == TileContent::Empty {
-                    valid_moves.push((newer_x, newer_y));
-                }
+            if self.is_valid_move(new_x as usize, new_y as usize) {
+                valid_moves.push((new_x as usize, new_y as usize));
             }
         }
 
         valid_moves
+    }
+
+    fn is_valid_move(&self, x: usize, y: usize) -> bool {
+        let max_bound = self.data.grid_size;
+        if x >= 0 && x < max_bound && y >= 0 && y < max_bound {
+            let newer_x = x as usize;
+            let newer_y = y as usize;
+            let tile = &self.data.grid[newer_x][newer_y];
+
+            if !(tile.hostile == Hostile::True) && tile.content == TileContent::Empty {
+                return true;
+            }
+        }
+
+        false
     }
 
     pub fn update_status(&mut self) {}
@@ -152,6 +159,7 @@ impl Drone {
     }
 
     fn find_best_path(&self, target_x: usize, target_y: usize) -> Option<Vec<(usize, usize)>> {
+        println!("Attempting to path to ({}, {})", target_x, target_y);
         let mut queue: VecDeque<(usize, usize, Vec<(usize, usize)>)> = VecDeque::new();
         let mut visited: HashSet<(usize, usize)> = HashSet::new();
 
@@ -160,11 +168,14 @@ impl Drone {
 
         while let Some((current_x, current_y, path)) = queue.pop_front() {
             if current_x == target_x && current_y == target_y {
+                println!("Path found: {:?}", path);
                 return Some(path);
             }
 
-            for (neighboring_x, neighboring_y) in self.get_valid_moves(current_x, current_y) {
-                if !visited.contains(&(neighboring_x, neighboring_y)) {
+            for &(neighboring_x, neighboring_y) in &self.get_valid_moves(current_x, current_y) {
+                if self.is_valid_move(neighboring_x, neighboring_y)
+                    && !visited.contains(&(neighboring_x, neighboring_y))
+                {
                     let mut new_path = path.clone();
                     new_path.push((neighboring_x, neighboring_y));
                     visited.insert((neighboring_x, neighboring_y));
@@ -173,6 +184,7 @@ impl Drone {
             }
         }
 
+        println!("No path found");
         None
     }
 
@@ -220,6 +232,10 @@ impl Drone {
                     best_move = path[0];
                 }
             }
+        }
+
+        if self.x == best_move.0 && self.y == best_move.1 {
+            println!("No moves found");
         }
 
         (self.x, self.y) = (best_move.0, best_move.1);
