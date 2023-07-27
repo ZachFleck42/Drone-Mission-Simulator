@@ -145,7 +145,16 @@ impl Drone {
         false
     }
 
-    pub fn update_status(&mut self) {}
+    pub fn update_status(&mut self) {
+        for (tile_x, tile_y) in self.get_visible_tiles(self.x, self.y) {
+            if self.data.grid[tile_x][tile_y].content == TileContent::Target {
+                self.status = Status::Monitoring;
+                return;
+            }
+        }
+
+        self.status = Status::Searching
+    }
 
     pub fn make_move(&mut self) {
         match self.status {
