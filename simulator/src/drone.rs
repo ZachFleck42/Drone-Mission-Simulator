@@ -85,8 +85,7 @@ impl Drone {
         let visible_tiles =
             get_surrounding_tiles(self.data.grid_size, self.visibility_range, self.x, self.y);
 
-        for tile in visible_tiles {
-            let (x, y) = (tile.0, tile.1);
+        for (x, y) in visible_tiles {
             let env_tile = &environment.terrain.grid[x][y];
 
             if env_tile.hostile {
@@ -125,10 +124,10 @@ impl Drone {
     }
 
     pub fn update_status(&mut self) {
-        for (tile_x, tile_y) in
+        for (x, y) in
             get_surrounding_tiles(self.data.grid_size, self.visibility_range, self.x, self.y)
         {
-            if self.data.grid[tile_x][tile_y].content == TileContent::Target {
+            if self.data.grid[x][y].content == TileContent::Target {
                 self.status = Status::Monitoring;
                 return;
             }
@@ -157,14 +156,14 @@ impl Drone {
             }
         }
 
-        for tile in unrevealed_tiles {
-            let dx = self.x as f64 - tile.0 as f64;
-            let dy = self.y as f64 - tile.1 as f64;
+        for (unrevealed_x, unrevealed_y) in unrevealed_tiles {
+            let dx = self.x as f64 - unrevealed_x as f64;
+            let dy = self.y as f64 - unrevealed_y as f64;
             let distance = (dx * dx + dy * dy).sqrt();
 
             if distance < closest_distance {
                 closest_distance = distance;
-                closest_unrevealed = Some(tile);
+                closest_unrevealed = Some((unrevealed_x, unrevealed_y));
             }
         }
 
@@ -207,10 +206,9 @@ impl Drone {
             let (x, y) = (potential_move.0, potential_move.1);
 
             let mut move_score = 0;
-            for now_visible_tile in
+            for (vis_x, vis_y) in
                 get_surrounding_tiles(self.data.grid_size, self.visibility_range, x, y)
             {
-                let (vis_x, vis_y) = now_visible_tile;
                 if self.data.grid[vis_x][vis_y].hostile == Hostile::Unknown {
                     move_score += 1;
                 }
