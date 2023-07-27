@@ -103,11 +103,11 @@ impl Drone {
         get_surrounding_tiles(self.data.grid_size, self.visibility_range, self.x, self.y)
     }
 
-    pub fn get_valid_moves(&self, x: usize, y: usize) -> Vec<(usize, usize)> {
+    pub fn get_valid_moves(&self) -> Vec<(usize, usize)> {
         let mut valid_moves = Vec::new();
-        for (move_x, move_y) in get_surrounding_tiles(self.data.grid_size, self.move_range, x, y) {
-            if self.is_valid_move(move_x, move_y) {
-                valid_moves.push((move_x, move_y));
+        for (x, y) in get_surrounding_tiles(self.data.grid_size, self.move_range, self.x, self.y) {
+            if self.is_valid_move(x, y) {
+                valid_moves.push((x, y));
             }
         }
 
@@ -116,11 +116,11 @@ impl Drone {
 
     fn is_valid_move(&self, x: usize, y: usize) -> bool {
         let tile = &self.data.grid[x][y];
-        if !(tile.hostile == Hostile::True) && tile.content == TileContent::Empty {
-            return true;
+        if tile.hostile == Hostile::True || tile.content != TileContent::Empty {
+            return false;
         }
 
-        false
+        true
     }
 
     pub fn update_status(&mut self) {
@@ -202,7 +202,7 @@ impl Drone {
         let mut best_move = (self.x, self.y);
 
         // Check every possible move and determine which will reveal the most tiles
-        for potential_move in self.get_valid_moves(self.x, self.y) {
+        for potential_move in self.get_valid_moves() {
             let (x, y) = (potential_move.0, potential_move.1);
 
             let mut move_score = 0;
