@@ -39,12 +39,13 @@ pub struct Drone {
     pub visibility_range: usize,
     pub status: Status,
     pub data: EnvData,
+    pub path_history: Vec<(usize, usize)>,
 }
 
 impl Drone {
     pub fn new(
-        x: usize,
-        y: usize,
+        drone_x: usize,
+        drone_y: usize,
         grid_size: usize,
         speed: usize,
         visibility_range: usize,
@@ -71,12 +72,13 @@ impl Drone {
         };
 
         Drone {
-            x,
-            y,
+            x: drone_x,
+            y: drone_y,
             move_range: speed,
             visibility_range,
             status: Status::Searching,
             data,
+            path_history: vec![(drone_x, drone_y)],
         }
     }
 
@@ -140,7 +142,8 @@ impl Drone {
             Status::Monitoring => self.monitor(),
         };
 
-        (self.x, self.y) = best_move
+        (self.x, self.y) = best_move;
+        self.path_history.push(best_move);
     }
 
     fn get_nearest_unrevealed_tile(&self) -> Option<(usize, usize)> {
