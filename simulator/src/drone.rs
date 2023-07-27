@@ -94,12 +94,17 @@ impl Drone {
 
     pub fn get_valid_moves(&self, x: usize, y: usize) -> Vec<(usize, usize)> {
         let mut valid_moves = Vec::new();
-        for (dx, dy) in DIRECTIONS {
-            let new_x = x as i32 + dx;
-            let new_y = y as i32 + dy;
 
-            if self.is_valid_move(new_x as usize, new_y as usize) {
-                valid_moves.push((new_x as usize, new_y as usize));
+        for (dx, dy) in DIRECTIONS {
+            let moved_x = x as i32 + dx;
+            let moved_y = y as i32 + dy;
+
+            if moved_x >= 0 && moved_y >= 0 {
+                let (new_x, new_y) = (moved_x as usize, moved_y as usize);
+
+                if self.is_valid_move(new_x, new_y) {
+                    valid_moves.push((new_x, new_y));
+                }
             }
         }
 
@@ -108,11 +113,8 @@ impl Drone {
 
     fn is_valid_move(&self, x: usize, y: usize) -> bool {
         let max_bound = self.data.grid_size;
-        if x >= 0 && x < max_bound && y >= 0 && y < max_bound {
-            let newer_x = x as usize;
-            let newer_y = y as usize;
-            let tile = &self.data.grid[newer_x][newer_y];
-
+        if x < max_bound && y < max_bound {
+            let tile = &self.data.grid[x][y];
             if !(tile.hostile == Hostile::True) && tile.content == TileContent::Empty {
                 return true;
             }
@@ -172,7 +174,7 @@ impl Drone {
                 return Some(path);
             }
 
-            for &(neighboring_x, neighboring_y) in &self.get_valid_moves(current_x, current_y) {
+            for (neighboring_x, neighboring_y) in self.get_valid_moves(current_x, current_y) {
                 if self.is_valid_move(neighboring_x, neighboring_y)
                     && !visited.contains(&(neighboring_x, neighboring_y))
                 {
