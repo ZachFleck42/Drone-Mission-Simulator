@@ -1,4 +1,5 @@
 use crate::env::Environment;
+use crate::utils::get_surrounding_tiles;
 use crate::utils::DIRECTIONS;
 use std::collections::{HashSet, VecDeque};
 
@@ -35,13 +36,20 @@ pub struct EnvData {
 pub struct Drone {
     pub x: usize,
     pub y: usize,
+    pub move_range: usize,
     pub visibility_range: usize,
     pub status: Status,
     pub data: EnvData,
 }
 
 impl Drone {
-    pub fn new(x: usize, y: usize, grid_size: usize, visibility_range: usize) -> Self {
+    pub fn new(
+        x: usize,
+        y: usize,
+        grid_size: usize,
+        speed: usize,
+        visibility_range: usize,
+    ) -> Self {
         let mut grid = Vec::with_capacity(grid_size);
         for x in 0..grid_size {
             let mut row = Vec::with_capacity(grid_size);
@@ -66,6 +74,7 @@ impl Drone {
         Drone {
             x,
             y,
+            move_range: speed,
             visibility_range,
             status: Status::Searching,
             data,
@@ -73,7 +82,8 @@ impl Drone {
     }
 
     pub fn scan_environment(&mut self, environment: &Environment) {
-        let visible_tiles = self.get_visible_tiles(self.x, self.y);
+        let visible_tiles =
+            get_surrounding_tiles(self.data.grid_size, self.visibility_range, self.x, self.y);
 
         for tile in visible_tiles {
             let (x, y) = (tile.0, tile.1);
@@ -94,39 +104,11 @@ impl Drone {
         }
     }
 
-    pub fn get_visible_tiles(&self, x: usize, y: usize) -> Vec<(usize, usize)> {
-        let max_bound = self.data.grid_size - 1;
-        let vis_range = self.visibility_range;
-
-        // Calculate the boundaries for the visible range around the drone
-        let min_x = x.saturating_sub(vis_range);
-        let max_x = std::cmp::min(x + vis_range, max_bound);
-        let min_y = y.saturating_sub(vis_range);
-        let max_y = std::cmp::min(y + vis_range, max_bound);
-
-        let mut visible_tiles = Vec::new();
-        for i in min_x..=max_x {
-            for j in min_y..=max_y {
-                visible_tiles.push((i, j));
-            }
-        }
-
-        visible_tiles
-    }
-
     pub fn get_valid_moves(&self, x: usize, y: usize) -> Vec<(usize, usize)> {
         let mut valid_moves = Vec::new();
-
-        for (dx, dy) in DIRECTIONS {
-            let moved_x = x as i32 + dx;
-            let moved_y = y as i32 + dy;
-
-            if moved_x >= 0 && moved_y >= 0 {
-                let (new_x, new_y) = (moved_x as usize, moved_y as usize);
-
-                if self.is_valid_move(new_x, new_y) {
-                    valid_moves.push((new_x, new_y));
-                }
+        for (move_x, move_y) in get_surrounding_tiles(self.data.grid_size, self.move_range, x, y) {
+            if self.is_valid_move(move_x, move_y) {
+                valid_moves.push((move_x, move_y));
             }
         }
 
@@ -134,19 +116,18 @@ impl Drone {
     }
 
     fn is_valid_move(&self, x: usize, y: usize) -> bool {
-        let max_bound = self.data.grid_size;
-        if x < max_bound && y < max_bound {
-            let tile = &self.data.grid[x][y];
-            if !(tile.hostile == Hostile::True) && tile.content == TileContent::Empty {
-                return true;
-            }
+        let tile = &self.data.grid[x][y];
+        if !(tile.hostile == Hostile::True) && tile.content == TileContent::Empty {
+            return true;
         }
 
         false
     }
 
     pub fn update_status(&mut self) {
-        for (tile_x, tile_y) in self.get_visible_tiles(self.x, self.y) {
+        for (tile_x, tile_y) in
+            get_surrounding_tiles(self.data.grid_size, self.visibility_range, self.x, self.y)
+        {
             if self.data.grid[tile_x][tile_y].content == TileContent::Target {
                 self.status = Status::Monitoring;
                 return;
@@ -226,7 +207,9 @@ impl Drone {
             let (x, y) = (potential_move.0, potential_move.1);
 
             let mut move_score = 0;
-            for now_visible_tile in self.get_visible_tiles(x, y) {
+            for now_visible_tile in
+                get_surrounding_tiles(self.data.grid_size, self.visibility_range, x, y)
+            {
                 let (vis_x, vis_y) = now_visible_tile;
                 if self.data.grid[vis_x][vis_y].hostile == Hostile::Unknown {
                     move_score += 1;
