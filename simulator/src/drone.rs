@@ -263,7 +263,8 @@ impl Drone {
         let target_adjacents = get_surrounding_tiles(self.data.grid_size, 1, target_x, target_y);
 
         // If the target is more than one tile away...
-        if self.get_distance_to(target_x, target_y) > 1.0 {
+        let distance_to_target = self.get_distance_to(target_x, target_y);
+        if distance_to_target > 1.0 {
             // If there's at lease one element in common between valid_moves and
             // target_adjacents, move to the closest one.
             // Otherwise, find the shortest path to a safe, target-adjacent tile
@@ -301,7 +302,32 @@ impl Drone {
             }
         }
 
-        // Determine which of the 8 tiles around the target drone is in
+        // If the target is one tile away already...
+        if distance_to_target as usize == 1 {
+            // Determine which specific tile the drone is in relative to the target.
+            // This way we can circle around the target in a semi-consistent manner.
+            let adjacent_positions = [(-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1)];
+            let num_adjacents = adjacent_positions.len();
+            let dx = target_x as i32 - self.x as i32;
+            let dy = target_y as i32 - self.y as i32;
+
+            if let Some(current_index) = adjacent_positions.iter().position(|&i| i == (dx, dy)) {
+                let clockwise_index = (current_index + 1) % num_adjacents;
+                let counterclock_index = (current_index + num_adjacents - 1) % num_adjacents;
+
+                let clockwise_x = target_x as i32 + adjacent_positions[clockwise_index].0;
+                let clockwise_y = target_y as i32 + adjacent_positions[clockwise_index].1;
+
+                let counterclock_x = target_x as i32 + adjacent_positions[counterclock_index].0;
+                let counterclock_y = target_y as i32 + adjacent_positions[counterclock_index].1;
+
+                best_move = (
+                    (self.x as i32 + next_x) as usize,
+                    (self.y as i32 + next_y) as usize,
+                )
+            }
+        }
+
         // Determine which tile the drone should get to next
         best_move
     }
@@ -320,7 +346,7 @@ impl Drone {
                 if tile.x == self.x && tile.y == self.y {
                     print!("D ");
                 } else if tile.content == TileContent::Target {
-                    print!("T!");
+                    print!("T ");
                 } else {
                     print!("{} ", symbol);
                 }
