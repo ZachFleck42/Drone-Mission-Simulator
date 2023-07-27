@@ -242,13 +242,23 @@ impl Drone {
     }
 
     fn monitor(&self) -> (usize, usize) {
-        // Check if within one tile of target
-        // If not, get there
-        // If so, continue
+        let best_move = (self.x, self.y);
+
+        let (mut target_x, mut target_y) = (0, 0);
+        for (x, y) in self.get_visible_tiles() {
+            if self.data.grid[x][y].content == TileContent::Target {
+                (target_x, target_y) = (x, y);
+                break;
+            }
+        }
+
+        if self.get_distance_to_tile(target_x, target_y) > 1.0 {
+            return best_move;
+        }
 
         // Determine which of the 8 tiles around the target drone is in
         // Determine which tile the drone should get to next
-        (0, 0)
+        best_move
     }
 
     pub fn print_grid(&self) {
