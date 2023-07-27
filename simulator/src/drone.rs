@@ -1,3 +1,4 @@
+use crate::env::Environment;
 use crate::utils::DIRECTIONS;
 use std::collections::{HashSet, VecDeque};
 
@@ -69,6 +70,28 @@ impl Drone {
             visibility_range,
             status: Status::Searching,
             data,
+        }
+    }
+
+    pub fn scan_environment(&mut self, environment: &Environment) {
+        let visible_tiles = self.get_visible_tiles(self.x, self.y);
+
+        for tile in visible_tiles {
+            let (x, y) = (tile.0, tile.1);
+            let env_tile = &environment.terrain.grid[x][y];
+
+            if env_tile.hostile {
+                self.data.grid[x][y].hostile = Hostile::True;
+            } else {
+                self.data.grid[x][y].hostile = Hostile::False;
+            }
+
+            if x == environment.target.x && y == environment.target.y {
+                self.data.grid[x][y].content = TileContent::Target;
+                self.data.last_target_pos = Some((x, y));
+            } else {
+                self.data.grid[x][y].content = TileContent::Empty;
+            }
         }
     }
 

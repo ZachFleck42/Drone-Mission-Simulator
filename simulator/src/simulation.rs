@@ -1,6 +1,4 @@
 use crate::drone::Drone;
-use crate::drone::Hostile;
-use crate::drone::TileContent;
 use crate::env::Environment;
 
 pub struct Simulation {
@@ -22,10 +20,10 @@ impl Simulation {
 
     pub fn tick(&mut self) {
         self.environment.move_target();
-        self.drone_scan_terrain();
+        self.drone.scan_environment(&self.environment);
         // Update drone status
         self.drone.make_move();
-        self.drone_scan_terrain();
+        self.drone.scan_environment(&self.environment);
         self.print();
     }
 
@@ -41,29 +39,6 @@ impl Simulation {
                 self.tick += 1;
                 self.tick();
             },
-        }
-    }
-
-    pub fn drone_scan_terrain(&mut self) {
-        let visible_tiles = self.drone.get_visible_tiles(self.drone.x, self.drone.y);
-        let drone_grid = &mut self.drone.data.grid;
-
-        for tile in visible_tiles {
-            let (x, y) = (tile.0, tile.1);
-            let env_tile = &self.environment.terrain.grid[x][y];
-
-            if env_tile.hostile {
-                drone_grid[x][y].hostile = Hostile::True;
-            } else {
-                drone_grid[x][y].hostile = Hostile::False;
-            }
-
-            if x == self.environment.target.x && y == self.environment.target.y {
-                drone_grid[x][y].content = TileContent::Target;
-                self.drone.data.last_target_pos = Some((x, y));
-            } else {
-                drone_grid[x][y].content = TileContent::Empty;
-            }
         }
     }
 

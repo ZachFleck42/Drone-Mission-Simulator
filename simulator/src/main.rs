@@ -5,18 +5,18 @@ mod utils;
 
 fn main() {
     // Define default values for environment and generate
-    let grid_size = 8;
+    let grid_size = 16;
     let hostile_rate = 10;
     let target_move_rate = 80;
-    let mut environment = env::Environment::new(grid_size, hostile_rate, target_move_rate);
+    let environment = env::Environment::new(grid_size, hostile_rate, target_move_rate);
 
     // Define default values for drone and generate
     let visibility_range = 2;
     let (entry_point_x, entry_point_y) = environment.generate_entry_point();
-    let mut drone = drone::Drone::new(entry_point_x, entry_point_y, grid_size, visibility_range);
+    let drone = drone::Drone::new(entry_point_x, entry_point_y, grid_size, visibility_range);
 
     // Define default values for simulation and generate
-    let max_ticks = Some(10);
+    let max_ticks = Some(32);
     let mut sim = simulation::Simulation::new(environment, drone, max_ticks);
 
     // Run simulation
