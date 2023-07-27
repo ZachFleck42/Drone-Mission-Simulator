@@ -30,3 +30,14 @@ pub fn get_surrounding_tiles(
 
     surrounding_tiles
 }
+
+pub fn get_distance_to_tile(
+    origin_x: usize,
+    origin_y: usize,
+    target_x: usize,
+    target_y: usize,
+) -> f64 {
+    let dx = origin_x as f64 - target_x as f64;
+    let dy = origin_y as f64 - target_y as f64;
+    (dx * dx + dy * dy).sqrt()
+}

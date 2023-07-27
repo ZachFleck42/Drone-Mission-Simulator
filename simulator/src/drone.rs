@@ -1,4 +1,5 @@
 use crate::env::Environment;
+use crate::utils::get_distance_to_tile;
 use crate::utils::get_surrounding_tiles;
 use std::collections::{HashSet, VecDeque};
 
@@ -105,6 +106,10 @@ impl Drone {
         get_surrounding_tiles(self.data.grid_size, self.visibility_range, self.x, self.y)
     }
 
+    fn get_distance_to(&self, target_x: usize, target_y: usize) -> f64 {
+        get_distance_to_tile(self.x, self.y, target_x, target_y)
+    }
+
     pub fn get_valid_moves(&self) -> Vec<(usize, usize)> {
         let mut valid_moves = Vec::new();
         for (x, y) in get_surrounding_tiles(self.data.grid_size, self.move_range, self.x, self.y) {
@@ -146,16 +151,22 @@ impl Drone {
         self.path_history.push(best_move);
     }
 
-    fn get_distance_to_tile(&self, target_x: usize, target_y: usize) -> f64 {
-        let dx = self.x as f64 - target_x as f64;
-        let dy = self.y as f64 - target_y as f64;
-        (dx * dx + dy * dy).sqrt()
+    fn get_closest_option(&self, options: Vec<(usize, usize)>) -> (usize, usize) {
+        let mut closest_distance = f64::MAX;
+        let mut closest_tile = options[0];
+
+        for (x, y) in options {
+            let distance_to_tile = self.get_distance_to(x, y);
+            if distance_to_tile < closest_distance {
+                closest_distance = distance_to_tile;
+                closest_tile = (x, y);
+            }
+        }
+
+        closest_tile
     }
 
-    fn get_nearest_unrevealed_tile(&self) -> Option<(usize, usize)> {
-        let mut closest_distance = f64::MAX;
-        let mut closest_unrevealed = None;
-
+    fn all_unrevealed_tiles(&self) -> Vec<(usize, usize)> {
         let mut unrevealed_tiles = Vec::new();
         for x in 0..self.data.grid_size {
             for y in 0..self.data.grid_size {
@@ -165,18 +176,10 @@ impl Drone {
             }
         }
 
-        for (unrevealed_x, unrevealed_y) in unrevealed_tiles {
-            let distance_to_tile = self.get_distance_to_tile(unrevealed_x, unrevealed_y);
-            if distance_to_tile < closest_distance {
-                closest_distance = distance_to_tile;
-                closest_unrevealed = Some((unrevealed_x, unrevealed_y));
-            }
-        }
-
-        closest_unrevealed
+        unrevealed_tiles
     }
 
-    fn find_best_path(&self, target_x: usize, target_y: usize) -> Option<Vec<(usize, usize)>> {
+    fn best_path_to(&self, target_x: usize, target_y: usize) -> Option<Vec<(usize, usize)>> {
         let mut queue: VecDeque<(usize, usize, Vec<(usize, usize)>)> = VecDeque::new();
         let mut visited: HashSet<(usize, usize)> = HashSet::new();
 
@@ -231,8 +234,10 @@ impl Drone {
         // If no moves will reveal additional tiles, then begin moving towards
         // the nearest unrevealed tile
         if best_move_score == 0 {
-            if let Some((target_x, target_y)) = self.get_nearest_unrevealed_tile() {
-                if let Some(path) = self.find_best_path(target_x, target_y) {
+            let unrevealed_tiles = self.all_unrevealed_tiles();
+            if !unrevealed_tiles.is_empty() {
+                let (unrevealed_x, unrevealed_y) = self.get_closest_option(unrevealed_tiles);
+                if let Some(path) = self.best_path_to(unrevealed_x, unrevealed_y) {
                     best_move = path[0];
                 }
             }
@@ -252,7 +257,9 @@ impl Drone {
             }
         }
 
-        if self.get_distance_to_tile(target_x, target_y) > 1.0 {
+        if self.get_distance_to(target_x, target_y) > 1.0 {
+            let target_adjacent_tiles =
+                get_surrounding_tiles(self.data.grid_size, 1, target_x, target_y);
             return best_move;
         }
 
