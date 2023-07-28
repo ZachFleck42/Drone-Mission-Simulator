@@ -1,4 +1,5 @@
 use crate::env::Environment;
+use crate::utils::get_adjacent_tiles_in_clockwise_order;
 use crate::utils::get_distance_to_tile;
 use crate::utils::get_surrounding_tiles;
 use std::collections::{HashSet, VecDeque};
@@ -145,11 +146,12 @@ impl Drone {
     pub fn update_status(&mut self) {
         for (x, y) in self.get_visible_tiles() {
             if self.data.grid[x][y].content == TileContent::Target {
+                println!("Target found; switching to 'Monitoring'");
                 self.status = Status::Monitoring;
                 return;
             }
         }
-
+        println!("Target not in sight: switching to 'Searching'");
         self.status = Status::Searching
     }
 
@@ -274,7 +276,8 @@ impl Drone {
 
         // If the target is more than one tile away...
         let distance_to_target = self.get_distance_to(target_x, target_y);
-        if distance_to_target > 1.0 {
+        if distance_to_target > 1.5 {
+            println!("Distance to target is {}", distance_to_target);
             // If there's at lease one element in common between valid_moves and
             // target_adjacents, move to the closest one.
             // Otherwise, find the shortest path to a safe, target-adjacent tile
@@ -313,11 +316,14 @@ impl Drone {
         }
 
         // If the target is one tile away already...
-        if distance_to_target as usize == 1 {
+        if distance_to_target < 2.0 {
             // Determine which specific tile the drone is in relative to the target.
             // This way we can circle around the target in a semi-consistent manner.
-            let adjacents = get_surrounding_tiles(self.data.grid_size, 1, target_x, target_y);
+            let adjacents =
+                get_adjacent_tiles_in_clockwise_order(self.data.grid_size, target_x, target_y);
             let num_adjacents = adjacents.len();
+
+            println!("Adjacents: {:?}", adjacents);
 
             if let Some(current_index) = adjacents.iter().position(|&i| i == (self.x, self.y)) {
                 let first_clockwise_tile = adjacents[(current_index + 1) % num_adjacents];
@@ -330,22 +336,39 @@ impl Drone {
 
                 if let Some(prev_move) = self.path_history.last() {
                     if prev_move == &first_clockwise_tile || prev_move == &second_clockwise_tile {
-                        if self.is_tile_safe(first_counter_tile.0, first_counter_tile.1) {
+                        if self.is_valid_move(first_counter_tile.0, first_counter_tile.1) {
+                            println!(
+                                "Last tile was first or second clockwise, moving to first counter {}, {}",
+                                first_counter_tile.0, first_counter_tile.1
+                            );
                             return first_counter_tile;
-                        } else if self.is_tile_safe(second_counter_tile.0, second_counter_tile.1) {
+                        } else if self.is_valid_move(second_counter_tile.0, second_counter_tile.1) {
+                            println!(
+                                "Last tile was first or second clockwise AND first_counter unavailable, moving to second_counter {}, {}",
+                                second_counter_tile.0, second_counter_tile.1
+                            );
                             return second_counter_tile;
                         }
                     }
                 }
 
-                if self.is_tile_safe(first_clockwise_tile.0, first_clockwise_tile.1) {
+                if self.is_valid_move(first_clockwise_tile.0, first_clockwise_tile.1) {
+                    println!(
+                        "Moving to first_clockwise, {}, {}",
+                        first_clockwise_tile.0, first_clockwise_tile.1
+                    );
                     return first_clockwise_tile;
-                } else if self.is_tile_safe(second_clockwise_tile.0, second_clockwise_tile.1) {
+                } else if self.is_valid_move(second_clockwise_tile.0, second_clockwise_tile.1) {
+                    println!(
+                        "First clockwise unavailable, moving to second clockwise {}, {}",
+                        second_clockwise_tile.0, second_clockwise_tile.1
+                    );
                     return second_clockwise_tile;
                 }
             }
         }
 
+        println!("No monitoring moves found; remaining stationary");
         (self.x, self.y)
     }
 

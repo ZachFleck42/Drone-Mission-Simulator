@@ -43,3 +43,37 @@ pub fn get_distance_to_tile(
     let dy = origin_y as f64 - target_y as f64;
     (dx * dx + dy * dy).sqrt()
 }
+
+pub fn get_adjacent_tiles_in_clockwise_order(
+    grid_size: usize,
+    center_x: usize,
+    center_y: usize,
+) -> Vec<(usize, usize)> {
+    let mut adjacent_tiles = Vec::new();
+    let max_bound = grid_size as isize - 1;
+
+    // Define the custom order for adjacent tiles in clockwise direction
+    let order = [
+        (-1, 0),  // Top
+        (-1, 1),  // Top-right
+        (0, 1),   // Right
+        (1, 1),   // Bottom-right
+        (1, 0),   // Bottom
+        (1, -1),  // Bottom-left
+        (0, -1),  // Left
+        (-1, -1), // Top-left
+    ];
+
+    // Check each relative position in the custom order and add valid adjacent tiles to the vector
+    for (dx, dy) in order.iter() {
+        let x = center_x as isize + dx;
+        let y = center_y as isize + dy;
+
+        // Check if the calculated position is within the grid boundaries
+        if x >= 0 && x <= max_bound && y >= 0 && y <= max_bound {
+            adjacent_tiles.push((x as usize, y as usize));
+        }
+    }
+
+    adjacent_tiles
+}
