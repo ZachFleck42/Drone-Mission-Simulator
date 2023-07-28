@@ -315,60 +315,6 @@ impl Drone {
             }
         }
 
-        // If the target is one tile away already...
-        if distance_to_target < 2.0 {
-            // Determine which specific tile the drone is in relative to the target.
-            // This way we can circle around the target in a semi-consistent manner.
-            let adjacents =
-                get_adjacent_tiles_in_clockwise_order(self.data.grid_size, target_x, target_y);
-            let num_adjacents = adjacents.len();
-
-            println!("Adjacents: {:?}", adjacents);
-
-            if let Some(current_index) = adjacents.iter().position(|&i| i == (self.x, self.y)) {
-                let first_clockwise_tile = adjacents[(current_index + 1) % num_adjacents];
-                let second_clockwise_tile = adjacents[(current_index + 2) % num_adjacents];
-
-                let first_counter_tile =
-                    adjacents[(current_index + num_adjacents - 1) % num_adjacents];
-                let second_counter_tile =
-                    adjacents[(current_index + num_adjacents - 2) % num_adjacents];
-
-                if let Some(prev_move) = self.path_history.last() {
-                    if prev_move == &first_clockwise_tile || prev_move == &second_clockwise_tile {
-                        if self.is_valid_move(first_counter_tile.0, first_counter_tile.1) {
-                            println!(
-                                "Last tile was first or second clockwise, moving to first counter {}, {}",
-                                first_counter_tile.0, first_counter_tile.1
-                            );
-                            return first_counter_tile;
-                        } else if self.is_valid_move(second_counter_tile.0, second_counter_tile.1) {
-                            println!(
-                                "Last tile was first or second clockwise AND first_counter unavailable, moving to second_counter {}, {}",
-                                second_counter_tile.0, second_counter_tile.1
-                            );
-                            return second_counter_tile;
-                        }
-                    }
-                }
-
-                if self.is_valid_move(first_clockwise_tile.0, first_clockwise_tile.1) {
-                    println!(
-                        "Moving to first_clockwise, {}, {}",
-                        first_clockwise_tile.0, first_clockwise_tile.1
-                    );
-                    return first_clockwise_tile;
-                } else if self.is_valid_move(second_clockwise_tile.0, second_clockwise_tile.1) {
-                    println!(
-                        "First clockwise unavailable, moving to second clockwise {}, {}",
-                        second_clockwise_tile.0, second_clockwise_tile.1
-                    );
-                    return second_clockwise_tile;
-                }
-            }
-        }
-
-        println!("No monitoring moves found; remaining stationary");
         (self.x, self.y)
     }
 
