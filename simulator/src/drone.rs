@@ -21,6 +21,11 @@ pub enum TileContent {
     Target,
 }
 
+#[derive(PartialEq, Clone, Copy)]
+pub enum Flags {
+    MonitoringCounterclockwise,
+}
+
 pub struct Tile {
     pub x: usize,
     pub y: usize,
@@ -42,6 +47,7 @@ pub struct Drone {
     pub status: Status,
     pub path_history: Vec<(usize, usize)>,
     pub data: EnvData,
+    pub flags: Vec<Flags>,
 }
 
 impl Drone {
@@ -81,6 +87,7 @@ impl Drone {
             status: Status::Searching,
             path_history: vec![(start_x, start_y)],
             data,
+            flags: Vec::new(),
         }
     }
 
@@ -146,12 +153,10 @@ impl Drone {
     pub fn update_status(&mut self) {
         for (x, y) in self.get_visible_tiles() {
             if self.data.grid[x][y].content == TileContent::Target {
-                println!("Target found; switching to 'Monitoring'");
                 self.status = Status::Monitoring;
                 return;
             }
         }
-        println!("Target not in sight: switching to 'Searching'");
         self.status = Status::Searching
     }
 
@@ -161,8 +166,8 @@ impl Drone {
             Status::Monitoring => self.monitor(),
         };
 
+        self.path_history.push((self.x, self.y));
         (self.x, self.y) = best_move;
-        self.path_history.push(best_move);
     }
 
     fn get_closest_option(&self, options: Vec<(usize, usize)>) -> (usize, usize) {
@@ -260,7 +265,7 @@ impl Drone {
         best_move
     }
 
-    fn monitor(&self) -> (usize, usize) {
+    fn monitor(&mut self) -> (usize, usize) {
         let mut best_move = (self.x, self.y);
 
         let (mut target_x, mut target_y) = (0, 0);
@@ -282,36 +287,46 @@ impl Drone {
 
         if let Some(current_index) = target_adjacents.iter().position(|&i| i == (self.x, self.y)) {
             let num_adjacents = target_adjacents.len();
+
             let first_clockwise_tile = target_adjacents[(current_index + 1) % num_adjacents];
             let second_clockwise_tile = target_adjacents[(current_index + 2) % num_adjacents];
 
             let first_counterclockwise_tile =
-                target_adjacents[(current_index + num_adjacents - 1) % num_adjacents];
+                target_adjacents[(current_index + num_adjacents.saturating_sub(1)) % num_adjacents];
             let second_counterclockwise_tile =
-                target_adjacents[(current_index + num_adjacents - 2) % num_adjacents];
+                target_adjacents[(current_index + num_adjacents.saturating_sub(2)) % num_adjacents];
 
-            // At this point, we have AT MOST four tiles to consider:
-            // Two tiles clockwise, and two tiles counter-clockwise tiles
+            let prioritized_moves = if self.flags.contains(&Flags::MonitoringCounterclockwise) {
+                vec![
+                    first_counterclockwise_tile,
+                    second_counterclockwise_tile,
+                    first_clockwise_tile,
+                    second_clockwise_tile,
+                ]
+            } else {
+                vec![
+                    first_clockwise_tile,
+                    second_clockwise_tile,
+                    first_counterclockwise_tile,
+                    second_counterclockwise_tile,
+                ]
+            };
 
-            // But, if the target is, say, in the corner of the grid or has
-            // hostile tiles adjacent to it, we could only have 1 to 3 tiles,
-            // and our defined first/second clockwise/counterclockwise tiles
-            // could have repeated values
+            for (next_x, next_y) in prioritized_moves {
+                if self.is_valid_move(next_x, next_y) {
+                    best_move = (next_x, next_y);
 
-            // We should default to moving to the first clockwise tile
-            // If that one is not safe, then check if we can move to the second
-
-            // If neither clockwise are possible, then check the first counter-clockwise
-            // If that one isn't possible, check the second counter-clockwise
-
-            // However, if our previous move was the first or second clockwise,
-            // it means we are moving counter-clockwise and should continue in
-            // that direction until we are unable.
-
-            // But then, if neither counter-clockwise tile is available to move to,
-            // we should fall back on one of the clockwise tiles again
-
-            let mut best_move_score = 0;
+                    if best_move == first_clockwise_tile || best_move == second_clockwise_tile {
+                        self.flags
+                            .retain(|&x| x != Flags::MonitoringCounterclockwise);
+                    } else {
+                        if !self.flags.contains(&Flags::MonitoringCounterclockwise) {
+                            self.flags.push(Flags::MonitoringCounterclockwise);
+                        }
+                    }
+                    break;
+                }
+            }
         } else {
             if !moves_to_consider.is_empty() {
                 best_move = self.get_closest_option(moves_to_consider);
