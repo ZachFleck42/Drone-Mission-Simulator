@@ -156,6 +156,13 @@ impl Drone {
                 return;
             }
         }
+
+        if let Some((target_x, target_y)) = self.data.last_target_pos {
+            if self.x == target_x && self.y == target_y {
+                self.data.last_target_pos = None;
+            }
+        }
+
         self.status = Status::Searching
     }
 
@@ -225,38 +232,44 @@ impl Drone {
     }
 
     fn search(&self) -> (usize, usize) {
-        let mut best_move_score = 0;
         let mut best_move = (self.x, self.y);
 
-        // Check every possible move and determine which will reveal the most tiles
-        for potential_move in self.get_valid_moves() {
-            let (x, y) = (potential_move.0, potential_move.1);
+        if let Some((target_x, target_y)) = self.data.last_target_pos {
+            if let Some(path) = self.best_path_to(target_x, target_y) {
+                best_move = path[0];
+            }
+        } else {
+            // Check every possible move and determine which will reveal the most tiles
+            let mut best_move_score = 0;
+            for potential_move in self.get_valid_moves() {
+                let (x, y) = (potential_move.0, potential_move.1);
 
-            let mut move_score = 0;
-            for (vis_x, vis_y) in
-                get_surrounding_tiles(self.data.grid_size, self.visibility_range, x, y)
-            {
-                if self.data.grid[vis_x][vis_y].hostile == Hostile::Unknown {
-                    move_score += 1;
+                let mut move_score = 0;
+                for (vis_x, vis_y) in
+                    get_surrounding_tiles(self.data.grid_size, self.visibility_range, x, y)
+                {
+                    if self.data.grid[vis_x][vis_y].hostile == Hostile::Unknown {
+                        move_score += 1;
+                    }
+                }
+
+                if move_score == 0 || move_score < best_move_score {
+                    continue;
+                } else if move_score > best_move_score {
+                    best_move_score = move_score;
+                    best_move = potential_move;
                 }
             }
 
-            if move_score == 0 || move_score < best_move_score {
-                continue;
-            } else if move_score > best_move_score {
-                best_move_score = move_score;
-                best_move = potential_move;
-            }
-        }
-
-        // If no moves will reveal additional tiles, then begin moving towards
-        // the nearest unrevealed tile
-        if best_move_score == 0 {
-            let unrevealed_tiles = self.get_all_unrevealed_tiles();
-            if !unrevealed_tiles.is_empty() {
-                let (unrevealed_x, unrevealed_y) = self.get_closest_option(unrevealed_tiles);
-                if let Some(path) = self.best_path_to(unrevealed_x, unrevealed_y) {
-                    best_move = path[0];
+            // If no moves will reveal additional tiles, then begin moving towards
+            // the nearest unrevealed tile
+            if best_move_score == 0 {
+                let unrevealed_tiles = self.get_all_unrevealed_tiles();
+                if !unrevealed_tiles.is_empty() {
+                    let (unrevealed_x, unrevealed_y) = self.get_closest_option(unrevealed_tiles);
+                    if let Some(path) = self.best_path_to(unrevealed_x, unrevealed_y) {
+                        best_move = path[0];
+                    }
                 }
             }
         }
