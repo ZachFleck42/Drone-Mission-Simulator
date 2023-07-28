@@ -132,15 +132,15 @@ impl Drone {
     }
 
     fn is_valid_move(&self, x: usize, y: usize) -> bool {
-        let max_bound = self.data.grid_size - 1;
         if self.get_distance_to(x, y) > self.move_range as f64
-            || x > max_bound
-            || y > max_bound
+            || x > self.data.grid_size - 1
+            || y > self.data.grid_size - 1
             || !self.is_tile_safe(x, y)
         {
-            return false;
+            false
+        } else {
+            true
         }
-        return true;
     }
 
     pub fn update_status(&mut self) {
@@ -180,7 +180,7 @@ impl Drone {
         closest_tile
     }
 
-    fn all_unrevealed_tiles(&self) -> Vec<(usize, usize)> {
+    fn get_all_unrevealed_tiles(&self) -> Vec<(usize, usize)> {
         let mut unrevealed_tiles = Vec::new();
         for x in 0..self.data.grid_size {
             for y in 0..self.data.grid_size {
@@ -248,7 +248,7 @@ impl Drone {
         // If no moves will reveal additional tiles, then begin moving towards
         // the nearest unrevealed tile
         if best_move_score == 0 {
-            let unrevealed_tiles = self.all_unrevealed_tiles();
+            let unrevealed_tiles = self.get_all_unrevealed_tiles();
             if !unrevealed_tiles.is_empty() {
                 let (unrevealed_x, unrevealed_y) = self.get_closest_option(unrevealed_tiles);
                 if let Some(path) = self.best_path_to(unrevealed_x, unrevealed_y) {
@@ -261,7 +261,8 @@ impl Drone {
     }
 
     fn monitor(&self) -> (usize, usize) {
-        // Verify the target's location
+        let mut best_move = (self.x, self.y);
+
         let (mut target_x, mut target_y) = (0, 0);
         for (x, y) in self.get_visible_tiles() {
             if self.data.grid[x][y].content == TileContent::Target {
@@ -270,18 +271,12 @@ impl Drone {
             }
         }
 
-        // Get a list of possible moves and a list of tiles adjacent to the target
         let valid_moves = self.get_valid_moves();
         let target_adjacents = get_surrounding_tiles(self.data.grid_size, 1, target_x, target_y);
 
-        // If the target is more than one tile away...
-        let distance_to_target = self.get_distance_to(target_x, target_y);
-        if distance_to_target > 1.5 {
-            println!("Distance to target is {}", distance_to_target);
-            // If there's at lease one element in common between valid_moves and
-            // target_adjacents, move to the closest one.
-            // Otherwise, find the shortest path to a safe, target-adjacent tile
-            // and make the first move towards it.
+        if target_adjacents.contains(&(self.x, self.y)) {
+            let mut best_move_score = 0;
+        } else {
             let common_tiles: Vec<(usize, usize)> = target_adjacents
                 .clone()
                 .into_iter()
@@ -289,7 +284,7 @@ impl Drone {
                 .collect();
 
             if !common_tiles.is_empty() {
-                return self.get_closest_option(common_tiles);
+                best_move = self.get_closest_option(common_tiles);
             } else {
                 let mut possible_paths: Vec<Vec<(usize, usize)>> = Vec::new();
                 for (x, y) in target_adjacents {
@@ -310,12 +305,12 @@ impl Drone {
                         }
                     }
 
-                    return shortest_path[0];
+                    best_move = shortest_path[0];
                 }
             }
         }
 
-        (self.x, self.y)
+        best_move
     }
 
     pub fn print_grid(&self) {
