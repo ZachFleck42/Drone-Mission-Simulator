@@ -113,7 +113,7 @@ impl Drone {
     pub fn get_valid_moves(&self) -> Vec<(usize, usize)> {
         let mut valid_moves = Vec::new();
         for (x, y) in get_surrounding_tiles(self.data.grid_size, self.move_range, self.x, self.y) {
-            if self.is_tile_safe(x, y) {
+            if self.is_valid_move(x, y) {
                 valid_moves.push((x, y));
             }
         }
@@ -130,6 +130,18 @@ impl Drone {
         true
     }
 
+    fn is_valid_move(&self, x: usize, y: usize) -> bool {
+        let max_bound = self.data.grid_size - 1;
+        if self.get_distance_to(x, y) > self.move_range as f64
+            || x > max_bound
+            || y > max_bound
+            || !self.is_tile_safe(x, y)
+        {
+            return false;
+        }
+        return true;
+    }
+
     pub fn update_status(&mut self) {
         for (x, y) in self.get_visible_tiles() {
             if self.data.grid[x][y].content == TileContent::Target {
@@ -144,7 +156,7 @@ impl Drone {
     pub fn make_move(&mut self) {
         let best_move = match self.status {
             Status::Searching => self.search(),
-            Status::Monitoring => self.search(),
+            Status::Monitoring => self.monitor(),
         };
 
         (self.x, self.y) = best_move;
@@ -247,8 +259,6 @@ impl Drone {
     }
 
     fn monitor(&self) -> (usize, usize) {
-        let mut best_move = (self.x, self.y);
-
         // Verify the target's location
         let (mut target_x, mut target_y) = (0, 0);
         for (x, y) in self.get_visible_tiles() {
@@ -276,7 +286,7 @@ impl Drone {
                 .collect();
 
             if !common_tiles.is_empty() {
-                best_move = self.get_closest_option(common_tiles);
+                return self.get_closest_option(common_tiles);
             } else {
                 let mut possible_paths: Vec<Vec<(usize, usize)>> = Vec::new();
                 for (x, y) in target_adjacents {
@@ -297,7 +307,7 @@ impl Drone {
                         }
                     }
 
-                    best_move = shortest_path[0];
+                    return shortest_path[0];
                 }
             }
         }
@@ -306,30 +316,37 @@ impl Drone {
         if distance_to_target as usize == 1 {
             // Determine which specific tile the drone is in relative to the target.
             // This way we can circle around the target in a semi-consistent manner.
-            let adjacent_positions = [(-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1)];
-            let num_adjacents = adjacent_positions.len();
-            let dx = target_x as i32 - self.x as i32;
-            let dy = target_y as i32 - self.y as i32;
+            let adjacents = get_surrounding_tiles(self.data.grid_size, 1, target_x, target_y);
+            let num_adjacents = adjacents.len();
 
-            if let Some(current_index) = adjacent_positions.iter().position(|&i| i == (dx, dy)) {
-                let clockwise_index = (current_index + 1) % num_adjacents;
-                let counterclock_index = (current_index + num_adjacents - 1) % num_adjacents;
+            if let Some(current_index) = adjacents.iter().position(|&i| i == (self.x, self.y)) {
+                let first_clockwise_tile = adjacents[(current_index + 1) % num_adjacents];
+                let second_clockwise_tile = adjacents[(current_index + 2) % num_adjacents];
 
-                let clockwise_x = target_x as i32 + adjacent_positions[clockwise_index].0;
-                let clockwise_y = target_y as i32 + adjacent_positions[clockwise_index].1;
+                let first_counter_tile =
+                    adjacents[(current_index + num_adjacents - 1) % num_adjacents];
+                let second_counter_tile =
+                    adjacents[(current_index + num_adjacents - 2) % num_adjacents];
 
-                let counterclock_x = target_x as i32 + adjacent_positions[counterclock_index].0;
-                let counterclock_y = target_y as i32 + adjacent_positions[counterclock_index].1;
+                if let Some(prev_move) = self.path_history.last() {
+                    if prev_move == &first_clockwise_tile || prev_move == &second_clockwise_tile {
+                        if self.is_tile_safe(first_counter_tile.0, first_counter_tile.1) {
+                            return first_counter_tile;
+                        } else if self.is_tile_safe(second_counter_tile.0, second_counter_tile.1) {
+                            return second_counter_tile;
+                        }
+                    }
+                }
 
-                best_move = (
-                    (self.x as i32 + next_x) as usize,
-                    (self.y as i32 + next_y) as usize,
-                )
+                if self.is_tile_safe(first_clockwise_tile.0, first_clockwise_tile.1) {
+                    return first_clockwise_tile;
+                } else if self.is_tile_safe(second_clockwise_tile.0, second_clockwise_tile.1) {
+                    return second_clockwise_tile;
+                }
             }
         }
 
-        // Determine which tile the drone should get to next
-        best_move
+        (self.x, self.y)
     }
 
     pub fn print_grid(&self) {
