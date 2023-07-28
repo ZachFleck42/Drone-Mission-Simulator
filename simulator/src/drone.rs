@@ -139,10 +139,9 @@ impl Drone {
     }
 
     fn is_valid_move(&self, x: usize, y: usize) -> bool {
-        if self.get_distance_to(x, y) > self.move_range as f64
-            || x > self.data.grid_size - 1
-            || y > self.data.grid_size - 1
-            || !self.is_tile_safe(x, y)
+        if !self.is_tile_safe(x, y)
+            || !get_surrounding_tiles(self.data.grid_size, self.move_range, self.x, self.y)
+                .contains(&(x, y))
         {
             false
         } else {
