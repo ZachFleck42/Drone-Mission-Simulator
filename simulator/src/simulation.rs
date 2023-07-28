@@ -5,7 +5,7 @@ pub struct Simulation {
     pub environment: Environment,
     pub drone: Drone,
     pub max_ticks: Option<usize>,
-    pub tick: usize,
+    pub current_tick: usize,
 }
 
 impl Simulation {
@@ -14,7 +14,7 @@ impl Simulation {
             environment,
             drone,
             max_ticks,
-            tick: 0,
+            current_tick: 0,
         }
     }
 
@@ -28,15 +28,18 @@ impl Simulation {
     }
 
     pub fn run(&mut self) {
+        self.print();
         match self.max_ticks {
+            // If max_ticks defined, only simulate until max_tick
             Some(max_ticks) => {
                 for _ in 0..max_ticks {
-                    self.tick += 1;
+                    self.current_tick += 1;
                     self.tick();
                 }
             }
+            // Otherwise, loop forever
             None => loop {
-                self.tick += 1;
+                self.current_tick += 1;
                 self.tick();
             },
         }
@@ -47,12 +50,15 @@ impl Simulation {
         let target = &self.environment.target;
         let drone = &self.drone;
 
-        println!("Tick {}", self.tick);
+        println!("Tick {}", self.current_tick);
         println!(
             "Target is at ({}, {})",
             self.environment.target.x, self.environment.target.y
         );
-        println!("Drone is at ({}, {})", self.drone.x, self.drone.y);
+        println!(
+            "Drone is at ({}, {}) in {:?} mode",
+            self.drone.x, self.drone.y, self.drone.status
+        );
 
         for i in 0..size {
             for j in 0..size {
