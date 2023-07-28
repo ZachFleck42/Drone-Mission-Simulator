@@ -4,6 +4,7 @@ use crate::utils::get_distance_to_tile;
 use crate::utils::get_surrounding_tiles;
 use std::collections::{HashSet, VecDeque};
 
+#[derive(Debug)]
 pub enum Status {
     Searching,
     Monitoring,
@@ -111,7 +112,12 @@ impl Drone {
     }
 
     fn get_visible_tiles(&self) -> Vec<(usize, usize)> {
-        get_surrounding_tiles(self.data.grid_size, self.visibility_range, self.x, self.y)
+        let mut visible_tiles = vec![(self.x, self.y)];
+        let surrounding_tiles =
+            get_surrounding_tiles(self.data.grid_size, self.visibility_range, self.x, self.y);
+
+        visible_tiles.extend(surrounding_tiles);
+        visible_tiles
     }
 
     fn get_distance_to(&self, target_x: usize, target_y: usize) -> f64 {
