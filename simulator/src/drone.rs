@@ -271,20 +271,50 @@ impl Drone {
             }
         }
 
-        let valid_moves = self.get_valid_moves();
-        let target_adjacents = get_surrounding_tiles(self.data.grid_size, 1, target_x, target_y);
+        let all_valid_moves = self.get_valid_moves();
+        let target_adjacents =
+            get_adjacent_tiles_in_clockwise_order(self.data.grid_size, target_x, target_y);
+        let moves_to_consider: Vec<(usize, usize)> = target_adjacents
+            .clone()
+            .into_iter()
+            .filter(|tile| all_valid_moves.contains(tile))
+            .collect();
 
-        if target_adjacents.contains(&(self.x, self.y)) {
+        if let Some(current_index) = target_adjacents.iter().position(|&i| i == (self.x, self.y)) {
+            let num_adjacents = target_adjacents.len();
+            let first_clockwise_tile = target_adjacents[(current_index + 1) % num_adjacents];
+            let second_clockwise_tile = target_adjacents[(current_index + 2) % num_adjacents];
+
+            let first_counterclockwise_tile =
+                target_adjacents[(current_index + num_adjacents - 1) % num_adjacents];
+            let second_counterclockwise_tile =
+                target_adjacents[(current_index + num_adjacents - 2) % num_adjacents];
+
+            // At this point, we have AT MOST four tiles to consider:
+            // Two tiles clockwise, and two tiles counter-clockwise tiles
+
+            // But, if the target is, say, in the corner of the grid or has
+            // hostile tiles adjacent to it, we could only have 1 to 3 tiles,
+            // and our defined first/second clockwise/counterclockwise tiles
+            // could have repeated values
+
+            // We should default to moving to the first clockwise tile
+            // If that one is not safe, then check if we can move to the second
+
+            // If neither clockwise are possible, then check the first counter-clockwise
+            // If that one isn't possible, check the second counter-clockwise
+
+            // However, if our previous move was the first or second clockwise,
+            // it means we are moving counter-clockwise and should continue in
+            // that direction until we are unable.
+
+            // But then, if neither counter-clockwise tile is available to move to,
+            // we should fall back on one of the clockwise tiles again
+
             let mut best_move_score = 0;
         } else {
-            let common_tiles: Vec<(usize, usize)> = target_adjacents
-                .clone()
-                .into_iter()
-                .filter(|tile| valid_moves.contains(tile))
-                .collect();
-
-            if !common_tiles.is_empty() {
-                best_move = self.get_closest_option(common_tiles);
+            if !moves_to_consider.is_empty() {
+                best_move = self.get_closest_option(moves_to_consider);
             } else {
                 let mut possible_paths: Vec<Vec<(usize, usize)>> = Vec::new();
                 for (x, y) in target_adjacents {
