@@ -87,7 +87,7 @@ impl Drone {
             status: Status::Searching,
             path_history: vec![(start_x, start_y)],
             data,
-            flags: Vec::new(),
+            flags: vec![Flags::MonitoringClockwise],
         }
     }
 
@@ -352,7 +352,7 @@ impl Drone {
             }
 
             for (move_x, move_y) in
-                get_surrounding_tiles(self.data.grid_size, self.move_range, current_x, current_y)
+                get_surrounding_tiles(self.data.grid_size, 1, current_x, current_y)
             {
                 if self.is_tile_safe(move_x, move_y) && !visited.contains(&(move_x, move_y)) {
                     let mut new_path = path.clone();
@@ -369,7 +369,7 @@ impl Drone {
     /// Returns a list of all valid moves the drone can make from its current position.
     pub fn get_valid_moves(&self) -> Vec<(usize, usize)> {
         let mut valid_moves = Vec::new();
-        for (x, y) in get_surrounding_tiles(self.data.grid_size, self.move_range, self.x, self.y) {
+        for (x, y) in get_surrounding_tiles(self.data.grid_size, 1, self.x, self.y) {
             if self.is_valid_move(x, y) {
                 valid_moves.push((x, y));
             }
@@ -381,8 +381,7 @@ impl Drone {
     /// Returns true if the drone can move to (x, y) from its current position
     fn is_valid_move(&self, x: usize, y: usize) -> bool {
         if !self.is_tile_safe(x, y)
-            || !get_surrounding_tiles(self.data.grid_size, self.move_range, self.x, self.y)
-                .contains(&(x, y))
+            || !get_surrounding_tiles(self.data.grid_size, 1, self.x, self.y).contains(&(x, y))
         {
             false
         } else {

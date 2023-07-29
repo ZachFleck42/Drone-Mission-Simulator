@@ -18,15 +18,6 @@ impl Simulation {
         }
     }
 
-    pub fn tick(&mut self) {
-        self.environment.move_target();
-        self.drone.scan_environment(&self.environment);
-        self.drone.update_status();
-        self.drone.make_move();
-        self.drone.scan_environment(&self.environment);
-        self.print();
-    }
-
     pub fn run(&mut self) {
         self.print();
         match self.max_ticks {
@@ -43,6 +34,17 @@ impl Simulation {
                 self.tick();
             },
         }
+    }
+
+    pub fn tick(&mut self) {
+        self.environment.move_target();
+        self.drone.scan_environment(&self.environment);
+        self.drone.update_status();
+        for _drone_move in 0..self.drone.move_range {
+            self.drone.make_move();
+            self.drone.scan_environment(&self.environment);
+        }
+        self.print();
     }
 
     pub fn print(&self) {
