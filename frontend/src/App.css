@@ -9,6 +9,7 @@
     align-items: center;
     max-width: 300px;
     margin: 0 auto;
+    padding-bottom: 12px;
 }
   
 input {
