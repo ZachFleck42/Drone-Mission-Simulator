@@ -23,14 +23,14 @@ function App() {
 			<div className="input-container">
 				<input
 					type="text"
-					name="test1"
+					name="input1"
 					value={inputData.input1}
 					onChange={handleInputChange}
 					placeholder="Enter input 1"
 				/>
 				<input
 					type="text"
-					name="test2"
+					name="input2"
 					value={inputData.input2}
 					onChange={handleInputChange}
 					placeholder="Enter input 2"
