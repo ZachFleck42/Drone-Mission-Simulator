@@ -1,3 +1,4 @@
+use actix_cors::Cors;
 use actix_web::{get, post, App, HttpResponse, HttpServer, Responder};
 
 #[get("/")]
@@ -12,8 +13,13 @@ async fn echo(req_body: String) -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| App::new().service(hello).service(echo))
-        .bind(("127.0.0.1", 8080))?
-        .run()
-        .await
+    HttpServer::new(|| {
+        App::new()
+            .wrap(Cors::permissive())
+            .service(hello)
+            .service(echo)
+    })
+    .bind(("127.0.0.1", 8080))?
+    .run()
+    .await
 }
