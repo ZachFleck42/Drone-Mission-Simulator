@@ -1,6 +1,10 @@
 use super::drone::Drone;
 use super::env::Environment;
 
+use serde::Serialize;
+use serde_json::Result;
+
+#[derive(Serialize)]
 pub struct Simulation {
     pub environment: Environment,
     pub drone: Drone,
@@ -34,6 +38,9 @@ impl Simulation {
                 self.tick();
             },
         }
+
+        let thing = serde_json::to_string(&self);
+        println!("{:?}", thing)
     }
 
     pub fn tick(&mut self) {

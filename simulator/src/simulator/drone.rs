@@ -1,31 +1,34 @@
 use super::env::Environment;
 use super::utils::get_distance_to_tile;
 use super::utils::get_surrounding_tiles;
+
+use serde::Serialize;
 use std::collections::{HashSet, VecDeque};
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub enum Status {
     Searching,
     Monitoring,
 }
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Serialize)]
 pub enum Hostile {
     True,
     False,
     Unknown,
 }
-#[derive(PartialEq)]
+#[derive(PartialEq, Serialize)]
 pub enum TileContent {
     Empty,
     Target,
 }
 
-#[derive(PartialEq, Clone, Copy)]
+#[derive(PartialEq, Clone, Copy, Serialize)]
 pub enum Flags {
     MonitoringClockwise,
 }
 
+#[derive(Serialize)]
 pub struct Tile {
     pub x: usize,
     pub y: usize,
@@ -33,12 +36,14 @@ pub struct Tile {
     pub content: TileContent,
 }
 
+#[derive(Serialize)]
 pub struct EnvData {
     pub grid_size: usize,
     pub grid: Vec<Vec<Tile>>,
     pub last_target_pos: Option<(usize, usize)>,
 }
 
+#[derive(Serialize)]
 pub struct Drone {
     pub x: usize,
     pub y: usize,

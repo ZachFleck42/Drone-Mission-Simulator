@@ -1,18 +1,23 @@
 use super::utils::get_surrounding_tiles;
 use super::utils::random_choice;
-use rand::Rng;
 
+use rand::Rng;
+use serde::Serialize;
+
+#[derive(Serialize)]
 pub struct Tile {
     pub x: usize,
     pub y: usize,
     pub hostile: bool,
 }
 
+#[derive(Serialize)]
 pub struct Terrain {
     pub size: usize,
     pub grid: Vec<Vec<Tile>>,
 }
 
+#[derive(Serialize)]
 pub struct Target {
     pub x: usize,
     pub y: usize,
@@ -20,6 +25,7 @@ pub struct Target {
     pub name: Option<String>,
 }
 
+#[derive(Serialize)]
 pub struct Environment {
     pub terrain: Terrain,
     pub target: Target,
