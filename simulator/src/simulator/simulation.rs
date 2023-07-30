@@ -2,7 +2,6 @@ use super::drone::Drone;
 use super::env::Environment;
 
 use serde::Serialize;
-use serde_json::Result;
 
 #[derive(Serialize)]
 pub struct Simulation {
