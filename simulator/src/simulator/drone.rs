@@ -5,30 +5,30 @@ use super::utils::get_surrounding_tiles;
 use serde::Serialize;
 use std::collections::{HashSet, VecDeque};
 
-#[derive(Debug, Serialize)]
+#[derive(Clone, Debug, Serialize)]
 pub enum Status {
     Searching,
     Monitoring,
 }
 
-#[derive(PartialEq, Serialize)]
+#[derive(Clone, PartialEq, Serialize)]
 pub enum Hostile {
     True,
     False,
     Unknown,
 }
-#[derive(PartialEq, Serialize)]
+#[derive(Clone, PartialEq, Serialize)]
 pub enum TileContent {
     Empty,
     Target,
 }
 
-#[derive(PartialEq, Clone, Copy, Serialize)]
+#[derive(PartialEq, Clone, Serialize)]
 pub enum Flags {
     MonitoringClockwise,
 }
 
-#[derive(Serialize)]
+#[derive(Clone, Serialize)]
 pub struct Tile {
     pub x: usize,
     pub y: usize,
@@ -36,14 +36,14 @@ pub struct Tile {
     pub content: TileContent,
 }
 
-#[derive(Serialize)]
+#[derive(Clone, Serialize)]
 pub struct EnvData {
     pub grid_size: usize,
     pub grid: Vec<Vec<Tile>>,
     pub last_target_pos: Option<(usize, usize)>,
 }
 
-#[derive(Serialize)]
+#[derive(Clone, Serialize)]
 pub struct Drone {
     pub x: usize,
     pub y: usize,
@@ -290,7 +290,7 @@ impl Drone {
                         || best_move == second_counterclockwise_tile
                     {
                         // Remove the MonitoringClockwise flag if present
-                        self.flags.retain(|&x| x != Flags::MonitoringClockwise);
+                        self.flags.retain(|x| x != &Flags::MonitoringClockwise);
                     // If a clockwise move was made...
                     } else {
                         // Make sure the MonitoringClockwise flag is present on drone

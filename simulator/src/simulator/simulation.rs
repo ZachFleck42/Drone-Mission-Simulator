@@ -8,46 +8,59 @@ use serde_json::Result;
 pub struct Simulation {
     pub environment: Environment,
     pub drone: Drone,
-    pub max_ticks: Option<usize>,
-    pub current_tick: usize,
+    pub max_frames: Option<usize>,
+    pub current_frame: usize,
+}
+
+#[derive(Serialize)]
+pub struct Frame {
+    pub frame_no: usize,
+    pub environment: Environment,
+    pub drone: Drone,
 }
 
 impl Simulation {
-    pub fn new(environment: Environment, drone: Drone, max_ticks: Option<usize>) -> Self {
+    pub fn new(environment: Environment, drone: Drone, max_frames: Option<usize>) -> Self {
         Simulation {
             environment,
             drone,
-            max_ticks,
-            current_tick: 0,
+            max_frames,
+            current_frame: 0,
         }
     }
 
-    pub fn run(&mut self) {
+    pub fn run(&mut self) -> Vec<Frame> {
+        let mut frames = vec![Frame {
+            frame_no: 0,
+            environment: self.environment.clone(),
+            drone: self.drone.clone(),
+        }];
+
         self.print();
-        match self.max_ticks {
+        match self.max_frames {
             // If max_ticks defined, only simulate until max_tick
-            Some(max_ticks) => {
-                for _ in 0..max_ticks {
-                    self.current_tick += 1;
+            Some(max_frames) => {
+                for frame_no in 1..=max_frames {
                     self.tick();
+                    frames.push(Frame {
+                        frame_no,
+                        environment: self.environment.clone(),
+                        drone: self.drone.clone(),
+                    })
                 }
             }
             // Otherwise, loop forever
-            None => loop {
-                self.current_tick += 1;
-                self.tick();
-            },
+            None => loop {},
         }
 
-        let thing = serde_json::to_string(&self);
-        println!("{:?}", thing)
+        frames
     }
 
     pub fn tick(&mut self) {
         self.environment.move_target();
         self.drone.scan_environment(&self.environment);
-        self.drone.update_status();
         for _drone_move in 0..self.drone.move_range {
+            self.drone.update_status();
             self.drone.make_move();
             self.drone.scan_environment(&self.environment);
         }
@@ -59,7 +72,7 @@ impl Simulation {
         let target = &self.environment.target;
         let drone = &self.drone;
 
-        println!("Tick {}", self.current_tick);
+        println!("Tick {}", self.current_frame);
         println!(
             "Target is at ({}, {})",
             self.environment.target.x, self.environment.target.y

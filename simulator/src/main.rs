@@ -44,8 +44,9 @@ async fn sim(sim_req: web::Json<SimReq>) -> impl Responder {
     let mut sim =
         simulator::simulation::Simulation::new(environment, drone, Some(sim_req.sim_max_ticks));
 
-    sim.run();
-    HttpResponse::Ok().json(sim_req)
+    let frames = sim.run();
+
+    HttpResponse::Ok().json(frames)
 }
 
 #[actix_web::main]
