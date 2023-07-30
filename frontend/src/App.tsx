@@ -5,20 +5,25 @@ import './App.css';
 
 function App() {
 	const [inputData, setInputData] = useState({
-		env_terrain_grid_size: '',
-		env_terrain_hostile_rate: '',
-		env_target_move_rate: '',
-		drone_move_range: '',
-		drone_vis_range: '',
-		sim_max_ticks: '',
+		env_terrain_grid_size: 0,
+		env_terrain_hostile_rate: 0,
+		env_target_move_rate: 0,
+		drone_move_range: 0,
+		drone_vis_range: 0,
+		sim_max_ticks: 0,
 	});
 
 	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
-		setInputData((prevData) => ({
-			...prevData,
-			[name]: value,
-		}));
+
+		const numValue = parseInt(value, 10);
+
+		if (!isNaN(numValue) && numValue >= 0) {
+			setInputData((prevData) => ({
+				...prevData,
+				[name]: numValue,
+			}));
+		}
 	};
 
 	return (

@@ -23,9 +23,8 @@ async fn echo(req_body: String) -> impl Responder {
 }
 
 #[post("/sim")]
-async fn sim(sim_req: String) -> impl Responder {
-    println!("{}", sim_req);
-    HttpResponse::Ok().body("Got it")
+async fn sim(sim_req: web::Json<SimReq>) -> impl Responder {
+    HttpResponse::Ok().json(sim_req)
 }
 
 #[actix_web::main]
