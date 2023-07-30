@@ -1,5 +1,5 @@
-use crate::drone::Drone;
-use crate::env::Environment;
+use super::drone::Drone;
+use super::env::Environment;
 
 pub struct Simulation {
     pub environment: Environment,

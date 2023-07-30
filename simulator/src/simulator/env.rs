@@ -1,5 +1,5 @@
-use crate::utils::get_surrounding_tiles;
-use crate::utils::random_choice;
+use super::utils::get_surrounding_tiles;
+use super::utils::random_choice;
 use rand::Rng;
 
 pub struct Tile {

@@ -1,3 +1,5 @@
+mod simulator;
+
 use actix_cors::Cors;
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 use serde::{Deserialize, Serialize};
@@ -24,6 +26,25 @@ async fn echo(req_body: String) -> impl Responder {
 
 #[post("/sim")]
 async fn sim(sim_req: web::Json<SimReq>) -> impl Responder {
+    let environment = simulator::env::Environment::new(
+        sim_req.env_terrain_grid_size,
+        sim_req.env_terrain_hostile_rate,
+        sim_req.env_target_move_rate,
+    );
+
+    let (entry_point_x, entry_point_y) = environment.generate_entry_point();
+    let drone = simulator::drone::Drone::new(
+        entry_point_x,
+        entry_point_y,
+        sim_req.env_terrain_grid_size,
+        sim_req.drone_move_range,
+        sim_req.drone_vis_range,
+    );
+
+    let mut sim =
+        simulator::simulation::Simulation::new(environment, drone, Some(sim_req.sim_max_ticks));
+
+    sim.run();
     HttpResponse::Ok().json(sim_req)
 }
 

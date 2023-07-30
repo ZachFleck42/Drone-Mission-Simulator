@@ -1,6 +1,6 @@
-use crate::env::Environment;
-use crate::utils::get_distance_to_tile;
-use crate::utils::get_surrounding_tiles;
+use super::env::Environment;
+use super::utils::get_distance_to_tile;
+use super::utils::get_surrounding_tiles;
 use std::collections::{HashSet, VecDeque};
 
 #[derive(Debug)]
