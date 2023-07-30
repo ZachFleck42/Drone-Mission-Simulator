@@ -1,7 +1,18 @@
 use actix_cors::Cors;
-use actix_web::{get, post, App, HttpResponse, HttpServer, Responder};
+use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use serde::{Deserialize, Serialize};
 
-#[get("/")]
+#[derive(Serialize, Deserialize, Clone, Debug)]
+struct SimReq {
+    env_terrain_grid_size: usize,
+    env_terrain_hostile_rate: usize,
+    env_target_move_rate: usize,
+    drone_move_range: usize,
+    drone_vis_range: usize,
+    sim_max_ticks: usize,
+}
+
+#[get("/hello")]
 async fn hello() -> impl Responder {
     HttpResponse::Ok().body("Hello world!")
 }
@@ -11,6 +22,12 @@ async fn echo(req_body: String) -> impl Responder {
     HttpResponse::Ok().body(req_body)
 }
 
+#[post("/sim")]
+async fn sim(sim_req: String) -> impl Responder {
+    println!("{}", sim_req);
+    HttpResponse::Ok().body("Got it")
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
@@ -18,6 +35,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(Cors::permissive())
             .service(hello)
             .service(echo)
+            .service(sim)
     })
     .bind(("127.0.0.1", 8080))?
     .run()

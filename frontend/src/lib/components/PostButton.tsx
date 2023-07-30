@@ -2,21 +2,26 @@ import React from 'react';
 import axios, { AxiosResponse } from 'axios';
 
 interface ButtonComponentProps {
+	buttonText: string;
 	url: string;
 	postData: object;
 }
 
-const PostButton: React.FC<ButtonComponentProps> = ({ url, postData }) => {
+const PostButton: React.FC<ButtonComponentProps> = ({
+	buttonText,
+	url,
+	postData,
+}) => {
 	const handleClick = async () => {
 		try {
 			const response: AxiosResponse = await axios.post(url, postData);
-			console.log('Response Data:', response.data);
+			console.log(response.data);
 		} catch (error) {
-			console.error('Error:', error);
+			console.error(error);
 		}
 	};
 
-	return <button onClick={handleClick}>Make API POST request</button>;
+	return <button onClick={handleClick}>{buttonText}</button>;
 };
 
 export default PostButton;

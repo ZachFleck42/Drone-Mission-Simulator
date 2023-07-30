@@ -68,8 +68,17 @@ function App() {
 					placeholder="Simulation ticks"
 				/>
 			</div>
-			<GetButton url="http://127.0.0.1:8080/" />
-			<PostButton url="http://127.0.0.1:8080/echo" postData={inputData} />
+			<GetButton url="http://127.0.0.1:8080/hello" />
+			<PostButton
+				buttonText="Echo"
+				url="http://127.0.0.1:8080/echo"
+				postData={inputData}
+			/>
+			<PostButton
+				buttonText="Sim"
+				url="http://127.0.0.1:8080/sim"
+				postData={inputData}
+			/>
 		</div>
 	);
 }
