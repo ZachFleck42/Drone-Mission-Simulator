@@ -7,6 +7,11 @@ function ThreeCanvas() {
 	useEffect(() => {
 		if (!canvasRef.current) return;
 
+		// Renderer
+		const renderer = new THREE.WebGLRenderer({ antialias: true });
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		canvasRef.current.appendChild(renderer.domElement);
+
 		// Scene
 		const scene = new THREE.Scene();
 
@@ -18,11 +23,6 @@ function ThreeCanvas() {
 			1000,
 		);
 		camera.position.z = 5;
-
-		// Renderer
-		const renderer = new THREE.WebGLRenderer({ antialias: true });
-		renderer.setSize(window.innerWidth, window.innerHeight);
-		canvasRef.current.appendChild(renderer.domElement);
 
 		// Cube
 		const geometry = new THREE.BoxGeometry();
