@@ -45,7 +45,7 @@ function RunSimulation({
 		(value) => value,
 	);
 
-	const [SimParams, setInputData] = useState<SimParams>(() => {
+	const [userInput, setInputData] = useState<SimParams>(() => {
 		const initialData: SimParams = {} as SimParams;
 		inputFields.forEach((field) => (initialData[field.key] = field.default));
 		return initialData;
@@ -79,9 +79,14 @@ function RunSimulation({
 	};
 
 	const handleSubmit = async () => {
-		let data = SimParams;
+		let params = userInput;
+
+		if (params.terrain_grid_size < 2) {
+			params.terrain_grid_size = 2;
+		}
+
 		try {
-			const response: AxiosResponse = await axios.post(api, data);
+			const response: AxiosResponse = await axios.post(api, params);
 			onServerResponse(response.data);
 		} catch (error) {
 			console.error(error);
@@ -110,7 +115,7 @@ function RunSimulation({
 						key={field.key}
 						type="number"
 						name={field.key}
-						value={interactedFields[field.key] ? SimParams[field.key] : ''}
+						value={interactedFields[field.key] ? userInput[field.key] : ''}
 						onChange={handleInputChange}
 						placeholder={`${field.label} (Default is ${field.default})`}
 					/>
