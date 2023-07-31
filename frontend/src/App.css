@@ -19,3 +19,33 @@ input {
     font-size: 16px;
 }
   
+
+.grid-display {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+  
+.grid-container {
+    border: 1px solid #333;
+}
+
+.grid-row {
+    display: flex;
+}
+
+.grid-cell {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #666;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+/* Additional styles for hostile cells */
+.grid-cell.hostile {
+    background-color: red;
+    color: white;
+}
