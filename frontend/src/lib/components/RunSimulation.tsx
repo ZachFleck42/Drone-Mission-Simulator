@@ -24,8 +24,10 @@ const inputFields: Array<{
 ];
 
 function RunSimulation({
+	api,
 	onServerResponse,
 }: {
+	api: string;
 	onServerResponse: (responseData: any) => void;
 }) {
 	const [interactedFields, setInteractedFields] = useState<
@@ -64,10 +66,9 @@ function RunSimulation({
 	};
 
 	const handleSubmit = async () => {
-		let url: string = 'http://127.0.0.1:8080/sim';
 		let data = SimParams;
 		try {
-			const response: AxiosResponse = await axios.post(url, data);
+			const response: AxiosResponse = await axios.post(api, data);
 			onServerResponse(response.data);
 		} catch (error) {
 			console.error(error);
@@ -88,7 +89,7 @@ function RunSimulation({
 					/>
 				))}
 			</div>
-			<button onClick={handleSubmit}>Send it!</button>
+			<button onClick={handleSubmit}>Get simulation data</button>
 		</div>
 	);
 }

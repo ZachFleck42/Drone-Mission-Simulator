@@ -1,6 +1,8 @@
 import RunSimulation from './lib/components/RunSimulation';
 import './App.css';
 
+const API = 'http://127.0.0.1:8080/sim';
+
 function App() {
 	const handleServerResponse = (responseData: any) => {
 		console.log('Response data from SimulationParams:', responseData);
@@ -8,7 +10,7 @@ function App() {
 
 	return (
 		<div className="App">
-			<RunSimulation onServerResponse={handleServerResponse} />
+			<RunSimulation api={API} onServerResponse={handleServerResponse} />
 		</div>
 	);
 }
