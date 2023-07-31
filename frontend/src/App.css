@@ -46,7 +46,14 @@ input {
 
 .grid-cell.hostile {
 	background-color: red;
-	color: white;
+}
+
+.grid-cell.visible {
+	background-color: yellow;
+}
+
+.grid-cell.visible-hostile {
+	background-color: #ff6932;
 }
 
 .frame-buttons {

@@ -15,7 +15,6 @@ function GridDisplay({
 	setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
 	const terrainGrids = data.map((item) => item.environment.terrain.grid);
-	const droneGrids = data.map((item) => item.drone.data.grid);
 
 	const targetPosition: { x: number; y: number } = {
 		x: data[currentFrameIndex].environment.target.x,
@@ -26,6 +25,8 @@ function GridDisplay({
 		x: data[currentFrameIndex].drone.x,
 		y: data[currentFrameIndex].drone.y,
 	};
+	const visibleTiles: [number, number][] =
+		data[currentFrameIndex].drone.visible_tiles;
 
 	const currentGrid = terrainGrids[currentFrameIndex];
 
@@ -62,22 +63,26 @@ function GridDisplay({
 			<div className="grid-container">
 				{currentGrid.map((row, rowIndex) => (
 					<div className="grid-row" key={rowIndex}>
-						{row.map((cell, colIndex) => (
-							<div
-								className={`grid-cell${cell.hostile ? ' hostile' : ''}${
-									targetPosition.x === rowIndex && targetPosition.y === colIndex
-										? ' target'
-										: ''
-								}`}
-								key={colIndex}>
-								{targetPosition.x === rowIndex && targetPosition.y === colIndex
-									? 'T'
-									: ''}
-								{dronePosition.x === rowIndex && dronePosition.y === colIndex
-									? 'D'
-									: ''}
-							</div>
-						))}
+						{row.map((cell, colIndex) => {
+							const isTargetCell =
+								targetPosition.x === rowIndex && targetPosition.y === colIndex;
+							const isDroneCell =
+								dronePosition.x === rowIndex && dronePosition.y === colIndex;
+							const isCellVisible = visibleTiles.some(
+								([x, y]) => rowIndex === x && colIndex === y,
+							);
+							const cellClassName = `grid-cell${
+								cell.hostile ? ' hostile' : ''
+							}${isCellVisible ? ' visible' : ''}${
+								isCellVisible && cell.hostile ? ' visible-hostile' : ''
+							}${isTargetCell ? ' target' : ''}`;
+							return (
+								<div className={cellClassName} key={colIndex}>
+									{isTargetCell ? 'T' : ''}
+									{isDroneCell ? 'D' : ''}
+								</div>
+							);
+						})}
 					</div>
 				))}
 			</div>

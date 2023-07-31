@@ -50,6 +50,7 @@ pub struct Drone {
     pub move_range: usize,
     pub visibility_range: usize,
     pub status: Status,
+    pub visible_tiles: Vec<(usize, usize)>,
     pub path_history: Vec<(usize, usize)>,
     pub data: EnvData,
     pub flags: Vec<Flags>,
@@ -84,12 +85,21 @@ impl Drone {
             last_target_pos: None,
         };
 
+        let mut visible_tiles = vec![(start_x, start_y)];
+        visible_tiles.extend(get_surrounding_tiles(
+            grid_size,
+            visibility_range,
+            start_x,
+            start_y,
+        ));
+
         Drone {
             x: start_x,
             y: start_y,
             move_range: speed,
             visibility_range,
             status: Status::Searching,
+            visible_tiles,
             path_history: vec![(start_x, start_y)],
             data,
             flags: vec![Flags::MonitoringClockwise],
@@ -99,6 +109,7 @@ impl Drone {
     /// Used to populate EnvData with data on the provided environment.
     pub fn scan_environment(&mut self, environment: &Environment) {
         for (x, y) in self.get_visible_tiles() {
+            self.visible_tiles = self.get_visible_tiles();
             let env_tile = &environment.terrain.grid[x][y];
 
             if env_tile.hostile {
