@@ -23,7 +23,7 @@ const inputFields: Array<{
 	{ key: 'sim_max_frames', label: 'Simulation ticks', default: 64 },
 ];
 
-function SimulationParams({
+function RunSimulation({
 	onServerResponse,
 }: {
 	onServerResponse: (responseData: any) => void;
@@ -93,4 +93,4 @@ function SimulationParams({
 	);
 }
 
-export default SimulationParams;
+export default RunSimulation;

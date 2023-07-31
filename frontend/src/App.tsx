@@ -1,4 +1,4 @@
-import SimulationParams from './lib/components/SimulationParams';
+import RunSimulation from './lib/components/RunSimulation';
 import './App.css';
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
 
 	return (
 		<div className="App">
-			<SimulationParams onServerResponse={handleServerResponse} />
+			<RunSimulation onServerResponse={handleServerResponse} />
 		</div>
 	);
 }
