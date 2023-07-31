@@ -21,14 +21,11 @@ function GridDisplay({ data }: { data: Simulation }) {
 	};
 
 	const previousFrame = () => {
-		setCurrentFrameIndex(
-			(prevIndex) =>
-				(prevIndex - 1 + terrainGrids.length) % terrainGrids.length,
-		);
+		setCurrentFrameIndex((prevIndex) => prevIndex - 1);
 	};
 
 	const nextFrame = () => {
-		setCurrentFrameIndex((prevIndex) => (prevIndex + 1) % terrainGrids.length);
+		setCurrentFrameIndex((prevIndex) => prevIndex + 1);
 	};
 
 	const lastFrame = () => {
@@ -63,13 +60,15 @@ function GridDisplay({ data }: { data: Simulation }) {
 			</div>
 			<div className="frame-buttons">
 				<button onClick={firstFrame}>&lt; &lt;</button>
-				<button onClick={previousFrame} disabled={terrainGrids.length <= 1}>
+				<button onClick={previousFrame} disabled={currentGridIndex === 0}>
 					&lt;
 				</button>
 				<span>
 					{currentGridIndex} / {terrainGrids.length - 1}
 				</span>
-				<button onClick={nextFrame} disabled={terrainGrids.length <= 1}>
+				<button
+					onClick={nextFrame}
+					disabled={currentGridIndex === terrainGrids.length - 1}>
 					&gt;
 				</button>
 				<button onClick={lastFrame}>&gt; &gt;</button>
