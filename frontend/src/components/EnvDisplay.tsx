@@ -9,6 +9,10 @@ function EnvDisplay({ data }: { data: Simulation }) {
 		y: data[currentGridIndex].environment.target.y,
 	};
 
+	const firstFrame = () => {
+		setCurrentFrameIndex(0);
+	};
+
 	const previousFrame = () => {
 		setCurrentFrameIndex(
 			(prevIndex) =>
@@ -18,6 +22,10 @@ function EnvDisplay({ data }: { data: Simulation }) {
 
 	const nextFrame = () => {
 		setCurrentFrameIndex((prevIndex) => (prevIndex + 1) % terrainGrids.length);
+	};
+
+	const lastFrame = () => {
+		setCurrentFrameIndex(terrainGrids.length - 1);
 	};
 
 	const currentGrid = terrainGrids[currentGridIndex];
@@ -44,12 +52,17 @@ function EnvDisplay({ data }: { data: Simulation }) {
 				))}
 			</div>
 			<div className="frame-buttons">
+				<button onClick={firstFrame}>&lt; &lt;</button>
 				<button onClick={previousFrame} disabled={terrainGrids.length <= 1}>
 					&lt;
 				</button>
+				<span>
+					{currentGridIndex} / {terrainGrids.length - 1}
+				</span>
 				<button onClick={nextFrame} disabled={terrainGrids.length <= 1}>
 					&gt;
 				</button>
+				<button onClick={lastFrame}>&gt; &gt;</button>
 			</div>
 		</div>
 	);

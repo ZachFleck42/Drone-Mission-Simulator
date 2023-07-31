@@ -22,7 +22,8 @@ input {
 .grid-display {
 	margin-top: 20px;
 	display: flex;
-	justify-content: center;
+	flex-direction: column; /* Changed to column */
+	align-items: center; /* Center align the grid and buttons */
 }
 
 .grid-container {
@@ -43,8 +44,18 @@ input {
 	font-weight: bold;
 }
 
-/* Additional styles for hostile cells */
 .grid-cell.hostile {
 	background-color: red;
 	color: white;
+}
+
+.frame-buttons {
+	margin-top: 10px;
+	display: flex;
+	align-items: center;
+}
+
+.frame-buttons button {
+	margin: 0 5px;
+	padding: 5px 10px;
 }
