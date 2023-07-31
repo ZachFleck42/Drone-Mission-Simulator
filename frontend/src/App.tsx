@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Simulation } from './types/Simulation';
 import RunSimulation from './components/RunSimulation';
 import GridDisplay from './components/GridDisplay';
-import ThreeCanvas from './components/TestCanvas';
 
 const API = 'http://127.0.0.1:8080/sim';
 
