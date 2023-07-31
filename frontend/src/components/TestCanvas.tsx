@@ -1,7 +1,24 @@
 import * as THREE from 'three';
 import { useState, useRef } from 'react';
 import { Canvas, useFrame, ThreeElements } from '@react-three/fiber';
-import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
+import { OrbitControls, PerspectiveCamera, useHelper } from '@react-three/drei';
+
+function DirectionalLightWithHelper(props: {
+	position: [number, number, number];
+	intensity: number;
+}) {
+	const directionalLightRef = useRef<THREE.DirectionalLight>(null!);
+	useHelper(directionalLightRef, THREE.DirectionalLightHelper);
+
+	return (
+		<directionalLight
+			position={props.position}
+			ref={directionalLightRef}
+			color={'white'}
+			intensity={props.intensity}
+		/>
+	);
+}
 
 function Box(props: ThreeElements['mesh']) {
 	const meshRef = useRef<THREE.Mesh>(null!);
@@ -17,7 +34,7 @@ function Box(props: ThreeElements['mesh']) {
 			onPointerOver={(event) => setHover(true)}
 			onPointerOut={(event) => setHover(false)}>
 			<boxGeometry args={[1, 1, 1]} />
-			<meshBasicMaterial color={hovered ? 'hotpink' : 'orange'} />
+			<meshStandardMaterial color={hovered ? 'hotpink' : 'red'} />
 		</mesh>
 	);
 }
@@ -27,7 +44,7 @@ function Plane(props: ThreeElements['mesh']) {
 	return (
 		<mesh {...props} ref={meshRef} rotation={[-Math.PI / 2, 0, 0]}>
 			<planeGeometry args={[10, 10]} />
-			<meshBasicMaterial color="green" side={THREE.DoubleSide} />
+			<meshStandardMaterial color="lightgreen" side={THREE.DoubleSide} />
 		</mesh>
 	);
 }
@@ -38,7 +55,7 @@ export default function TestCanvas() {
 			<PerspectiveCamera makeDefault fov={75} position={[1, 1, 5]} />
 			<OrbitControls />
 			<ambientLight />
-			<pointLight position={[5, 5, 5]} />
+			<DirectionalLightWithHelper position={[0, 5, 0]} intensity={0.5} />
 			<axesHelper />
 			<Plane />
 			<Box position={[0, 2, 0]} />
