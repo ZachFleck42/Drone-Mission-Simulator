@@ -3,21 +3,11 @@ import { useState, useRef } from 'react';
 import { Canvas, useFrame, ThreeElements } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera, useHelper } from '@react-three/drei';
 
-function DirectionalLightWithHelper(props: {
-	position: [number, number, number];
-	intensity: number;
-}) {
+function DirectionalLightWithHelper(props: ThreeElements['directionalLight']) {
 	const directionalLightRef = useRef<THREE.DirectionalLight>(null!);
 	useHelper(directionalLightRef, THREE.DirectionalLightHelper);
 
-	return (
-		<directionalLight
-			position={props.position}
-			ref={directionalLightRef}
-			color={'white'}
-			intensity={props.intensity}
-		/>
-	);
+	return <directionalLight ref={directionalLightRef} {...props} />;
 }
 
 function Box(props: ThreeElements['mesh']) {
@@ -55,7 +45,11 @@ export default function TestCanvas() {
 			<PerspectiveCamera makeDefault fov={75} position={[1, 1, 5]} />
 			<OrbitControls />
 			<ambientLight />
-			<DirectionalLightWithHelper position={[0, 5, 0]} intensity={0.5} />
+			<DirectionalLightWithHelper
+				position={[0, 5, 0]}
+				intensity={0.5}
+				color={'white'}
+			/>
 			<axesHelper />
 			<Plane />
 			<Box position={[0, 2, 0]} />
