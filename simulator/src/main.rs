@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 mod simulator;
 
 use actix_cors::Cors;
