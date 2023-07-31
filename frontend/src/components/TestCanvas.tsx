@@ -10,11 +10,16 @@ function DirectionalLightWithHelper(props: ThreeElements['directionalLight']) {
 	return <directionalLight ref={directionalLightRef} {...props} />;
 }
 
-function Box(props: ThreeElements['mesh']) {
+function CustomBox(props: ThreeElements['mesh']) {
 	const meshRef = useRef<THREE.Mesh>(null!);
 	const [hovered, setHover] = useState(false);
 	const [active, setActive] = useState(false);
-	useFrame((state, delta) => (meshRef.current.rotation.x += delta));
+	useFrame(
+		(state, delta) => (
+			(meshRef.current.rotation.x += delta),
+			(meshRef.current.rotation.y += delta)
+		),
+	);
 	return (
 		<mesh
 			{...props}
@@ -29,7 +34,7 @@ function Box(props: ThreeElements['mesh']) {
 	);
 }
 
-function Plane(props: ThreeElements['mesh']) {
+function CustomPlane(props: ThreeElements['mesh']) {
 	const meshRef = useRef<THREE.Mesh>(null!);
 	return (
 		<mesh {...props} ref={meshRef} rotation={[-Math.PI / 2, 0, 0]}>
@@ -51,8 +56,8 @@ export default function TestCanvas() {
 				color={'white'}
 			/>
 			<axesHelper />
-			<Plane />
-			<Box position={[0, 2, 0]} />
+			<CustomPlane />
+			<CustomBox position={[0, 2, 0]} />
 		</Canvas>
 	);
 }
