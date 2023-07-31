@@ -41,11 +41,10 @@ function GridDisplay({ data }: { data: Simulation }) {
 	}, [isPlaying, terrainGrids.length]);
 
 	const togglePlayPause = () => {
-		if (isPlaying && currentGridIndex === terrainGrids.length - 1) {
-			setIsPlaying(false);
-		} else {
-			setIsPlaying((prevState) => !prevState);
+		if (currentGridIndex === terrainGrids.length - 1) {
+			setCurrentFrameIndex(0);
 		}
+		setIsPlaying((prevState) => !prevState);
 	};
 
 	return (
