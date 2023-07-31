@@ -2,7 +2,7 @@ import './App.css';
 import { useState } from 'react';
 import { Simulation } from './types/Simulation';
 import RunSimulation from './components/RunSimulation';
-import EnvDisplay from './components/EnvDisplay';
+import GridDisplay from './components/GridDisplay';
 
 const API = 'http://127.0.0.1:8080/sim';
 
@@ -17,7 +17,7 @@ function App() {
 	return (
 		<div className="App">
 			<RunSimulation api={API} onServerResponse={handleServerResponse} />
-			{apiData.length > 0 && <EnvDisplay data={apiData} />}
+			{apiData.length > 0 && <GridDisplay data={apiData} />}
 		</div>
 	);
 }

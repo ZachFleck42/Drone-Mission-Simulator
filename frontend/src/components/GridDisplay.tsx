@@ -4,9 +4,16 @@ import { Simulation } from '../types/Simulation';
 function GridDisplay({ data }: { data: Simulation }) {
 	const [currentGridIndex, setCurrentFrameIndex] = useState<number>(0);
 	const terrainGrids = data.map((item) => item.environment.terrain.grid);
+	const droneGrids = data.map((item) => item.drone.data.grid);
+
 	const targetPosition: { x: number; y: number } = {
 		x: data[currentGridIndex].environment.target.x,
 		y: data[currentGridIndex].environment.target.y,
+	};
+
+	const dronePosition: { x: number; y: number } = {
+		x: data[currentGridIndex].drone.x,
+		y: data[currentGridIndex].drone.y,
 	};
 
 	const firstFrame = () => {
