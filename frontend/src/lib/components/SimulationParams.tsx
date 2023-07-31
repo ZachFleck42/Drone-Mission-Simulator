@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PostButton from './PostButton';
 
-type InputData = {
+type SimParams = {
 	terrain_grid_size: number;
 	terrain_hostile_rate: number;
 	target_move_rate: number;
@@ -11,7 +11,7 @@ type InputData = {
 };
 
 const inputFields: Array<{
-	key: keyof InputData;
+	key: keyof SimParams;
 	label: string;
 	default: number;
 }> = [
@@ -25,7 +25,7 @@ const inputFields: Array<{
 
 function SimulationParams() {
 	const [interactedFields, setInteractedFields] = useState<
-		Record<keyof InputData, boolean>
+		Record<keyof SimParams, boolean>
 	>({
 		terrain_grid_size: false,
 		terrain_hostile_rate: false,
@@ -35,8 +35,8 @@ function SimulationParams() {
 		sim_max_frames: false,
 	});
 
-	const [inputData, setInputData] = useState<InputData>(() => {
-		const initialData: InputData = {} as InputData;
+	const [SimParams, setInputData] = useState<SimParams>(() => {
+		const initialData: SimParams = {} as SimParams;
 		inputFields.forEach((field) => (initialData[field.key] = field.default));
 		return initialData;
 	});
@@ -60,14 +60,14 @@ function SimulationParams() {
 	};
 
 	return (
-		<div className="App">
+		<div className="run-simulation">
 			<div className="input-fields">
 				{inputFields.map((field) => (
 					<input
 						key={field.key}
 						type="number"
 						name={field.key}
-						value={interactedFields[field.key] ? inputData[field.key] : ''}
+						value={interactedFields[field.key] ? SimParams[field.key] : ''}
 						onChange={handleInputChange}
 						placeholder={`${field.label} (Default is ${field.default})`}
 					/>
@@ -76,12 +76,12 @@ function SimulationParams() {
 			<PostButton
 				buttonText="Echo"
 				url="http://127.0.0.1:8080/echo"
-				postData={inputData}
+				data={SimParams}
 			/>
 			<PostButton
 				buttonText="Sim"
 				url="http://127.0.0.1:8080/sim"
-				postData={inputData}
+				data={SimParams}
 			/>
 		</div>
 	);

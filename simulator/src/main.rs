@@ -5,7 +5,7 @@ use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
-struct SimReq {
+struct SimulationParameters {
     terrain_grid_size: usize,
     terrain_hostile_rate: usize,
     target_move_rate: usize,
@@ -25,28 +25,30 @@ async fn echo(req_body: String) -> impl Responder {
 }
 
 #[post("/sim")]
-async fn sim(sim_req: web::Json<SimReq>) -> impl Responder {
+async fn sim(simulation_request: web::Json<SimulationParameters>) -> impl Responder {
     let environment = simulator::env::Environment::new(
-        sim_req.terrain_grid_size,
-        sim_req.terrain_hostile_rate,
-        sim_req.target_move_rate,
+        simulation_request.terrain_grid_size,
+        simulation_request.terrain_hostile_rate,
+        simulation_request.target_move_rate,
     );
 
     let (entry_point_x, entry_point_y) = environment.generate_entry_point();
     let drone = simulator::drone::Drone::new(
         entry_point_x,
         entry_point_y,
-        sim_req.terrain_grid_size,
-        sim_req.drone_move_range,
-        sim_req.drone_vis_range,
+        simulation_request.terrain_grid_size,
+        simulation_request.drone_move_range,
+        simulation_request.drone_vis_range,
     );
 
-    let mut sim =
-        simulator::simulation::Simulation::new(environment, drone, Some(sim_req.sim_max_frames));
+    let mut sim = simulator::simulation::Simulation::new(
+        environment,
+        drone,
+        Some(simulation_request.sim_max_frames),
+    );
 
-    let frames = sim.run();
-
-    HttpResponse::Ok().json(frames)
+    let simulation_frames = sim.run();
+    HttpResponse::Ok().json(simulation_frames)
 }
 
 #[actix_web::main]

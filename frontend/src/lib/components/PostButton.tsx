@@ -4,17 +4,17 @@ import axios, { AxiosResponse } from 'axios';
 interface ButtonComponentProps {
 	buttonText: string;
 	url: string;
-	postData: object;
+	data: object;
 }
 
 const PostButton: React.FC<ButtonComponentProps> = ({
 	buttonText,
 	url,
-	postData,
+	data,
 }) => {
 	const handleClick = async () => {
 		try {
-			const response: AxiosResponse = await axios.post(url, postData);
+			const response: AxiosResponse = await axios.post(url, data);
 			console.log(response.data);
 		} catch (error) {
 			console.error(error);
