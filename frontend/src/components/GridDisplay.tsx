@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Simulation } from '../types/Simulation';
 
 function GridDisplay({ data }: { data: Simulation }) {
 	const [currentGridIndex, setCurrentFrameIndex] = useState<number>(0);
+	const [isPlaying, setIsPlaying] = useState<boolean>(false);
 	const terrainGrids = data.map((item) => item.environment.terrain.grid);
 	const droneGrids = data.map((item) => item.drone.data.grid);
 
@@ -17,6 +18,35 @@ function GridDisplay({ data }: { data: Simulation }) {
 	};
 
 	const currentGrid = terrainGrids[currentGridIndex];
+
+	useEffect(() => {
+		let intervalId: NodeJS.Timeout;
+
+		if (isPlaying) {
+			intervalId = setInterval(() => {
+				setCurrentFrameIndex((prevIndex) => {
+					const nextIndex = prevIndex + 1;
+					if (nextIndex >= terrainGrids.length) {
+						setIsPlaying(false);
+						return terrainGrids.length - 1;
+					}
+					return nextIndex;
+				});
+			}, 500);
+		}
+
+		return () => {
+			clearInterval(intervalId);
+		};
+	}, [isPlaying, terrainGrids.length]);
+
+	const togglePlayPause = () => {
+		if (isPlaying && currentGridIndex === terrainGrids.length - 1) {
+			setIsPlaying(false);
+		} else {
+			setIsPlaying((prevState) => !prevState);
+		}
+	};
 
 	return (
 		<div className="grid-display">
@@ -45,12 +75,12 @@ function GridDisplay({ data }: { data: Simulation }) {
 			<div className="frame-buttons">
 				<button
 					onClick={() => setCurrentFrameIndex(0)}
-					disabled={currentGridIndex === 0}>
+					disabled={isPlaying || currentGridIndex === 0}>
 					&lt; &lt;
 				</button>
 				<button
 					onClick={() => setCurrentFrameIndex((prevIndex) => prevIndex - 1)}
-					disabled={currentGridIndex === 0}>
+					disabled={isPlaying || currentGridIndex === 0}>
 					&lt;
 				</button>
 				<span>
@@ -58,13 +88,20 @@ function GridDisplay({ data }: { data: Simulation }) {
 				</span>
 				<button
 					onClick={() => setCurrentFrameIndex((prevIndex) => prevIndex + 1)}
-					disabled={currentGridIndex === terrainGrids.length - 1}>
+					disabled={isPlaying || currentGridIndex === terrainGrids.length - 1}>
 					&gt;
 				</button>
 				<button
 					onClick={() => setCurrentFrameIndex(terrainGrids.length - 1)}
-					disabled={currentGridIndex === terrainGrids.length - 1}>
+					disabled={isPlaying || currentGridIndex === terrainGrids.length - 1}>
 					&gt; &gt;
+				</button>
+				<button onClick={togglePlayPause}>
+					{currentGridIndex === terrainGrids.length - 1
+						? 'Replay'
+						: isPlaying
+						? 'Pause'
+						: 'Play'}
 				</button>
 			</div>
 		</div>
