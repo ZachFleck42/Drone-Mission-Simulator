@@ -33,7 +33,7 @@ function App() {
 			) : (
 				<div style={{ marginTop: '100px' }}>Waiting for simulation data...</div>
 			)}
-			<div>
+			<div className="canvas-display">
 				<ZCanvas />
 			</div>
 		</div>

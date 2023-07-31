@@ -66,3 +66,9 @@ input {
 	margin: 0 5px;
 	padding: 5px 10px;
 }
+
+.canvas-display {
+	border: 1px solid #333;
+	width: 500px;
+	height: 500px;
+}
