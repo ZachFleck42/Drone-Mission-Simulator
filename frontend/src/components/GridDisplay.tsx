@@ -16,22 +16,6 @@ function GridDisplay({ data }: { data: Simulation }) {
 		y: data[currentGridIndex].drone.y,
 	};
 
-	const firstFrame = () => {
-		setCurrentFrameIndex(0);
-	};
-
-	const previousFrame = () => {
-		setCurrentFrameIndex((prevIndex) => prevIndex - 1);
-	};
-
-	const nextFrame = () => {
-		setCurrentFrameIndex((prevIndex) => prevIndex + 1);
-	};
-
-	const lastFrame = () => {
-		setCurrentFrameIndex(terrainGrids.length - 1);
-	};
-
 	const currentGrid = terrainGrids[currentGridIndex];
 
 	return (
@@ -59,22 +43,26 @@ function GridDisplay({ data }: { data: Simulation }) {
 				))}
 			</div>
 			<div className="frame-buttons">
-				<button onClick={firstFrame} disabled={currentGridIndex === 0}>
+				<button
+					onClick={() => setCurrentFrameIndex(0)}
+					disabled={currentGridIndex === 0}>
 					&lt; &lt;
 				</button>
-				<button onClick={previousFrame} disabled={currentGridIndex === 0}>
+				<button
+					onClick={() => setCurrentFrameIndex((prevIndex) => prevIndex - 1)}
+					disabled={currentGridIndex === 0}>
 					&lt;
 				</button>
 				<span>
 					{currentGridIndex} / {terrainGrids.length - 1}
 				</span>
 				<button
-					onClick={nextFrame}
+					onClick={() => setCurrentFrameIndex((prevIndex) => prevIndex + 1)}
 					disabled={currentGridIndex === terrainGrids.length - 1}>
 					&gt;
 				</button>
 				<button
-					onClick={lastFrame}
+					onClick={() => setCurrentFrameIndex(terrainGrids.length - 1)}
 					disabled={currentGridIndex === terrainGrids.length - 1}>
 					&gt; &gt;
 				</button>
