@@ -10,16 +10,25 @@ type InputData = {
 	sim_max_ticks: number;
 };
 
-function SimulationParams() {
-	const defaultInputData: InputData = {
-		env_terrain_grid_size: 16,
-		env_terrain_hostile_rate: 10,
-		env_target_move_rate: 10,
-		drone_move_range: 1,
-		drone_vis_range: 2,
-		sim_max_ticks: 64,
-	};
+const defaultInputData: InputData = {
+	env_terrain_grid_size: 16,
+	env_terrain_hostile_rate: 10,
+	env_target_move_rate: 10,
+	drone_move_range: 1,
+	drone_vis_range: 2,
+	sim_max_ticks: 64,
+};
 
+const inputFields: Array<{ key: keyof InputData; label: string }> = [
+	{ key: 'env_terrain_grid_size', label: 'Terrain grid size' },
+	{ key: 'env_terrain_hostile_rate', label: 'Terrain hostile rate' },
+	{ key: 'env_target_move_rate', label: 'Target move rate' },
+	{ key: 'drone_move_range', label: 'Drone move range' },
+	{ key: 'drone_vis_range', label: 'Drone visibility range' },
+	{ key: 'sim_max_ticks', label: 'Simulation ticks' },
+];
+
+function SimulationParams() {
 	const [interactedFields, setInteractedFields] = useState<
 		Record<keyof InputData, boolean>
 	>({
@@ -54,73 +63,18 @@ function SimulationParams() {
 	return (
 		<div className="App">
 			<div className="input-container">
-				<input
-					type="number"
-					name="env_terrain_grid_size"
-					value={
-						interactedFields.env_terrain_grid_size
-							? inputData.env_terrain_grid_size
-							: ''
-					}
-					onChange={handleInputChange}
-					placeholder={`Terrain grid size (default ${defaultInputData.env_terrain_grid_size})`}
-				/>
-
-				<input
-					type="number"
-					name="env_terrain_hostile_rate"
-					value={
-						interactedFields.env_terrain_hostile_rate
-							? inputData.env_terrain_hostile_rate
-							: ''
-					}
-					onChange={handleInputChange}
-					placeholder={`Terrain hostile rate (default ${defaultInputData.env_terrain_hostile_rate})`}
-				/>
-
-				<input
-					type="number"
-					name="env_target_move_rate"
-					value={
-						interactedFields.env_target_move_rate
-							? inputData.env_target_move_rate
-							: ''
-					}
-					onChange={handleInputChange}
-					placeholder={`Target move rate (default ${defaultInputData.env_target_move_rate})`}
-				/>
-
-				<input
-					type="number"
-					name="drone_move_range"
-					value={
-						interactedFields.drone_move_range ? inputData.drone_move_range : ''
-					}
-					onChange={handleInputChange}
-					placeholder={`Drone move range (default ${defaultInputData.drone_move_range})`}
-				/>
-
-				<input
-					type="number"
-					name="drone_vis_range"
-					value={
-						interactedFields.drone_vis_range ? inputData.drone_vis_range : ''
-					}
-					onChange={handleInputChange}
-					placeholder={`Drone visibility range (default ${defaultInputData.drone_vis_range})`}
-				/>
-
-				<input
-					type="number"
-					name="sim_max_ticks"
-					value={
-						interactedFields.sim_max_ticks
-							? inputData.sim_max_ticks.toString()
-							: ''
-					}
-					onChange={handleInputChange}
-					placeholder={`Simulation ticks (default ${defaultInputData.sim_max_ticks})`}
-				/>
+				{inputFields.map((field) => (
+					<input
+						key={field.key}
+						type="number"
+						name={field.key}
+						value={interactedFields[field.key] ? inputData[field.key] : ''}
+						onChange={handleInputChange}
+						placeholder={`${field.label} (default is ${
+							defaultInputData[field.key]
+						})`}
+					/>
+				))}
 			</div>
 			<PostButton
 				buttonText="Echo"
