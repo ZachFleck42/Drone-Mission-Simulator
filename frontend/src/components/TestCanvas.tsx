@@ -22,6 +22,20 @@ function Box(props: ThreeElements['mesh']) {
 	);
 }
 
+function Plane(props: ThreeElements['mesh']) {
+	const meshRef = useRef<THREE.Mesh>(null!);
+	return (
+		<mesh {...props} ref={meshRef} rotation={[-Math.PI / 2, 0, 0]}>
+			<planeGeometry attach="geometry" args={[100, 100]} />
+			<meshLambertMaterial
+				attach="material"
+				color="lightblue"
+				side={THREE.DoubleSide}
+			/>
+		</mesh>
+	);
+}
+
 export default function ZCanvas() {
 	return (
 		<Canvas>
@@ -29,8 +43,8 @@ export default function ZCanvas() {
 			<ambientLight />
 			<axesHelper />
 			<pointLight position={[10, 10, 10]} />
-			<Box position={[-1.2, 0, 0]} />
-			<Box position={[1.2, 0, 0]} />
+			<Plane />
+			<Box position={[0, 2, 0]} />
 		</Canvas>
 	);
 }
