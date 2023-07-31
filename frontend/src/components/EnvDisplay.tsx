@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { Simulation } from '../types/Simulation';
 
-interface GridDisplayProps {
-	data: any;
-}
-
-const TerrainDisplay: React.FC<GridDisplayProps> = ({ data }) => {
+function EnvDisplay({ data }: { data: Simulation }) {
 	const [currentGridIndex, setCurrentFrameIndex] = useState<number>(0);
-	const terrainGrids = data.map((item: any) => item.environment.terrain.grid);
+	const terrainGrids = data.map((item) => item.environment.terrain.grid);
+	const targetPosition: { x: number; y: number } = {
+		x: data[currentGridIndex].environment.target.x,
+		y: data[currentGridIndex].environment.target.y,
+	};
 
 	const previousFrame = () => {
 		setCurrentFrameIndex(
@@ -21,20 +22,23 @@ const TerrainDisplay: React.FC<GridDisplayProps> = ({ data }) => {
 
 	const currentGrid = terrainGrids[currentGridIndex];
 
-	if (!currentGrid || !currentGrid.length) {
-		return null;
-	}
-
 	return (
 		<div className="grid-display">
 			<div className="grid-container">
-				{currentGrid.map((row: any[], rowIndex: number) => (
+				{currentGrid.map((row, rowIndex) => (
 					<div className="grid-row" key={rowIndex}>
-						{row.map((cell: any, colIndex: number) => (
+						{row.map((cell, colIndex) => (
 							<div
-								className={`grid-cell${cell.hostile ? ' hostile' : ''}`}
-								key={colIndex}
-							/>
+								className={`grid-cell${cell.hostile ? ' hostile' : ''}${
+									targetPosition.x === colIndex && targetPosition.y === rowIndex
+										? ' target'
+										: ''
+								}`}
+								key={colIndex}>
+								{targetPosition.x === colIndex && targetPosition.y === rowIndex
+									? 'T'
+									: ''}
+							</div>
 						))}
 					</div>
 				))}
@@ -49,6 +53,6 @@ const TerrainDisplay: React.FC<GridDisplayProps> = ({ data }) => {
 			</div>
 		</div>
 	);
-};
+}
 
-export default TerrainDisplay;
+export default EnvDisplay;
