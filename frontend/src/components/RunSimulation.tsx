@@ -1,14 +1,14 @@
 import axios, { AxiosResponse } from 'axios';
 import React, { useState } from 'react';
 
-type SimParams = {
+interface SimParams {
 	terrain_grid_size: number;
 	terrain_hostile_rate: number;
 	target_move_rate: number;
 	drone_move_range: number;
 	drone_vis_range: number;
 	sim_max_frames: number;
-};
+}
 
 const inputFields: Array<{
 	key: keyof SimParams;

@@ -1,12 +1,19 @@
-interface GridPoint {
+interface EnvGridPoint {
 	x: number;
 	y: number;
 	hostile: boolean;
 }
 
+interface DroneGridPoint {
+	x: number;
+	y: number;
+	hostile: string;
+	content: string;
+}
+
 interface Terrain {
 	size: number;
-	grid: GridPoint[][];
+	grid: EnvGridPoint[][];
 }
 
 interface Target {
@@ -30,7 +37,7 @@ interface Drone {
 	path_history: [number, number][];
 	data: {
 		grid_size: number;
-		grid: GridPoint[][];
+		grid: DroneGridPoint[][];
 		last_target_pos: [number, number] | null;
 	};
 	flags: string[];
@@ -42,6 +49,4 @@ interface Frame {
 	drone: Drone;
 }
 
-type APIResponse = Frame[];
-
-export {};
+export type Simulation = Frame[];

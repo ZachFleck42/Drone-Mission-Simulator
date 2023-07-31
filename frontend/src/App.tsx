@@ -1,14 +1,15 @@
 import { useState } from 'react';
-import RunSimulation from './lib/components/RunSimulation';
-import TerrainDisplay from './lib/components/TerrainDisplay';
+import RunSimulation from './components/RunSimulation';
+import TerrainDisplay from './components/TerrainDisplay';
 import './App.css';
+import { Simulation } from './types/Simulation';
 
 const API = 'http://127.0.0.1:8080/sim';
 
 function App() {
-	const [apiData, setApiData] = useState<any[]>([]);
+	const [apiData, setApiData] = useState<Simulation>([]);
 
-	const handleServerResponse = (responseData: any[]) => {
+	const handleServerResponse = (responseData: Simulation) => {
 		console.log('Response data from SimulationParams:', responseData);
 		setApiData(responseData);
 	};
