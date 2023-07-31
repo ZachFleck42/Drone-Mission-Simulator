@@ -23,7 +23,11 @@ const inputFields: Array<{
 	{ key: 'sim_max_frames', label: 'Simulation ticks', default: 64 },
 ];
 
-function SimulationParams() {
+function SimulationParams({
+	onServerResponse,
+}: {
+	onServerResponse: (responseData: any) => void;
+}) {
 	const [interactedFields, setInteractedFields] = useState<
 		Record<keyof SimParams, boolean>
 	>({
@@ -77,11 +81,13 @@ function SimulationParams() {
 				buttonText="Echo"
 				url="http://127.0.0.1:8080/echo"
 				data={SimParams}
+				onPost={onServerResponse}
 			/>
 			<PostButton
 				buttonText="Sim"
 				url="http://127.0.0.1:8080/sim"
 				data={SimParams}
+				onPost={onServerResponse}
 			/>
 		</div>
 	);
