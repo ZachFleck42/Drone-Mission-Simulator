@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Simulation } from './types/Simulation';
 import RunSimulation from './components/RunSimulation';
 import GridDisplay from './components/GridDisplay';
-import ZCanvas from './components/TestCanvas';
+import TestCanvas from './components/TestCanvas';
 
 const API = 'http://127.0.0.1:8080/sim';
 
@@ -34,7 +34,7 @@ function App() {
 				<div style={{ marginTop: '100px' }}>Waiting for simulation data...</div>
 			)}
 			<div className="canvas-display">
-				<ZCanvas />
+				<TestCanvas />
 			</div>
 		</div>
 	);

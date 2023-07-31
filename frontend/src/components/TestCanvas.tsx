@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { useState, useRef } from 'react';
 import { Canvas, useFrame, ThreeElements } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 
 function Box(props: ThreeElements['mesh']) {
 	const meshRef = useRef<THREE.Mesh>(null!);
@@ -36,9 +36,10 @@ function Plane(props: ThreeElements['mesh']) {
 	);
 }
 
-export default function ZCanvas() {
+export default function TestCanvas() {
 	return (
 		<Canvas>
+			<PerspectiveCamera makeDefault fov={75} position={[1, 1, 5]} />
 			<OrbitControls />
 			<ambientLight />
 			<axesHelper />
