@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { useState, useRef } from 'react';
-import { Canvas, useFrame, ThreeElements } from '@react-three/fiber';
+import { Canvas, useFrame, ThreeElements, MeshProps } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera, useHelper } from '@react-three/drei';
 
 function DirectionalLightWithHelper(props: ThreeElements['directionalLight']) {
@@ -34,11 +34,15 @@ function CustomBox(props: ThreeElements['mesh']) {
 	);
 }
 
-function CustomPlane(props: ThreeElements['mesh']) {
+interface CustomPlaneProps extends MeshProps {
+	size: number;
+}
+
+function CustomPlane({ size, ...props }: CustomPlaneProps) {
 	const meshRef = useRef<THREE.Mesh>(null!);
 	return (
 		<mesh {...props} ref={meshRef} rotation={[-Math.PI / 2, 0, 0]}>
-			<planeGeometry args={[10, 10]} />
+			<planeGeometry args={[size, size]} />
 			<meshStandardMaterial color="lightgreen" side={THREE.DoubleSide} />
 		</mesh>
 	);
@@ -56,7 +60,8 @@ export default function TestCanvas() {
 				color={'white'}
 			/>
 			<axesHelper />
-			<CustomPlane />
+			<CustomPlane size={20} />
+			<gridHelper args={[20, 20]} />
 			<CustomBox position={[0, 2, 0]} />
 		</Canvas>
 	);
