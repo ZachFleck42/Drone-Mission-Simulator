@@ -3,7 +3,7 @@
     padding: 20px;
 }
   
-.input-container {
+.input-fields {
     display: flex;
     flex-direction: column;
     align-items: center;

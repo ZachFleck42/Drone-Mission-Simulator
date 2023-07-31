@@ -2,45 +2,44 @@ import React, { useState } from 'react';
 import PostButton from './PostButton';
 
 type InputData = {
-	env_terrain_grid_size: number;
-	env_terrain_hostile_rate: number;
-	env_target_move_rate: number;
+	terrain_grid_size: number;
+	terrain_hostile_rate: number;
+	target_move_rate: number;
 	drone_move_range: number;
 	drone_vis_range: number;
-	sim_max_ticks: number;
+	sim_max_frames: number;
 };
 
-const defaultInputData: InputData = {
-	env_terrain_grid_size: 16,
-	env_terrain_hostile_rate: 10,
-	env_target_move_rate: 10,
-	drone_move_range: 1,
-	drone_vis_range: 2,
-	sim_max_ticks: 64,
-};
-
-const inputFields: Array<{ key: keyof InputData; label: string }> = [
-	{ key: 'env_terrain_grid_size', label: 'Terrain grid size' },
-	{ key: 'env_terrain_hostile_rate', label: 'Terrain hostile rate' },
-	{ key: 'env_target_move_rate', label: 'Target move rate' },
-	{ key: 'drone_move_range', label: 'Drone move range' },
-	{ key: 'drone_vis_range', label: 'Drone visibility range' },
-	{ key: 'sim_max_ticks', label: 'Simulation ticks' },
+const inputFields: Array<{
+	key: keyof InputData;
+	label: string;
+	default: number;
+}> = [
+	{ key: 'terrain_grid_size', label: 'Terrain grid size', default: 16 },
+	{ key: 'terrain_hostile_rate', label: 'Terrain hostile rate', default: 10 },
+	{ key: 'target_move_rate', label: 'Target move rate', default: 10 },
+	{ key: 'drone_move_range', label: 'Drone move range', default: 1 },
+	{ key: 'drone_vis_range', label: 'Drone visibility range', default: 2 },
+	{ key: 'sim_max_frames', label: 'Simulation ticks', default: 64 },
 ];
 
 function SimulationParams() {
 	const [interactedFields, setInteractedFields] = useState<
 		Record<keyof InputData, boolean>
 	>({
-		env_terrain_grid_size: false,
-		env_terrain_hostile_rate: false,
-		env_target_move_rate: false,
+		terrain_grid_size: false,
+		terrain_hostile_rate: false,
+		target_move_rate: false,
 		drone_move_range: false,
 		drone_vis_range: false,
-		sim_max_ticks: false,
+		sim_max_frames: false,
 	});
 
-	const [inputData, setInputData] = useState(defaultInputData);
+	const [inputData, setInputData] = useState<InputData>(() => {
+		const initialData: InputData = {} as InputData;
+		inputFields.forEach((field) => (initialData[field.key] = field.default));
+		return initialData;
+	});
 
 	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
@@ -56,13 +55,13 @@ function SimulationParams() {
 			[name]:
 				numValue !== undefined
 					? numValue
-					: defaultInputData[name as keyof InputData],
+					: inputFields.find((field) => field.key === name)?.default ?? 0,
 		}));
 	};
 
 	return (
 		<div className="App">
-			<div className="input-container">
+			<div className="input-fields">
 				{inputFields.map((field) => (
 					<input
 						key={field.key}
@@ -70,9 +69,7 @@ function SimulationParams() {
 						name={field.key}
 						value={interactedFields[field.key] ? inputData[field.key] : ''}
 						onChange={handleInputChange}
-						placeholder={`${field.label} (default is ${
-							defaultInputData[field.key]
-						})`}
+						placeholder={`${field.label} (Default is ${field.default})`}
 					/>
 				))}
 			</div>

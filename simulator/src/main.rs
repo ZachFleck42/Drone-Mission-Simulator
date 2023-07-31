@@ -6,12 +6,12 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 struct SimReq {
-    env_terrain_grid_size: usize,
-    env_terrain_hostile_rate: usize,
-    env_target_move_rate: usize,
+    terrain_grid_size: usize,
+    terrain_hostile_rate: usize,
+    target_move_rate: usize,
     drone_move_range: usize,
     drone_vis_range: usize,
-    sim_max_ticks: usize,
+    sim_max_frames: usize,
 }
 
 #[get("/hello")]
@@ -27,22 +27,22 @@ async fn echo(req_body: String) -> impl Responder {
 #[post("/sim")]
 async fn sim(sim_req: web::Json<SimReq>) -> impl Responder {
     let environment = simulator::env::Environment::new(
-        sim_req.env_terrain_grid_size,
-        sim_req.env_terrain_hostile_rate,
-        sim_req.env_target_move_rate,
+        sim_req.terrain_grid_size,
+        sim_req.terrain_hostile_rate,
+        sim_req.target_move_rate,
     );
 
     let (entry_point_x, entry_point_y) = environment.generate_entry_point();
     let drone = simulator::drone::Drone::new(
         entry_point_x,
         entry_point_y,
-        sim_req.env_terrain_grid_size,
+        sim_req.terrain_grid_size,
         sim_req.drone_move_range,
         sim_req.drone_vis_range,
     );
 
     let mut sim =
-        simulator::simulation::Simulation::new(environment, drone, Some(sim_req.sim_max_ticks));
+        simulator::simulation::Simulation::new(environment, drone, Some(sim_req.sim_max_frames));
 
     let frames = sim.run();
 

@@ -35,7 +35,6 @@ impl Simulation {
             drone: self.drone.clone(),
         }];
 
-        self.print();
         match self.max_frames {
             // If max_ticks defined, only simulate until max_tick
             Some(max_frames) => {
@@ -63,7 +62,6 @@ impl Simulation {
             self.drone.make_move();
             self.drone.scan_environment(&self.environment);
         }
-        self.print();
     }
 
     pub fn print(&self) {
