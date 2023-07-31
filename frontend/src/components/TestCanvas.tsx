@@ -26,7 +26,7 @@ function Plane(props: ThreeElements['mesh']) {
 	const meshRef = useRef<THREE.Mesh>(null!);
 	return (
 		<mesh {...props} ref={meshRef} rotation={[-Math.PI / 2, 0, 0]}>
-			<planeGeometry attach="geometry" args={[100, 100]} />
+			<planeGeometry attach="geometry" args={[10, 10]} />
 			<meshLambertMaterial
 				attach="material"
 				color="lightblue"
