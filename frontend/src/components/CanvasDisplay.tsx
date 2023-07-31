@@ -14,14 +14,13 @@ function Tile(props: ThreeElements['mesh'], size: number, color: string) {
 			onPointerOver={(event) => setHover(true)}
 			onPointerOut={(event) => setHover(false)}>
 			<planeGeometry args={[size, size]} />
-			<meshStandardMaterial color={color} side={THREE.DoubleSide}/>
+			<meshStandardMaterial color={color} side={THREE.DoubleSide} />
 		</mesh>
 	);
 }
 
 function Grid() {
-	return (
-	)
+	return <div />;
 }
 
 export default Grid;

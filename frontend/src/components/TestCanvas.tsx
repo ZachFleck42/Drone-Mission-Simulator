@@ -17,7 +17,7 @@ function Box(props: ThreeElements['mesh']) {
 			onPointerOver={(event) => setHover(true)}
 			onPointerOut={(event) => setHover(false)}>
 			<boxGeometry args={[1, 1, 1]} />
-			<meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
+			<meshBasicMaterial color={hovered ? 'hotpink' : 'orange'} />
 		</mesh>
 	);
 }
@@ -26,12 +26,8 @@ function Plane(props: ThreeElements['mesh']) {
 	const meshRef = useRef<THREE.Mesh>(null!);
 	return (
 		<mesh {...props} ref={meshRef} rotation={[-Math.PI / 2, 0, 0]}>
-			<planeGeometry attach="geometry" args={[10, 10]} />
-			<meshLambertMaterial
-				attach="material"
-				color="lightblue"
-				side={THREE.DoubleSide}
-			/>
+			<planeGeometry args={[10, 10]} />
+			<meshBasicMaterial color="green" side={THREE.DoubleSide} />
 		</mesh>
 	);
 }
@@ -42,8 +38,8 @@ export default function TestCanvas() {
 			<PerspectiveCamera makeDefault fov={75} position={[1, 1, 5]} />
 			<OrbitControls />
 			<ambientLight />
+			<pointLight position={[5, 5, 5]} />
 			<axesHelper />
-			<pointLight position={[10, 10, 10]} />
 			<Plane />
 			<Box position={[0, 2, 0]} />
 		</Canvas>
