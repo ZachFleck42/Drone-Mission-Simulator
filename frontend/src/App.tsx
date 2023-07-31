@@ -19,13 +19,15 @@ function App() {
 	return (
 		<div className="App">
 			<RunSimulation api={API} onServerResponse={handleServerResponse} />
-			{apiData.length > 0 && (
+			{apiData.length > 0 ? (
 				<GridDisplay
 					data={apiData}
 					currentFrameIndex={currentFrameIndex}
 					setCurrentFrameIndex={setCurrentFrameIndex}
 				/>
-			)}{' '}
+			) : (
+				<div style={{ marginTop: '100px' }}>Waiting for simulation data...</div>
+			)}
 		</div>
 	);
 }
