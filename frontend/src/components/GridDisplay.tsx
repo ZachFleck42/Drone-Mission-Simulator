@@ -45,15 +45,15 @@ function GridDisplay({ data }: { data: Simulation }) {
 						{row.map((cell, colIndex) => (
 							<div
 								className={`grid-cell${cell.hostile ? ' hostile' : ''}${
-									targetPosition.x === colIndex && targetPosition.y === rowIndex
+									targetPosition.x === rowIndex && targetPosition.y === colIndex
 										? ' target'
 										: ''
 								}`}
 								key={colIndex}>
-								{targetPosition.x === colIndex && targetPosition.y === rowIndex
+								{targetPosition.x === rowIndex && targetPosition.y === colIndex
 									? 'T'
 									: ''}
-								{dronePosition.x === colIndex && dronePosition.y === rowIndex
+								{dronePosition.x === rowIndex && dronePosition.y === colIndex
 									? 'D'
 									: ''}
 							</div>
