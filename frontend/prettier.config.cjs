@@ -1,12 +1,4 @@
 module.exports = {
-	importOrder: [
-		'^@core/(.*)$',
-		'^@server/(.*)$',
-		'^@ui/(.*)$',
-		'^\\$lib/components/(.*)$',
-		'^\\$lib/(.*)$',
-		'^[./]',
-	],
 	arrowParens: 'always',
 	bracketSameLine: true,
 	bracketSpacing: true,
