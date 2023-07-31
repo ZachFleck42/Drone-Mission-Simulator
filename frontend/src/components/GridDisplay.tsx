@@ -59,7 +59,9 @@ function GridDisplay({ data }: { data: Simulation }) {
 				))}
 			</div>
 			<div className="frame-buttons">
-				<button onClick={firstFrame}>&lt; &lt;</button>
+				<button onClick={firstFrame} disabled={currentGridIndex === 0}>
+					&lt; &lt;
+				</button>
 				<button onClick={previousFrame} disabled={currentGridIndex === 0}>
 					&lt;
 				</button>
@@ -71,7 +73,11 @@ function GridDisplay({ data }: { data: Simulation }) {
 					disabled={currentGridIndex === terrainGrids.length - 1}>
 					&gt;
 				</button>
-				<button onClick={lastFrame}>&gt; &gt;</button>
+				<button
+					onClick={lastFrame}
+					disabled={currentGridIndex === terrainGrids.length - 1}>
+					&gt; &gt;
+				</button>
 			</div>
 		</div>
 	);
