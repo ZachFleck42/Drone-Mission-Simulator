@@ -53,6 +53,9 @@ function GridDisplay({ data }: { data: Simulation }) {
 								{targetPosition.x === colIndex && targetPosition.y === rowIndex
 									? 'T'
 									: ''}
+								{dronePosition.x === colIndex && dronePosition.y === rowIndex
+									? 'D'
+									: ''}
 							</div>
 						))}
 					</div>
