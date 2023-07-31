@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Simulation } from '../types/Simulation';
 
-function EnvDisplay({ data }: { data: Simulation }) {
+function GridDisplay({ data }: { data: Simulation }) {
 	const [currentGridIndex, setCurrentFrameIndex] = useState<number>(0);
 	const terrainGrids = data.map((item) => item.environment.terrain.grid);
 	const targetPosition: { x: number; y: number } = {
@@ -68,4 +68,4 @@ function EnvDisplay({ data }: { data: Simulation }) {
 	);
 }
 
-export default EnvDisplay;
+export default GridDisplay;
