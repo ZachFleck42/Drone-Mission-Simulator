@@ -5,12 +5,15 @@ function GridDisplay({
 	data,
 	currentFrameIndex,
 	setCurrentFrameIndex,
+	isPlaying, // Use the isPlaying prop here
+	setIsPlaying, // Use the setIsPlaying prop here
 }: {
 	data: Simulation;
 	currentFrameIndex: number;
 	setCurrentFrameIndex: React.Dispatch<React.SetStateAction<number>>;
+	isPlaying: boolean; // Receive isPlaying as a prop
+	setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-	const [isPlaying, setIsPlaying] = useState<boolean>(false);
 	const terrainGrids = data.map((item) => item.environment.terrain.grid);
 	const droneGrids = data.map((item) => item.drone.data.grid);
 
