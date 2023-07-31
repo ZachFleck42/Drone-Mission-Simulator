@@ -49,20 +49,29 @@ function RunSimulation({
 
 	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
-		const numValue = value === '' ? undefined : parseInt(value, 10);
+		const numValue = parseInt(value, 10);
 
-		setInteractedFields((prevInteractedFields) => ({
-			...prevInteractedFields,
-			[name]: value !== '',
-		}));
+		if (!Number.isNaN(numValue) && numValue >= 0) {
+			setInteractedFields((prevInteractedFields) => ({
+				...prevInteractedFields,
+				[name]: true,
+			}));
 
-		setInputData((prevData) => ({
-			...prevData,
-			[name]:
-				numValue !== undefined
-					? numValue
-					: inputFields.find((field) => field.key === name)?.default ?? 0,
-		}));
+			setInputData((prevData) => ({
+				...prevData,
+				[name]: numValue,
+			}));
+		} else {
+			setInteractedFields((prevInteractedFields) => ({
+				...prevInteractedFields,
+				[name]: false,
+			}));
+
+			setInputData((prevData) => ({
+				...prevData,
+				[name]: inputFields.find((field) => field.key === name)?.default ?? 0,
+			}));
+		}
 	};
 
 	const handleSubmit = async () => {
