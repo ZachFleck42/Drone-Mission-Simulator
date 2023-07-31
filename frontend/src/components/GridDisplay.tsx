@@ -1,17 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Simulation } from '../types/Simulation';
 
 function GridDisplay({
 	data,
 	currentFrameIndex,
 	setCurrentFrameIndex,
-	isPlaying, // Use the isPlaying prop here
-	setIsPlaying, // Use the setIsPlaying prop here
+	isPlaying,
+	setIsPlaying,
 }: {
 	data: Simulation;
 	currentFrameIndex: number;
 	setCurrentFrameIndex: React.Dispatch<React.SetStateAction<number>>;
-	isPlaying: boolean; // Receive isPlaying as a prop
+	isPlaying: boolean;
 	setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
 	const terrainGrids = data.map((item) => item.environment.terrain.grid);
