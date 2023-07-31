@@ -1,51 +1,50 @@
 .App {
-    text-align: center;
-    padding: 20px;
+	text-align: center;
+	padding: 20px;
 }
-  
+
 .simulation-params {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 300px;
-    margin: 0 auto;
-    padding-bottom: 12px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	max-width: 300px;
+	margin: 0 auto;
+	padding-bottom: 12px;
 }
-  
+
 input {
-    width: 100%;
-    padding: 8px;
-    margin: 5px 0;
-    font-size: 16px;
+	width: 100%;
+	padding: 8px;
+	margin: 5px 0;
+	font-size: 16px;
 }
-  
 
 .grid-display {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
+	margin-top: 20px;
+	display: flex;
+	justify-content: center;
 }
-  
+
 .grid-container {
-    border: 1px solid #333;
+	border: 1px solid #333;
 }
 
 .grid-row {
-    display: flex;
+	display: flex;
 }
 
 .grid-cell {
-    width: 20px;
-    height: 20px;
-    border: 1px solid #666;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
+	width: 20px;
+	height: 20px;
+	border: 1px solid #666;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-weight: bold;
 }
 
 /* Additional styles for hostile cells */
 .grid-cell.hostile {
-    background-color: red;
-    color: white;
+	background-color: red;
+	color: white;
 }
