@@ -41,6 +41,10 @@ function RunSimulation({
 		sim_max_frames: false,
 	});
 
+	const userInteraction = Object.values(interactedFields).some(
+		(value) => value,
+	);
+
 	const [SimParams, setInputData] = useState<SimParams>(() => {
 		const initialData: SimParams = {} as SimParams;
 		inputFields.forEach((field) => (initialData[field.key] = field.default));
@@ -84,6 +88,20 @@ function RunSimulation({
 		}
 	};
 
+	const resetToDefault = () => {
+		const clearedData: SimParams = {} as SimParams;
+		inputFields.forEach((field) => (clearedData[field.key] = field.default));
+		setInteractedFields({
+			terrain_grid_size: false,
+			terrain_hostile_rate: false,
+			target_move_rate: false,
+			drone_move_range: false,
+			drone_vis_range: false,
+			sim_max_frames: false,
+		});
+		setInputData(clearedData);
+	};
+
 	return (
 		<div className="run-simulation">
 			<div className="simulation-params">
@@ -98,6 +116,9 @@ function RunSimulation({
 					/>
 				))}
 			</div>
+			<button onClick={resetToDefault} disabled={!userInteraction}>
+				Reset to Default
+			</button>
 			<button onClick={handleSubmit}>Get simulation data</button>
 		</div>
 	);
