@@ -49,9 +49,11 @@ function CustomPlane({ size, ...props }: CustomPlaneProps) {
 }
 
 export default function TestCanvas() {
+	const gridSize = 20;
+
 	return (
 		<Canvas>
-			<PerspectiveCamera makeDefault fov={75} position={[1, 1, 5]} />
+			<PerspectiveCamera makeDefault fov={75} position={[4, 6, 4]} />
 			<OrbitControls />
 			<ambientLight />
 			<DirectionalLightWithHelper
@@ -59,9 +61,8 @@ export default function TestCanvas() {
 				intensity={0.5}
 				color={'white'}
 			/>
-			<axesHelper />
-			<CustomPlane size={20} />
-			<gridHelper args={[20, 20]} />
+			<CustomPlane size={gridSize} />
+			<gridHelper args={[gridSize, gridSize]} />
 			<CustomBox position={[0, 2, 0]} />
 		</Canvas>
 	);
