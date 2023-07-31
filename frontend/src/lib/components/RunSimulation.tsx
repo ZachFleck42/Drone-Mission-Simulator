@@ -1,5 +1,5 @@
+import axios, { AxiosResponse } from 'axios';
 import React, { useState } from 'react';
-import PostButton from './PostButton';
 
 type SimParams = {
 	terrain_grid_size: number;
@@ -63,9 +63,20 @@ function RunSimulation({
 		}));
 	};
 
+	const handleSubmit = async () => {
+		let url: string = 'http://127.0.0.1:8080/sim';
+		let data = SimParams;
+		try {
+			const response: AxiosResponse = await axios.post(url, data);
+			onServerResponse(response.data);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
 	return (
 		<div className="run-simulation">
-			<div className="input-fields">
+			<div className="simulation-params">
 				{inputFields.map((field) => (
 					<input
 						key={field.key}
@@ -77,18 +88,7 @@ function RunSimulation({
 					/>
 				))}
 			</div>
-			<PostButton
-				buttonText="Echo"
-				url="http://127.0.0.1:8080/echo"
-				data={SimParams}
-				onPost={onServerResponse}
-			/>
-			<PostButton
-				buttonText="Sim"
-				url="http://127.0.0.1:8080/sim"
-				data={SimParams}
-				onPost={onServerResponse}
-			/>
+			<button onClick={handleSubmit}>Send it!</button>
 		</div>
 	);
 }
