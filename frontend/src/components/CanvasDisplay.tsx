@@ -1,38 +1,14 @@
 import React, { useRef, useState } from 'react';
 import * as THREE from 'three';
-import { useFrame, MeshProps, useThree, useLoader } from '@react-three/fiber';
+import { useFrame, MeshProps, useThree } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { Environment, Simulation, Drone } from '../types/Simulation';
-import Thing from './arid_bk.jpg';
-
-function SkyBox() {
-	const { scene } = useThree();
-	const loader = new THREE.CubeTextureLoader();
-	loader.setPath('../assets/textures/skybox');
-	const texture = loader.load([
-		'arid_rt.jpg',
-		'arid_lf.jpg',
-		'arid_up.jpg',
-		'arid_dn.jpg',
-		'arid_ft.jpg',
-		'arid_bk.jpg',
-	]);
-
-	scene.background = texture;
-	scene.background = new THREE.Color('green');
-	return null;
-}
-
-function TestBox() {
-	const texture = useLoader(THREE.TextureLoader, 'arid_bk.jpg');
-
-	return (
-		<mesh position={[8, 2, -8]} castShadow>
-			<planeGeometry args={[2, 2, 2]} />
-			<meshStandardMaterial map={texture} />
-		</mesh>
-	);
-}
+import rt from '../assets/textures/skybox/arid_rt.jpg';
+import lf from '../assets/textures/skybox/arid_lf.jpg';
+import up from '../assets/textures/skybox/arid_up.jpg';
+import dn from '../assets/textures/skybox/arid_dn.jpg';
+import bk from '../assets/textures/skybox/arid_bk.jpg';
+import ft from '../assets/textures/skybox/arid_ft.jpg';
 
 interface GridTileProps extends MeshProps {
 	color: string;
@@ -87,6 +63,14 @@ function GridPlane({ environment, drone }: GridProps) {
 			})}
 		</group>
 	);
+}
+
+const loader = new THREE.CubeTextureLoader();
+const skyBoxTexture = loader.load([rt, lf, up, dn, bk, ft]);
+function SkyBox() {
+	const { scene } = useThree();
+	scene.background = skyBoxTexture;
+	return null;
 }
 
 interface DroneProps extends MeshProps {
@@ -190,7 +174,6 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 			/>
 			<DroneMesh droneRef={droneRef} drone={data[currentFrameIndex].drone} />
 			<SkyBox />
-			<TestBox />
 		</group>
 	);
 }
