@@ -1,8 +1,38 @@
 import React, { useRef, useState } from 'react';
 import * as THREE from 'three';
-import { useFrame, MeshProps } from '@react-three/fiber';
+import { useFrame, MeshProps, useThree, useLoader } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { Environment, Simulation, Drone } from '../types/Simulation';
+import Thing from './arid_bk.jpg';
+
+function SkyBox() {
+	const { scene } = useThree();
+	const loader = new THREE.CubeTextureLoader();
+	loader.setPath('../assets/textures/skybox');
+	const texture = loader.load([
+		'arid_rt.jpg',
+		'arid_lf.jpg',
+		'arid_up.jpg',
+		'arid_dn.jpg',
+		'arid_ft.jpg',
+		'arid_bk.jpg',
+	]);
+
+	scene.background = texture;
+	scene.background = new THREE.Color('green');
+	return null;
+}
+
+function TestBox() {
+	const texture = useLoader(THREE.TextureLoader, 'arid_bk.jpg');
+
+	return (
+		<mesh position={[8, 2, -8]} castShadow>
+			<planeGeometry args={[2, 2, 2]} />
+			<meshStandardMaterial map={texture} />
+		</mesh>
+	);
+}
 
 interface GridTileProps extends MeshProps {
 	color: string;
@@ -139,6 +169,7 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 				maxPolarAngle={Math.PI / 2}
 				target={[grid_center_x, 0, grid_center_z]}
 			/>
+			<ambientLight />
 			<directionalLight
 				position={[grid_center_x, 20, grid_center_z]}
 				intensity={1}
@@ -158,6 +189,8 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 				environment={data[currentFrameIndex].environment}
 			/>
 			<DroneMesh droneRef={droneRef} drone={data[currentFrameIndex].drone} />
+			<SkyBox />
+			<TestBox />
 		</group>
 	);
 }
