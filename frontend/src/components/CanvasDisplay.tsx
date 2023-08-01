@@ -3,12 +3,12 @@ import * as THREE from 'three';
 import { useFrame, MeshProps, useThree } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { Environment, Simulation, Drone } from '../types/Simulation';
-import rt from '../assets/textures/skybox/arid_rt.jpg';
-import lf from '../assets/textures/skybox/arid_lf.jpg';
-import up from '../assets/textures/skybox/arid_up.jpg';
-import dn from '../assets/textures/skybox/arid_dn.jpg';
-import bk from '../assets/textures/skybox/arid_bk.jpg';
-import ft from '../assets/textures/skybox/arid_ft.jpg';
+import rt from '../assets/textures/skybox/arid2_rt.jpg';
+import lf from '../assets/textures/skybox/arid2_lf.jpg';
+import up from '../assets/textures/skybox/arid2_up.jpg';
+import dn from '../assets/textures/skybox/arid2_dn.jpg';
+import bk from '../assets/textures/skybox/arid2_bk.jpg';
+import ft from '../assets/textures/skybox/arid2_ft.jpg';
 
 interface GridTileProps extends MeshProps {
 	color: string;
@@ -26,7 +26,7 @@ function GridTile({ color, size, ...props }: GridTileProps) {
 			onClick={(event) => console.log(tileRef.current.position)}
 			onPointerOver={(event) => setHover(true)}
 			onPointerOut={(event) => setHover(false)}>
-			<planeGeometry args={[size, size]} />
+			<boxGeometry args={[size, size, 0.1]} />
 			<meshStandardMaterial
 				color={hovered ? 'white' : color}
 				side={THREE.DoubleSide}
