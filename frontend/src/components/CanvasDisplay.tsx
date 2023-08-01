@@ -62,14 +62,17 @@ function Grid({ environment, drone }: GridProps) {
 
 // function Drone() {}
 
-interface TargetProps extends MeshProps {
+interface TargetProps {
 	environment: Environment;
+	targetRef: React.MutableRefObject<THREE.Mesh>;
 }
 
-function Target({ environment, ...props }: TargetProps) {
-	const targetRef = useRef<THREE.Mesh>(null!);
-	const target_x = environment.target.x;
-	const target_y = environment.target.y;
+function Target({ environment, targetRef }: TargetProps) {
+	useFrame(() => {
+		const { x, y } = environment.target;
+		targetRef.current.position.set(x, 0.5, y);
+	});
+
 	return (
 		<mesh ref={targetRef}>
 			<boxGeometry args={[0.5, 1, 0.5]} />
@@ -95,18 +98,15 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 		setIsPlaying,
 	} = props;
 
-	const sceneRef = useRef(null!);
-	const gridRef = useRef(null!);
 	const groupRef = useRef(null!);
 	const targetRef = useRef<THREE.Mesh>(null!);
 
 	useFrame(() => {
 		const frame = data[currentFrameIndex];
 		const { drone, environment } = frame;
-		const target = environment.target;
 
-		// Set target's position to [target.x, target.y, 0]
-		// targetRef.current.position.set(target.x, target.y, 0);
+		const { x, y } = environment.target;
+		targetRef.current.position.set(x, 0.5, y);
 	});
 
 	return (
@@ -120,8 +120,8 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 				drone={data[currentFrameIndex].drone}
 			/>
 			<Target
-				ref={targetRef}
 				environment={data[currentFrameIndex].environment}
+				targetRef={targetRef}
 			/>
 		</group>
 	);
