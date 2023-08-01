@@ -36,7 +36,7 @@ function App() {
 			)}
 			{apiData.length > 0 ? (
 				<div className="canvas-display">
-					<Canvas>
+					<Canvas shadows>
 						<SimulationCanvas
 							data={apiData}
 							currentFrameIndex={currentFrameIndex}

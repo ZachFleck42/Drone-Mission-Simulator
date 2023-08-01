@@ -16,6 +16,7 @@ function GridTile({ color, size, ...props }: GridTileProps) {
 		<mesh
 			{...props}
 			ref={tileRef}
+			receiveShadow
 			onClick={(event) => console.log(tileRef.current.position)}
 			onPointerOver={(event) => setHover(true)}
 			onPointerOut={(event) => setHover(false)}>
@@ -28,7 +29,7 @@ function GridTile({ color, size, ...props }: GridTileProps) {
 	);
 }
 
-interface GridProps {
+interface GridProps extends MeshProps {
 	environment: Environment;
 	drone: Drone;
 }
@@ -46,6 +47,7 @@ function GridPlane({ environment, drone }: GridProps) {
 					const color = hostile ? 'red' : 'lightgreen';
 					return (
 						<GridTile
+							receiveShadow
 							key={`tile-${rowIndex}-${colIndex}`}
 							position={position}
 							color={color}
@@ -58,7 +60,7 @@ function GridPlane({ environment, drone }: GridProps) {
 	);
 }
 
-interface DroneProps {
+interface DroneProps extends MeshProps {
 	drone: Drone;
 	droneRef: React.MutableRefObject<THREE.Mesh>;
 }
@@ -70,14 +72,14 @@ function DroneMesh({ drone, droneRef }: DroneProps) {
 	});
 
 	return (
-		<mesh ref={droneRef}>
+		<mesh castShadow ref={droneRef}>
 			<sphereGeometry args={[0.25, 32, 16]} />
 			<meshStandardMaterial color={'blue'} />
 		</mesh>
 	);
 }
 
-interface TargetProps {
+interface TargetProps extends MeshProps {
 	environment: Environment;
 	targetRef: React.MutableRefObject<THREE.Mesh>;
 }
@@ -89,7 +91,7 @@ function TargetMesh({ environment, targetRef }: TargetProps) {
 	});
 
 	return (
-		<mesh ref={targetRef}>
+		<mesh castShadow ref={targetRef}>
 			<boxGeometry args={[0.5, 1, 0.5]} />
 			<meshStandardMaterial color={'orange'} />
 		</mesh>
@@ -135,9 +137,15 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 				maxPolarAngle={Math.PI / 2}
 				target={[grid_center_x, 0, grid_center_z]}
 			/>
-			<ambientLight />
-			<directionalLight position={[0, 10, 0]} intensity={0.5} color={'white'} />
+			<directionalLight
+				position={[grid_center_x, 10, grid_center_z]}
+				target-position={[grid_center_x, 0, grid_center_z]}
+				intensity={2}
+				color={'white'}
+				castShadow
+			/>
 			<GridPlane
+				receiveShadow
 				environment={data[currentFrameIndex].environment}
 				drone={data[currentFrameIndex].drone}
 			/>
@@ -145,7 +153,11 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 				targetRef={targetRef}
 				environment={data[currentFrameIndex].environment}
 			/>
-			<DroneMesh droneRef={droneRef} drone={data[currentFrameIndex].drone} />
+			<DroneMesh
+				castShadow
+				droneRef={droneRef}
+				drone={data[currentFrameIndex].drone}
+			/>
 		</group>
 	);
 }
