@@ -50,11 +50,6 @@ function App() {
 			) : (
 				<div style={{ marginTop: '100px' }}>Waiting for simulation data...</div>
 			)}
-			{/* <div className="canvas-display">
-				<Canvas>
-					<TestCanvas />
-				</Canvas>
-			</div> */}
 		</div>
 	);
 }
