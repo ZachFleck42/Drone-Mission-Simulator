@@ -65,9 +65,15 @@ interface DroneProps extends MeshProps {
 }
 
 function DroneMesh({ drone, droneRef }: DroneProps) {
-	useFrame(() => {
+	const [position, setPosition] = useState({ x: 0, y: 0 });
+
+	useFrame((_, delta) => {
 		const { x, y } = drone;
-		droneRef.current.position.set(x, 1.5, -y);
+		const speed = 1.5;
+		const newX = position.x + (x - position.x) * speed * delta;
+		const newY = position.y + (-y - position.y) * speed * delta;
+		setPosition({ x: newX, y: newY });
+		droneRef.current.position.set(newX, 1.5, newY);
 	});
 
 	return (
@@ -84,9 +90,15 @@ interface TargetProps extends MeshProps {
 }
 
 function TargetMesh({ environment, targetRef }: TargetProps) {
-	useFrame(() => {
+	const [position, setPosition] = useState({ x: 0, y: 0 });
+
+	useFrame((_, delta) => {
 		const { x, y } = environment.target;
-		targetRef.current.position.set(x, 0.5, -y);
+		const speed = 2;
+		const newX = position.x + (x - position.x) * speed * delta;
+		const newY = position.y + (-y - position.y) * speed * delta;
+		setPosition({ x: newX, y: newY });
+		targetRef.current.position.set(newX, 0.5, newY);
 	});
 
 	return (
