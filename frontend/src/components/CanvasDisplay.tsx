@@ -15,7 +15,7 @@ interface GridTileProps extends MeshProps {
 	size: number;
 }
 
-function GridTile({ color, size, ...props }: GridTileProps) {
+function TerrainTile({ color, size, ...props }: GridTileProps) {
 	const tileRef = useRef<THREE.Mesh>(null!);
 	const [hovered, setHover] = useState(false);
 	return (
@@ -37,12 +37,10 @@ function GridTile({ color, size, ...props }: GridTileProps) {
 
 interface GridProps {
 	environment: Environment;
-	drone: Drone;
 }
 
-function GridPlane({ environment, drone }: GridProps) {
+function TerrainGrid({ environment }: GridProps) {
 	const { terrain } = environment;
-	const visibleTiles = drone.visible_tiles;
 
 	return (
 		<group rotation={[-Math.PI / 2, 0, 0]}>
@@ -52,7 +50,7 @@ function GridPlane({ environment, drone }: GridProps) {
 					const position: [number, number, number] = [x, y, 0];
 					const color = hostile ? 'red' : 'lightgreen';
 					return (
-						<GridTile
+						<TerrainTile
 							key={`tile-${rowIndex}-${colIndex}`}
 							position={position}
 							color={color}
@@ -97,6 +95,12 @@ function DroneMesh({ drone, droneRef }: DroneProps) {
 		</mesh>
 	);
 }
+
+interface DroneTileProps extends MeshProps {
+	drone: Drone;
+}
+
+function DroneTiles() {}
 
 interface TargetProps extends MeshProps {
 	environment: Environment;
@@ -164,16 +168,15 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 				shadow-camera-right={grid_size * 2}
 				shadow-camera-top={grid_size * 2}
 			/>
-			<GridPlane
-				environment={data[currentFrameIndex].environment}
-				drone={data[currentFrameIndex].drone}
-			/>
-			<TargetMesh
-				targetRef={targetRef}
-				environment={data[currentFrameIndex].environment}
-			/>
-			<DroneMesh droneRef={droneRef} drone={data[currentFrameIndex].drone} />
 			<SkyBox />
+			<group>
+				<TerrainGrid environment={data[currentFrameIndex].environment} />
+				<TargetMesh
+					targetRef={targetRef}
+					environment={data[currentFrameIndex].environment}
+				/>
+				<DroneMesh droneRef={droneRef} drone={data[currentFrameIndex].drone} />
+			</group>
 		</group>
 	);
 }
