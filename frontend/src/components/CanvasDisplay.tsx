@@ -17,11 +17,14 @@ function GridTile({ color, size, ...props }: GridTileProps) {
 		<mesh
 			{...props}
 			ref={tileRef}
-			onClick={(event) => setActive(!active)}
+			onClick={(event) => console.log(tileRef.current.position)}
 			onPointerOver={(event) => setHover(true)}
 			onPointerOut={(event) => setHover(false)}>
 			<planeGeometry args={[size, size]} />
-			<meshStandardMaterial color={color} side={THREE.DoubleSide} />
+			<meshStandardMaterial
+				color={hovered ? 'white' : color}
+				side={THREE.DoubleSide}
+			/>
 		</mesh>
 	);
 }
@@ -34,11 +37,32 @@ interface GridProps {
 function Grid({ environment, drone }: GridProps) {
 	const { terrain } = environment;
 	const size = terrain.size;
+	const visibleTiles = drone.visible_tiles;
+
+	return (
+		<group rotation={[-Math.PI / 2, 0, 0]}>
+			{terrain.grid.map((row, rowIndex) => {
+				return row.map((tile, colIndex) => {
+					const { x, y, hostile } = tile;
+					const position: [number, number, number] = [x, y, 0];
+					const color = hostile ? 'red' : 'lightgreen';
+					return (
+						<GridTile
+							key={`tile-${rowIndex}-${colIndex}`}
+							position={position}
+							color={color}
+							size={1}
+						/>
+					);
+				});
+			})}
+		</group>
+	);
 }
 
-function Drone() {}
+// function Drone() {}
 
-function Target() {}
+// function Target() {}
 
 function SimulationCanvas({
 	data,
@@ -69,6 +93,7 @@ function SimulationCanvas({
 			<OrbitControls maxPolarAngle={Math.PI / 2} />
 			<ambientLight />
 			<directionalLight position={[0, 10, 0]} intensity={0.5} color={'white'} />
+			<Grid environment={data[0].environment} drone={data[0].drone} />
 		</group>
 	);
 }

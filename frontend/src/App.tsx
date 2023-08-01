@@ -5,6 +5,7 @@ import RunSimulation from './components/RunSimulation';
 import GridDisplay from './components/GridDisplay';
 import TestCanvas from './components/TestCanvas';
 import { Canvas } from '@react-three/fiber';
+import SimulationCanvas from './components/CanvasDisplay';
 
 const API = 'http://127.0.0.1:8080/sim';
 
@@ -34,11 +35,26 @@ function App() {
 			) : (
 				<div style={{ marginTop: '100px' }}>Waiting for simulation data...</div>
 			)}
-			<div className="canvas-display">
+			{apiData.length > 0 ? (
+				<div className="canvas-display">
+					<Canvas>
+						<SimulationCanvas
+							data={apiData}
+							currentFrameIndex={currentFrameIndex}
+							setCurrentFrameIndex={setCurrentFrameIndex}
+							isPlaying={isPlaying}
+							setIsPlaying={setIsPlaying}
+						/>
+					</Canvas>
+				</div>
+			) : (
+				<div style={{ marginTop: '100px' }}>Waiting for simulation data...</div>
+			)}
+			{/* <div className="canvas-display">
 				<Canvas>
 					<TestCanvas />
 				</Canvas>
-			</div>
+			</div> */}
 		</div>
 	);
 }
