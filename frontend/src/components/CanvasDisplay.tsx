@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { Canvas, useFrame, ThreeElements, MeshProps } from '@react-three/fiber';
 import * as THREE from 'three';
+import { useFrame, ThreeElements, MeshProps } from '@react-three/fiber';
+import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { Environment, Simulation, Drone } from '../types/Simulation';
-import { OrbitControls, PerspectiveCamera, useHelper } from '@react-three/drei';
 
 interface GridTileProps extends MeshProps {
 	color: string;
@@ -62,21 +62,34 @@ function Grid({ environment, drone }: GridProps) {
 
 // function Drone() {}
 
-// function Target() {}
+interface TargetProps extends MeshProps {}
 
-function SimulationCanvas({
-	data,
-	currentFrameIndex,
-	setCurrentFrameIndex,
-	isPlaying,
-	setIsPlaying,
-}: {
+function Target(props: ThreeElements['mesh']) {
+	return (
+		<mesh>
+			<boxGeometry args={[1, 1, 1]} />
+			<meshStandardMaterial color={'orange'} />
+		</mesh>
+	);
+}
+
+interface SimulationCanvasProps {
 	data: Simulation;
 	currentFrameIndex: number;
 	setCurrentFrameIndex: React.Dispatch<React.SetStateAction<number>>;
 	isPlaying: boolean;
 	setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+}
+
+function SimulationCanvas(props: SimulationCanvasProps) {
+	const {
+		data,
+		currentFrameIndex,
+		setCurrentFrameIndex,
+		isPlaying,
+		setIsPlaying,
+	} = props;
+
 	const grid_size = data[0].environment.terrain.size;
 
 	const sceneRef = React.useRef(null!);
@@ -89,11 +102,14 @@ function SimulationCanvas({
 
 	return (
 		<group name="scene">
-			<PerspectiveCamera makeDefault fov={75} position={[4, 6, 4]} />
+			<PerspectiveCamera makeDefault fov={75} position={[3, 6, 3]} />
 			<OrbitControls maxPolarAngle={Math.PI / 2} />
 			<ambientLight />
 			<directionalLight position={[0, 10, 0]} intensity={0.5} color={'white'} />
-			<Grid environment={data[0].environment} drone={data[0].drone} />
+			<Grid
+				environment={data[currentFrameIndex].environment}
+				drone={data[currentFrameIndex].drone}
+			/>
 		</group>
 	);
 }
