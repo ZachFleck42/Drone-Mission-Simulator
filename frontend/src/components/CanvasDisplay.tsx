@@ -71,7 +71,6 @@ function Target({ environment, targetRef }: TargetProps) {
 	useFrame(() => {
 		const { x, y } = environment.target;
 		targetRef.current.position.set(x, 0.5, -y);
-		// console.log(targetRef.current.position);
 	});
 
 	return (
@@ -98,8 +97,8 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 		isPlaying,
 		setIsPlaying,
 	} = props;
-
-	const groupRef = useRef(null!);
+	const grid_size = data[0].environment.terrain.size;
+	const [grid_center_x, grid_center_z] = [grid_size / 2, -grid_size / 2];
 	const targetRef = useRef<THREE.Mesh>(null!);
 
 	useFrame(() => {
@@ -111,12 +110,18 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 	});
 
 	return (
-		<group ref={groupRef} name="scene">
-			<PerspectiveCamera makeDefault fov={75} position={[3, 6, 3]} />
-			<OrbitControls maxPolarAngle={Math.PI / 2} />
+		<group name="scene">
+			<PerspectiveCamera
+				makeDefault
+				fov={75}
+				position={[grid_center_x * 3, grid_size / 2, grid_center_z]}
+			/>
+			<OrbitControls
+				maxPolarAngle={Math.PI / 2}
+				target={[grid_center_x, 0, grid_center_z]}
+			/>
 			<ambientLight />
 			<directionalLight position={[0, 10, 0]} intensity={0.5} color={'white'} />
-			<axesHelper />
 			<Grid
 				environment={data[currentFrameIndex].environment}
 				drone={data[currentFrameIndex].drone}
