@@ -70,7 +70,8 @@ interface TargetProps {
 function Target({ environment, targetRef }: TargetProps) {
 	useFrame(() => {
 		const { x, y } = environment.target;
-		targetRef.current.position.set(x, 0.5, y);
+		targetRef.current.position.set(x, 0.5, -y);
+		// console.log(targetRef.current.position);
 	});
 
 	return (
@@ -106,7 +107,7 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 		const { drone, environment } = frame;
 
 		const { x, y } = environment.target;
-		targetRef.current.position.set(x, 0.5, y);
+		targetRef.current.position.set(x, 0.5, -y);
 	});
 
 	return (
@@ -115,6 +116,7 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 			<OrbitControls maxPolarAngle={Math.PI / 2} />
 			<ambientLight />
 			<directionalLight position={[0, 10, 0]} intensity={0.5} color={'white'} />
+			<axesHelper />
 			<Grid
 				environment={data[currentFrameIndex].environment}
 				drone={data[currentFrameIndex].drone}
