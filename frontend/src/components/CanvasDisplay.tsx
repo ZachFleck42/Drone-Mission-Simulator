@@ -10,13 +10,13 @@ interface GridTileProps extends MeshProps {
 }
 
 function GridTile({ color, size, ...props }: GridTileProps) {
-	const meshRef = useRef<THREE.Mesh>(null!);
+	const tileRef = useRef<THREE.Mesh>(null!);
 	const [hovered, setHover] = useState(false);
 	const [active, setActive] = useState(false);
 	return (
 		<mesh
 			{...props}
-			ref={meshRef}
+			ref={tileRef}
 			onClick={(event) => setActive(!active)}
 			onPointerOver={(event) => setHover(true)}
 			onPointerOut={(event) => setHover(false)}>
@@ -26,7 +26,15 @@ function GridTile({ color, size, ...props }: GridTileProps) {
 	);
 }
 
-function Grid() {}
+interface GridProps {
+	environment: Environment;
+	drone: Drone;
+}
+
+function Grid({ environment, drone }: GridProps) {
+	const { terrain } = environment;
+	const size = terrain.size;
+}
 
 function Drone() {}
 
@@ -48,16 +56,19 @@ function SimulationCanvas({
 	const grid_size = data[0].environment.terrain.size;
 
 	const sceneRef = React.useRef(null!);
+	const gridRef = React.useRef(null!);
+
 	useFrame(() => {
 		const frame = data[currentFrameIndex];
 		const { drone, environment } = frame;
 	});
 
 	return (
-		<group>
+		<group name="scene">
 			<PerspectiveCamera makeDefault fov={75} position={[4, 6, 4]} />
-			<OrbitControls />
-			<directionalLight position={[0, 10, 0]} />
+			<OrbitControls maxPolarAngle={Math.PI / 2} />
+			<ambientLight />
+			<directionalLight position={[0, 10, 0]} intensity={0.5} color={'white'} />
 		</group>
 	);
 }
