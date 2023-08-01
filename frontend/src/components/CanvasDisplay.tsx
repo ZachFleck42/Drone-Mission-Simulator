@@ -12,7 +12,6 @@ interface GridTileProps extends MeshProps {
 function GridTile({ color, size, ...props }: GridTileProps) {
 	const tileRef = useRef<THREE.Mesh>(null!);
 	const [hovered, setHover] = useState(false);
-	const [active, setActive] = useState(false);
 	return (
 		<mesh
 			{...props}
@@ -34,9 +33,8 @@ interface GridProps {
 	drone: Drone;
 }
 
-function Grid({ environment, drone }: GridProps) {
+function GridPlane({ environment, drone }: GridProps) {
 	const { terrain } = environment;
-	const size = terrain.size;
 	const visibleTiles = drone.visible_tiles;
 
 	return (
@@ -60,14 +58,31 @@ function Grid({ environment, drone }: GridProps) {
 	);
 }
 
-// function Drone() {}
+interface DroneProps {
+	drone: Drone;
+	droneRef: React.MutableRefObject<THREE.Mesh>;
+}
+
+function DroneMesh({ drone, droneRef }: DroneProps) {
+	useFrame(() => {
+		const { x, y } = drone;
+		droneRef.current.position.set(x, 1.5, -y);
+	});
+
+	return (
+		<mesh ref={droneRef}>
+			<sphereGeometry args={[0.25, 32, 16]} />
+			<meshStandardMaterial color={'blue'} />
+		</mesh>
+	);
+}
 
 interface TargetProps {
 	environment: Environment;
 	targetRef: React.MutableRefObject<THREE.Mesh>;
 }
 
-function Target({ environment, targetRef }: TargetProps) {
+function TargetMesh({ environment, targetRef }: TargetProps) {
 	useFrame(() => {
 		const { x, y } = environment.target;
 		targetRef.current.position.set(x, 0.5, -y);
@@ -103,13 +118,10 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 		-(grid_size - 1) / 2,
 	];
 	const targetRef = useRef<THREE.Mesh>(null!);
+	const droneRef = useRef<THREE.Mesh>(null!);
 
 	useFrame(() => {
 		const frame = data[currentFrameIndex];
-		const { drone, environment } = frame;
-
-		const { x, y } = environment.target;
-		targetRef.current.position.set(x, 0.5, -y);
 	});
 
 	return (
@@ -125,14 +137,15 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 			/>
 			<ambientLight />
 			<directionalLight position={[0, 10, 0]} intensity={0.5} color={'white'} />
-			<Grid
+			<GridPlane
 				environment={data[currentFrameIndex].environment}
 				drone={data[currentFrameIndex].drone}
 			/>
-			<Target
-				environment={data[currentFrameIndex].environment}
+			<TargetMesh
 				targetRef={targetRef}
+				environment={data[currentFrameIndex].environment}
 			/>
+			<DroneMesh droneRef={droneRef} drone={data[currentFrameIndex].drone} />
 		</group>
 	);
 }
