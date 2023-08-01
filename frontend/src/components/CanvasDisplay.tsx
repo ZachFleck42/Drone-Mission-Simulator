@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import * as THREE from 'three';
-import { useFrame, ThreeElements, MeshProps } from '@react-three/fiber';
+import { useFrame, MeshProps } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { Environment, Simulation, Drone } from '../types/Simulation';
 
@@ -29,7 +29,7 @@ function GridTile({ color, size, ...props }: GridTileProps) {
 	);
 }
 
-interface GridProps extends MeshProps {
+interface GridProps {
 	environment: Environment;
 	drone: Drone;
 }
@@ -47,7 +47,6 @@ function GridPlane({ environment, drone }: GridProps) {
 					const color = hostile ? 'red' : 'lightgreen';
 					return (
 						<GridTile
-							receiveShadow
 							key={`tile-${rowIndex}-${colIndex}`}
 							position={position}
 							color={color}
@@ -107,13 +106,8 @@ interface SimulationCanvasProps {
 }
 
 function SimulationCanvas(props: SimulationCanvasProps) {
-	const {
-		data,
-		currentFrameIndex,
-		setCurrentFrameIndex,
-		isPlaying,
-		setIsPlaying,
-	} = props;
+	const { data, currentFrameIndex } = props;
+
 	const grid_size = data[0].environment.terrain.size;
 	const [grid_center_x, grid_center_z] = [
 		(grid_size - 1) / 2,
@@ -121,10 +115,6 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 	];
 	const targetRef = useRef<THREE.Mesh>(null!);
 	const droneRef = useRef<THREE.Mesh>(null!);
-
-	useFrame(() => {
-		const frame = data[currentFrameIndex];
-	});
 
 	return (
 		<group name="scene">
@@ -138,14 +128,16 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 				target={[grid_center_x, 0, grid_center_z]}
 			/>
 			<directionalLight
-				position={[grid_center_x, 10, grid_center_z]}
-				target-position={[grid_center_x, 0, grid_center_z]}
-				intensity={2}
+				position={[grid_center_x, 20, grid_center_z]}
+				intensity={1}
 				color={'white'}
 				castShadow
+				shadow-camera-bottom={-grid_size * 2}
+				shadow-camera-left={-grid_size * 2}
+				shadow-camera-right={grid_size * 2}
+				shadow-camera-top={grid_size * 2}
 			/>
 			<GridPlane
-				receiveShadow
 				environment={data[currentFrameIndex].environment}
 				drone={data[currentFrameIndex].drone}
 			/>
@@ -153,11 +145,7 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 				targetRef={targetRef}
 				environment={data[currentFrameIndex].environment}
 			/>
-			<DroneMesh
-				castShadow
-				droneRef={droneRef}
-				drone={data[currentFrameIndex].drone}
-			/>
+			<DroneMesh droneRef={droneRef} drone={data[currentFrameIndex].drone} />
 		</group>
 	);
 }
