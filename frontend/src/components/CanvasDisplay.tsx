@@ -6,9 +6,10 @@ import { OrbitControls, PerspectiveCamera, useHelper } from '@react-three/drei';
 
 interface GridTileProps extends MeshProps {
 	color: string;
+	size: number;
 }
 
-function GridTile({ color, ...props }: GridTileProps) {
+function GridTile({ color, size, ...props }: GridTileProps) {
 	const meshRef = useRef<THREE.Mesh>(null!);
 	const [hovered, setHover] = useState(false);
 	const [active, setActive] = useState(false);
@@ -19,7 +20,7 @@ function GridTile({ color, ...props }: GridTileProps) {
 			onClick={(event) => setActive(!active)}
 			onPointerOver={(event) => setHover(true)}
 			onPointerOut={(event) => setHover(false)}>
-			<planeGeometry />
+			<planeGeometry args={[size, size]} />
 			<meshStandardMaterial color={color} side={THREE.DoubleSide} />
 		</mesh>
 	);
@@ -44,14 +45,20 @@ function SimulationCanvas({
 	isPlaying: boolean;
 	setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-	const currentFrameData = data[currentFrameIndex];
+	const grid_size = data[0].environment.terrain.size;
+
+	const sceneRef = React.useRef(null!);
+	useFrame(() => {
+		const frame = data[currentFrameIndex];
+		const { drone, environment } = frame;
+	});
 
 	return (
-		<Canvas>
+		<group>
 			<PerspectiveCamera makeDefault fov={75} position={[4, 6, 4]} />
 			<OrbitControls />
-			<ambientLight />
-		</Canvas>
+			<directionalLight position={[0, 10, 0]} />
+		</group>
 	);
 }
 

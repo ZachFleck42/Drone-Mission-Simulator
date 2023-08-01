@@ -52,7 +52,7 @@ export default function TestCanvas() {
 	const gridSize = 20;
 
 	return (
-		<Canvas>
+		<group>
 			<PerspectiveCamera makeDefault fov={75} position={[4, 6, 4]} />
 			<OrbitControls />
 			<ambientLight />
@@ -64,6 +64,6 @@ export default function TestCanvas() {
 			<CustomPlane size={gridSize} />
 			<gridHelper args={[gridSize, gridSize]} />
 			<CustomBox position={[0, 2, 0]} />
-		</Canvas>
+		</group>
 	);
 }
