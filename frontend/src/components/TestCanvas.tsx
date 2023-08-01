@@ -54,7 +54,7 @@ export default function TestCanvas() {
 	return (
 		<group>
 			<PerspectiveCamera makeDefault fov={75} position={[4, 6, 4]} />
-			<OrbitControls />
+			<OrbitControls maxPolarAngle={Math.PI / 2} />
 			<ambientLight />
 			<DirectionalLightWithHelper
 				position={[0, 5, 0]}
