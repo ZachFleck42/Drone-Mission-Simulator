@@ -98,7 +98,10 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 		setIsPlaying,
 	} = props;
 	const grid_size = data[0].environment.terrain.size;
-	const [grid_center_x, grid_center_z] = [grid_size / 2, -grid_size / 2];
+	const [grid_center_x, grid_center_z] = [
+		(grid_size - 1) / 2,
+		-(grid_size - 1) / 2,
+	];
 	const targetRef = useRef<THREE.Mesh>(null!);
 
 	useFrame(() => {
