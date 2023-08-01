@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { Canvas, useFrame, ThreeElements, MeshProps } from '@react-three/fiber';
 import * as THREE from 'three';
-import { Simulation } from '../types/Simulation';
+import { Environment, Simulation, Drone } from '../types/Simulation';
+import { OrbitControls, PerspectiveCamera, useHelper } from '@react-three/drei';
 
 interface GridTileProps extends MeshProps {
 	color: string;
@@ -26,7 +27,11 @@ function GridTile({ color, ...props }: GridTileProps) {
 
 function Grid() {}
 
-function SimScene({
+function Drone() {}
+
+function Target() {}
+
+function SimulationCanvas({
 	data,
 	currentFrameIndex,
 	setCurrentFrameIndex,
@@ -39,23 +44,15 @@ function SimScene({
 	isPlaying: boolean;
 	setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-	const terrainGrids = data.map((item) => item.environment.terrain.grid);
-	const droneGrids = data.map((item) => item.drone.data.grid);
+	const currentFrameData = data[currentFrameIndex];
 
-	const targetPosition: { x: number; y: number } = {
-		x: data[currentFrameIndex].environment.target.x,
-		y: data[currentFrameIndex].environment.target.y,
-	};
-
-	const dronePosition: { x: number; y: number } = {
-		x: data[currentFrameIndex].drone.x,
-		y: data[currentFrameIndex].drone.y,
-	};
-	const visibleTiles: [number, number][] =
-		data[currentFrameIndex].drone.visible_tiles;
-
-	const currentGrid = terrainGrids[currentFrameIndex];
-	return <div />;
+	return (
+		<Canvas>
+			<PerspectiveCamera makeDefault fov={75} position={[4, 6, 4]} />
+			<OrbitControls />
+			<ambientLight />
+		</Canvas>
+	);
 }
 
-export default SimScene;
+export default SimulationCanvas;
