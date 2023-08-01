@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { useFrame, ThreeElements, MeshProps } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
@@ -62,12 +62,17 @@ function Grid({ environment, drone }: GridProps) {
 
 // function Drone() {}
 
-interface TargetProps extends MeshProps {}
+interface TargetProps extends MeshProps {
+	environment: Environment;
+}
 
-function Target(props: ThreeElements['mesh']) {
+function Target({ environment, ...props }: TargetProps) {
+	const targetRef = useRef<THREE.Mesh>(null!);
+	const target_x = environment.target.x;
+	const target_y = environment.target.y;
 	return (
-		<mesh>
-			<boxGeometry args={[1, 1, 1]} />
+		<mesh ref={targetRef}>
+			<boxGeometry args={[0.5, 1, 0.5]} />
 			<meshStandardMaterial color={'orange'} />
 		</mesh>
 	);
@@ -90,18 +95,22 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 		setIsPlaying,
 	} = props;
 
-	const grid_size = data[0].environment.terrain.size;
-
-	const sceneRef = React.useRef(null!);
-	const gridRef = React.useRef(null!);
+	const sceneRef = useRef(null!);
+	const gridRef = useRef(null!);
+	const groupRef = useRef(null!);
+	const targetRef = useRef<THREE.Mesh>(null!);
 
 	useFrame(() => {
 		const frame = data[currentFrameIndex];
 		const { drone, environment } = frame;
+		const target = environment.target;
+
+		// Set target's position to [target.x, target.y, 0]
+		// targetRef.current.position.set(target.x, target.y, 0);
 	});
 
 	return (
-		<group name="scene">
+		<group ref={groupRef} name="scene">
 			<PerspectiveCamera makeDefault fov={75} position={[3, 6, 3]} />
 			<OrbitControls maxPolarAngle={Math.PI / 2} />
 			<ambientLight />
@@ -109,6 +118,10 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 			<Grid
 				environment={data[currentFrameIndex].environment}
 				drone={data[currentFrameIndex].drone}
+			/>
+			<Target
+				ref={targetRef}
+				environment={data[currentFrameIndex].environment}
 			/>
 		</group>
 	);
