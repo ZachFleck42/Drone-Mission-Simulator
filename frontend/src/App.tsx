@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Simulation } from './types/Simulation';
 import RunSimulation from './components/RunSimulation';
 import GridDisplay from './components/GridDisplay';
-import TestCanvas from './components/TestCanvas';
 import { Canvas } from '@react-three/fiber';
 import SimulationCanvas from './components/CanvasDisplay';
 
