@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export default function SimControls({
+export default function FrameControls({
 	maxFrames,
 	currentFrameIndex,
 	setCurrentFrameIndex,
@@ -44,7 +44,7 @@ export default function SimControls({
 	}, [isPlaying, frameLimit, setCurrentFrameIndex]);
 
 	return (
-		<div className="frame-buttons">
+		<div className="frame-controls">
 			<button
 				onClick={() => setCurrentFrameIndex(0)}
 				disabled={isPlaying || currentFrameIndex === 0}>
