@@ -6,8 +6,13 @@ import GridDisplay from './components/GridDisplay';
 import SimulationCanvas from './components/CanvasDisplay';
 import FrameControls from './components/FrameControls';
 import HistoryList from './components/SimHistory';
+import SimSettings from './components/SimSettings';
 
 const API = 'http://127.0.0.1:8080/sim';
+
+function timeout(delay: number) {
+	return new Promise((res) => setTimeout(res, delay));
+}
 
 function App() {
 	const [activeData, setActiveData] = useState<Simulation>([]);
@@ -15,10 +20,14 @@ function App() {
 	const [currentFrameIndex, setCurrentFrameIndex] = useState<number>(0);
 	const [isPlaying, setIsPlaying] = useState<boolean>(false);
 	const [threeD, setThreeD] = useState<boolean>(true);
+	const [visTiles, setVisTiles] = useState<boolean>(true);
+	const [hostileTiles, setHostileTiles] = useState<boolean>(true);
+	const [pathHistory, setPathHistory] = useState<boolean>(false);
+	const [unrevealedTiles, setUnrevealedTiles] = useState<boolean>(false);
 
 	const handleServerResponse = (responseData: Simulation) => {
-		setSimHistory((oldData) => [...oldData, responseData]);
 		setActiveData(responseData);
+		setSimHistory((oldData) => [...oldData, responseData]);
 		setCurrentFrameIndex(0);
 		setIsPlaying(false);
 	};
@@ -31,7 +40,20 @@ function App() {
 					<div className="sim-params-inputs">
 						<ParamInputs api={API} onServerResponse={handleServerResponse} />
 					</div>
-					<div className="sim-settings"></div>
+					<div className="sim-settings">
+						<SimSettings
+							threeD={threeD}
+							setThreeD={setThreeD}
+							visTiles={visTiles}
+							setVisTiles={setVisTiles}
+							hostileTiles={hostileTiles}
+							setHostileTiles={setHostileTiles}
+							pathHistory={pathHistory}
+							setPathHistory={setPathHistory}
+							unrevealedTiles={unrevealedTiles}
+							setUnrevealedTiles={setUnrevealedTiles}
+						/>
+					</div>
 				</div>
 				<div className="sim-display">
 					<div className="sim-display-header">
