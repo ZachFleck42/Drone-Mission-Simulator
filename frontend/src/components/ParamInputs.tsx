@@ -122,10 +122,15 @@ export default function ParamInputs({
 				))}
 			</div>
 			<div className="params-buttons">
-				<button onClick={resetToDefault} disabled={!userInteraction}>
+				<button
+					className="reset-inputs"
+					onClick={resetToDefault}
+					disabled={!userInteraction}>
 					Reset to Default
 				</button>
-				<button onClick={handleSubmit}>Get simulation data</button>
+				<button className="submit-inputs" onClick={handleSubmit}>
+					Get simulation data
+				</button>
 			</div>
 		</div>
 	);

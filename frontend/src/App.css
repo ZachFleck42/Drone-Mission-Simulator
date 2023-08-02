@@ -92,19 +92,27 @@ html {
 	border-radius: 3px;
 }
 
-.params-buttons button {
+.params-buttons button:disabled {
+	background-color: #ccc;
+	cursor: not-allowed;
+}
+
+.submit-inputs,
+.reset-inputs {
 	padding: 8px 12px;
 	margin-right: 10px;
 	border: none;
 	border-radius: 3px;
-	background-color: #007bff;
 	color: white;
 	cursor: pointer;
 }
 
-.params-buttons button:disabled {
-	background-color: #ccc;
-	cursor: not-allowed;
+.submit-inputs {
+	background-color: #007bff;
+}
+
+.reset-inputs {
+	background-color: #89cff0;
 }
 
 .sim-canvas {
