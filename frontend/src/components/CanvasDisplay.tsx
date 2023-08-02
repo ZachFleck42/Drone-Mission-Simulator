@@ -55,7 +55,7 @@ function TerrainGrid({ environment, tileSize }: GridProps) {
 						y * tileSize,
 						0,
 					];
-					const color = hostile ? 'red' : 'lightgreen';
+					const color = hostile ? 'red' : '#d0a770';
 					return (
 						<TerrainTile
 							key={`tile-${rowIndex}-${colIndex}`}
@@ -85,6 +85,7 @@ interface DroneProps extends MeshProps {
 
 function DroneMesh({ drone, droneRef }: DroneProps) {
 	const [position, setPosition] = useState({ x: 0, y: 0 });
+	const visibleTiles = drone.visible_tiles;
 
 	useFrame((_, delta) => {
 		const { x, y } = drone;
@@ -96,18 +97,29 @@ function DroneMesh({ drone, droneRef }: DroneProps) {
 	});
 
 	return (
-		<mesh castShadow ref={droneRef}>
-			<sphereGeometry args={[0.25, 32, 16]} />
-			<meshStandardMaterial color={'blue'} />
-		</mesh>
+		<group>
+			<mesh castShadow ref={droneRef}>
+				<sphereGeometry args={[0.25, 32, 16]} />
+				<meshStandardMaterial color={'blue'} />
+			</mesh>
+
+			{visibleTiles.map((tile, index) => {
+				const [x, y] = tile;
+				const tilePosition: any = [x, 0.01, -y];
+				return (
+					<mesh
+						key={`visible-tile-${index}`}
+						position={tilePosition}
+						receiveShadow
+						scale={[1, 0.1, 1]}>
+						<boxGeometry args={[1, 1, 1]} />
+						<meshStandardMaterial color={'yellow'} transparent opacity={0.5} />
+					</mesh>
+				);
+			})}
+		</group>
 	);
 }
-
-interface DroneTileProps extends MeshProps {
-	drone: Drone;
-}
-
-function DroneTiles() {}
 
 interface TargetProps extends MeshProps {
 	environment: Environment;
@@ -155,42 +167,37 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 
 	return (
 		<Canvas shadows>
-			<group name="scene">
-				<PerspectiveCamera
-					makeDefault
-					fov={75}
-					position={[grid_center_x * 3, grid_size / 2, grid_center_z]}
+			<PerspectiveCamera
+				makeDefault
+				fov={75}
+				position={[grid_center_x * 3, grid_size / 2, grid_center_z]}
+			/>
+			<OrbitControls
+				maxPolarAngle={Math.PI / 2}
+				target={[grid_center_x, 0, grid_center_z]}
+			/>
+			<ambientLight />
+			<directionalLight
+				position={[grid_center_x, 20, grid_center_z]}
+				intensity={1}
+				color={'white'}
+				castShadow
+				shadow-camera-bottom={-grid_size * 2}
+				shadow-camera-left={-grid_size * 2}
+				shadow-camera-right={grid_size * 2}
+				shadow-camera-top={grid_size * 2}
+			/>
+			<SkyBox />
+			<group name="sim-objects">
+				<TerrainGrid
+					environment={data[currentFrameIndex].environment}
+					tileSize={1}
 				/>
-				<OrbitControls
-					maxPolarAngle={Math.PI / 2}
-					target={[grid_center_x, 0, grid_center_z]}
+				<TargetMesh
+					targetRef={targetRef}
+					environment={data[currentFrameIndex].environment}
 				/>
-				<ambientLight />
-				<directionalLight
-					position={[grid_center_x, 20, grid_center_z]}
-					intensity={1}
-					color={'white'}
-					castShadow
-					shadow-camera-bottom={-grid_size * 2}
-					shadow-camera-left={-grid_size * 2}
-					shadow-camera-right={grid_size * 2}
-					shadow-camera-top={grid_size * 2}
-				/>
-				<SkyBox />
-				<group>
-					<TerrainGrid
-						environment={data[currentFrameIndex].environment}
-						tileSize={1}
-					/>
-					<TargetMesh
-						targetRef={targetRef}
-						environment={data[currentFrameIndex].environment}
-					/>
-					<DroneMesh
-						droneRef={droneRef}
-						drone={data[currentFrameIndex].drone}
-					/>
-				</group>
+				<DroneMesh droneRef={droneRef} drone={data[currentFrameIndex].drone} />
 			</group>
 		</Canvas>
 	);
