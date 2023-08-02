@@ -82,27 +82,14 @@ interface DroneProps extends MeshProps {
 	droneRef: React.MutableRefObject<THREE.Mesh>;
 }
 
-function DroneMesh({ drone, droneRef }: DroneProps) {
-	const [position, setPosition] = useState({ x: 0, y: 0 });
-	const visibleTiles = drone.visible_tiles;
+interface VisibleTilesProps {
+	tiles: [number, number][];
+}
 
-	useFrame((_, delta) => {
-		const { x, y } = drone;
-		const speed = 1.5;
-		const newX = position.x + (x - position.x) * speed * delta;
-		const newY = position.y + (-y - position.y) * speed * delta;
-		setPosition({ x: newX, y: newY });
-		droneRef.current.position.set(newX, 1.5, newY);
-	});
-
+function VisibleTiles({ ...props }: VisibleTilesProps) {
 	return (
-		<group name="drone">
-			<mesh castShadow ref={droneRef}>
-				<sphereGeometry args={[0.25, 32, 16]} />
-				<meshStandardMaterial color={'blue'} />
-			</mesh>
-
-			{visibleTiles.map((tile, index) => {
+		<group name="visible-tiles">
+			{props.tiles.map((tile, index) => {
 				const [x, y] = tile;
 				const tilePosition: any = [x, 0.15, -y];
 				return (
@@ -116,6 +103,26 @@ function DroneMesh({ drone, droneRef }: DroneProps) {
 				);
 			})}
 		</group>
+	);
+}
+
+function DroneMesh({ drone, droneRef }: DroneProps) {
+	const [position, setPosition] = useState({ x: 0, y: 0 });
+
+	useFrame((_, delta) => {
+		const { x, y } = drone;
+		const speed = 1.5;
+		const newX = position.x + (x - position.x) * speed * delta;
+		const newY = position.y + (-y - position.y) * speed * delta;
+		setPosition({ x: newX, y: newY });
+		droneRef.current.position.set(newX, 1.5, newY);
+	});
+
+	return (
+		<mesh castShadow ref={droneRef}>
+			<sphereGeometry args={[0.25, 32, 16]} />
+			<meshStandardMaterial color={'blue'} />
+		</mesh>
 	);
 }
 
@@ -200,6 +207,7 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 					environment={data[currentFrameIndex].environment}
 				/>
 				<DroneMesh droneRef={droneRef} drone={data[currentFrameIndex].drone} />
+				<VisibleTiles tiles={data[currentFrameIndex].drone.visible_tiles} />
 			</group>
 		</Canvas>
 	);
