@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import React, { useState } from 'react';
+import tooltip from '../assets/tooltip.svg';
 
 interface SimParams {
 	terrain_grid_size: number;
@@ -111,14 +112,16 @@ export default function ParamInputs({
 		<div className="params-container">
 			<div className="params-input">
 				{inputFields.map((field) => (
-					<input
-						key={field.key}
-						type="number"
-						name={field.key}
-						value={interactedFields[field.key] ? userInput[field.key] : ''}
-						onChange={handleInputChange}
-						placeholder={`${field.label} (Default: ${field.default})`}
-					/>
+					<div key={field.key} className="input-field">
+						<input
+							type="number"
+							name={field.key}
+							value={interactedFields[field.key] ? userInput[field.key] : ''}
+							onChange={handleInputChange}
+							placeholder={`${field.label} (Default: ${field.default})`}
+						/>
+						<img src={tooltip} alt="icon" className="tooltip-icon" />
+					</div>
 				))}
 			</div>
 			<div className="params-buttons">
@@ -129,7 +132,7 @@ export default function ParamInputs({
 					Reset to Default
 				</button>
 				<button className="submit-inputs" onClick={handleSubmit}>
-					Get simulation data
+					Run simulation
 				</button>
 			</div>
 		</div>

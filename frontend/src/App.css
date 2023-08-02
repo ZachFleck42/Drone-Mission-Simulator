@@ -86,10 +86,15 @@ html {
 }
 
 .params-input input {
-	width: 72%;
+	width: 74%;
 	padding: 8px;
 	margin-bottom: 8px;
 	border-radius: 3px;
+}
+
+.input-field {
+	display: flex;
+	align-items: center;
 }
 
 .params-buttons button:disabled {
@@ -108,11 +113,17 @@ html {
 }
 
 .submit-inputs {
-	background-color: #4361ee;
+	background-color: #2563eb;
 }
 
 .reset-inputs {
-	background-color: #74c6ec;
+	background-color: #525252;
+}
+
+.tooltip-icon {
+	width: 23px;
+	height: 23px;
+	margin-left: 8px;
 }
 
 .sim-canvas {
