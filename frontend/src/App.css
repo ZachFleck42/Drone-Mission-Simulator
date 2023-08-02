@@ -1,5 +1,6 @@
 html {
-	background-color: #f0f5f9;
+	font-family: Roboto, Helvetica, sans-serif;
+	background-color: #404040;
 }
 
 .App {
@@ -13,6 +14,8 @@ html {
 	margin-top: 100px;
 	border: 1px solid black;
 	display: flex;
+	background-color: #d4d4d8;
+	border-radius: 10px;
 }
 
 .sim-params,

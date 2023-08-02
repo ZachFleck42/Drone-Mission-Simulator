@@ -67,7 +67,6 @@ function App() {
 				</div>
 				<div className="sim-history">
 					<div className="sim-history-header">Simulation History</div>
-					<p>I will put things here just because</p>
 				</div>
 			</div>
 		</div>
