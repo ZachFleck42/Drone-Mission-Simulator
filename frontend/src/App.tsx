@@ -1,6 +1,5 @@
 import './App.css';
 import { useState } from 'react';
-import Toggle from 'react-toggle';
 import { Simulation } from './types/Simulation';
 import ParamInputs from './components/ParamInputs';
 import GridDisplay from './components/GridDisplay';
@@ -15,7 +14,7 @@ function App() {
 	const [simHistory, setSimHistory] = useState<Simulation[]>([]);
 	const [currentFrameIndex, setCurrentFrameIndex] = useState<number>(0);
 	const [isPlaying, setIsPlaying] = useState<boolean>(false);
-	const [threeD, setDimensions] = useState<boolean>(true);
+	const [threeD, setThreeD] = useState<boolean>(true);
 
 	const handleServerResponse = (responseData: Simulation) => {
 		setSimHistory((oldData) => [...oldData, responseData]);
@@ -29,23 +28,14 @@ function App() {
 			<div className="simulator">
 				<div className="sim-params">
 					<div className="sim-params-header">Simulation Parameters</div>
-					<div className="sim-inputs">
+					<div className="sim-params-inputs">
 						<ParamInputs api={API} onServerResponse={handleServerResponse} />
 					</div>
-					<div className="sim-controls"></div>
+					<div className="sim-settings"></div>
 				</div>
 				<div className="sim-display">
 					<div className="sim-display-header">
 						<div className="sim-display-title">Simulation</div>
-						<label className="threeD-toggle">
-							<Toggle
-								icons={false}
-								defaultChecked={true}
-								onChange={() => {
-									setDimensions(!threeD);
-								}}
-							/>
-						</label>
 					</div>
 					<div className="sim-canvas">
 						{activeData.length === 0 ? (
