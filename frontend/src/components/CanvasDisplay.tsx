@@ -18,6 +18,7 @@ interface GridTileProps extends MeshProps {
 function TerrainTile({ color, size, ...props }: GridTileProps) {
 	const tileRef = useRef<THREE.Mesh>(null!);
 	const [hovered, setHover] = useState(false);
+
 	return (
 		<mesh
 			{...props}
@@ -25,8 +26,9 @@ function TerrainTile({ color, size, ...props }: GridTileProps) {
 			receiveShadow
 			onClick={(event) => console.log(tileRef.current.position)}
 			onPointerOver={(event) => setHover(true)}
-			onPointerOut={(event) => setHover(false)}>
-			<boxGeometry args={[size, size, 0.1]} />
+			onPointerOut={(event) => setHover(false)}
+			scale={[size, size, 1]}>
+			<boxGeometry args={[1, 1, 0.1]} />
 			<meshStandardMaterial
 				color={hovered ? 'white' : color}
 				side={THREE.DoubleSide}
@@ -37,9 +39,10 @@ function TerrainTile({ color, size, ...props }: GridTileProps) {
 
 interface GridProps {
 	environment: Environment;
+	tileSize: number;
 }
 
-function TerrainGrid({ environment }: GridProps) {
+function TerrainGrid({ environment, tileSize }: GridProps) {
 	const { terrain } = environment;
 
 	return (
@@ -47,14 +50,18 @@ function TerrainGrid({ environment }: GridProps) {
 			{terrain.grid.map((row, rowIndex) => {
 				return row.map((tile, colIndex) => {
 					const { x, y, hostile } = tile;
-					const position: [number, number, number] = [x, y, 0];
+					const position: [number, number, number] = [
+						x * tileSize,
+						y * tileSize,
+						0,
+					];
 					const color = hostile ? 'red' : 'lightgreen';
 					return (
 						<TerrainTile
 							key={`tile-${rowIndex}-${colIndex}`}
 							position={position}
 							color={color}
-							size={1}
+							size={tileSize}
 						/>
 					);
 				});
@@ -170,7 +177,10 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 			/>
 			<SkyBox />
 			<group>
-				<TerrainGrid environment={data[currentFrameIndex].environment} />
+				<TerrainGrid
+					environment={data[currentFrameIndex].environment}
+					tileSize={2}
+				/>
 				<TargetMesh
 					targetRef={targetRef}
 					environment={data[currentFrameIndex].environment}
