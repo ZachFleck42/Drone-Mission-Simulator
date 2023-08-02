@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Simulation } from './types/Simulation';
 import RunSimulation from './components/RunSimulation';
 import GridDisplay from './components/GridDisplay';
-import { Canvas } from '@react-three/fiber';
 import SimulationCanvas from './components/CanvasDisplay';
 import FrameControls from './components/FrameControls';
 
@@ -14,7 +13,7 @@ function App() {
 	const [currentFrameIndex, setCurrentFrameIndex] = useState<number>(0);
 	const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
-	let threeD = false;
+	let threeD = true;
 
 	const handleServerResponse = (responseData: Simulation) => {
 		console.log('Response data from SimulationParams:', responseData);
@@ -48,15 +47,13 @@ function App() {
 					) : (
 						<>
 							{threeD ? (
-								<Canvas shadows>
-									<SimulationCanvas
-										data={apiData}
-										currentFrameIndex={currentFrameIndex}
-										setCurrentFrameIndex={setCurrentFrameIndex}
-										isPlaying={isPlaying}
-										setIsPlaying={setIsPlaying}
-									/>
-								</Canvas>
+								<SimulationCanvas
+									data={apiData}
+									currentFrameIndex={currentFrameIndex}
+									setCurrentFrameIndex={setCurrentFrameIndex}
+									isPlaying={isPlaying}
+									setIsPlaying={setIsPlaying}
+								/>
 							) : (
 								<GridDisplay
 									data={apiData}

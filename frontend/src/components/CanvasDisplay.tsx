@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
 import * as THREE from 'three';
-import { useFrame, MeshProps, useThree } from '@react-three/fiber';
+import { Canvas, MeshProps, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
-import { Environment, Simulation, Drone } from '../types/Simulation';
+import { Drone, Environment, Simulation } from '../types/Simulation';
 import rt from '../assets/textures/skybox/arid2_rt.jpg';
 import lf from '../assets/textures/skybox/arid2_lf.jpg';
 import up from '../assets/textures/skybox/arid2_up.jpg';
@@ -154,40 +154,45 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 	const droneRef = useRef<THREE.Mesh>(null!);
 
 	return (
-		<group name="scene">
-			<PerspectiveCamera
-				makeDefault
-				fov={75}
-				position={[grid_center_x * 3, grid_size / 2, grid_center_z]}
-			/>
-			<OrbitControls
-				maxPolarAngle={Math.PI / 2}
-				target={[grid_center_x, 0, grid_center_z]}
-			/>
-			<ambientLight />
-			<directionalLight
-				position={[grid_center_x, 20, grid_center_z]}
-				intensity={1}
-				color={'white'}
-				castShadow
-				shadow-camera-bottom={-grid_size * 2}
-				shadow-camera-left={-grid_size * 2}
-				shadow-camera-right={grid_size * 2}
-				shadow-camera-top={grid_size * 2}
-			/>
-			<SkyBox />
-			<group>
-				<TerrainGrid
-					environment={data[currentFrameIndex].environment}
-					tileSize={1}
+		<Canvas shadows>
+			<group name="scene">
+				<PerspectiveCamera
+					makeDefault
+					fov={75}
+					position={[grid_center_x * 3, grid_size / 2, grid_center_z]}
 				/>
-				<TargetMesh
-					targetRef={targetRef}
-					environment={data[currentFrameIndex].environment}
+				<OrbitControls
+					maxPolarAngle={Math.PI / 2}
+					target={[grid_center_x, 0, grid_center_z]}
 				/>
-				<DroneMesh droneRef={droneRef} drone={data[currentFrameIndex].drone} />
+				<ambientLight />
+				<directionalLight
+					position={[grid_center_x, 20, grid_center_z]}
+					intensity={1}
+					color={'white'}
+					castShadow
+					shadow-camera-bottom={-grid_size * 2}
+					shadow-camera-left={-grid_size * 2}
+					shadow-camera-right={grid_size * 2}
+					shadow-camera-top={grid_size * 2}
+				/>
+				<SkyBox />
+				<group>
+					<TerrainGrid
+						environment={data[currentFrameIndex].environment}
+						tileSize={1}
+					/>
+					<TargetMesh
+						targetRef={targetRef}
+						environment={data[currentFrameIndex].environment}
+					/>
+					<DroneMesh
+						droneRef={droneRef}
+						drone={data[currentFrameIndex].drone}
+					/>
+				</group>
 			</group>
-		</group>
+		</Canvas>
 	);
 }
 
