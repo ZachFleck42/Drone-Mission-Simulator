@@ -72,3 +72,63 @@ input {
 	width: 500px;
 	height: 500px;
 }
+Center the simulator div within the App div .App {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh; /* Assuming you want it to take the full viewport height */
+}
+
+/* Style the simulator div */
+.simulator {
+	width: 1200px;
+	height: 900px;
+	border: 1px solid black;
+	display: flex;
+}
+
+/* Style the child divs */
+.sim-params,
+.simulation-container,
+.sim-history {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid black;
+}
+
+/* Set the width of the child divs */
+.sim-params {
+	width: 300px;
+}
+
+.simulation-container {
+	width: 600px;
+}
+
+.sim-history {
+	width: 300px;
+}
+
+/* Style the headers */
+.sim-params-header,
+.simulation-container-header,
+.sim-history-header {
+	height: 40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 1px solid black;
+}
+
+/* Style the sim-display */
+.sim-display {
+	width: 600px;
+	height: 600px;
+	border: 1px solid black;
+}
+
+/* Style the sim-controls */
+.sim-controls {
+	height: 260px;
+	border: 1px solid black;
+}
