@@ -2,7 +2,7 @@ import './App.css';
 import { useState } from 'react';
 import Toggle from 'react-toggle';
 import { Simulation } from './types/Simulation';
-import RunSimulation from './components/RunSimulation';
+import ParamInputs from './components/ParamInputs';
 import GridDisplay from './components/GridDisplay';
 import SimulationCanvas from './components/CanvasDisplay';
 import FrameControls from './components/FrameControls';
@@ -28,7 +28,7 @@ function App() {
 				<div className="sim-params">
 					<div className="sim-params-header">Simulation Parameters</div>
 					<div className="sim-inputs">
-						<RunSimulation api={API} onServerResponse={handleServerResponse} />
+						<ParamInputs api={API} onServerResponse={handleServerResponse} />
 					</div>
 					<div className="sim-controls">
 						<FrameControls
