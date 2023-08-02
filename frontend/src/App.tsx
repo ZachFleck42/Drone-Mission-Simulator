@@ -86,13 +86,17 @@ function App() {
 								)}
 							</>
 						)}
-						<FrameControls
-							maxFrames={activeData.length}
-							currentFrameIndex={currentFrameIndex}
-							setCurrentFrameIndex={setCurrentFrameIndex}
-							isPlaying={isPlaying}
-							setIsPlaying={setIsPlaying}
-						/>
+						{activeData.length === 0 ? (
+							''
+						) : (
+							<FrameControls
+								maxFrames={activeData.length}
+								currentFrameIndex={currentFrameIndex}
+								setCurrentFrameIndex={setCurrentFrameIndex}
+								isPlaying={isPlaying}
+								setIsPlaying={setIsPlaying}
+							/>
+						)}
 					</div>
 				</div>
 				<div className="sim-history">

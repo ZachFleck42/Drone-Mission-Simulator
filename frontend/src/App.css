@@ -40,6 +40,12 @@ html {
 	width: 300px;
 }
 
+.sim-history-container {
+	height: 600px;
+	overflow: hidden;
+	background-color: #f5f5f5;
+}
+
 .sim-params-header,
 .sim-display-header,
 .sim-history-header,
