@@ -22,33 +22,38 @@ function App() {
 
 	return (
 		<div className="App">
-			<RunSimulation api={API} onServerResponse={handleServerResponse} />
-			{apiData.length > 0 ? (
-				<GridDisplay
-					data={apiData}
-					currentFrameIndex={currentFrameIndex}
-					setCurrentFrameIndex={setCurrentFrameIndex}
-					isPlaying={isPlaying}
-					setIsPlaying={setIsPlaying}
-				/>
-			) : (
-				<div style={{ marginTop: '100px' }}>Waiting for simulation data...</div>
-			)}
-			{apiData.length > 0 ? (
-				<div className="canvas-display">
-					<Canvas shadows>
-						<SimulationCanvas
-							data={apiData}
-							currentFrameIndex={currentFrameIndex}
-							setCurrentFrameIndex={setCurrentFrameIndex}
-							isPlaying={isPlaying}
-							setIsPlaying={setIsPlaying}
-						/>
-					</Canvas>
+			<div className="simulator">
+				<div className="sim-params">
+					<div className="sim-params-header">Simulation Parameters</div>
+					<RunSimulation api={API} onServerResponse={handleServerResponse} />
 				</div>
-			) : (
-				<div style={{ marginTop: '100px' }}>Waiting for simulation data...</div>
-			)}
+				<div className="simulation-container">
+					<div className="simulation-container-header">Simulation</div>
+					<div className="sim-display">
+						{apiData.length > 0 ? (
+							<div className="canvas-display">
+								<Canvas shadows>
+									<SimulationCanvas
+										data={apiData}
+										currentFrameIndex={currentFrameIndex}
+										setCurrentFrameIndex={setCurrentFrameIndex}
+										isPlaying={isPlaying}
+										setIsPlaying={setIsPlaying}
+									/>
+								</Canvas>
+							</div>
+						) : (
+							<div style={{ marginTop: '100px' }}>
+								Waiting for simulation data...
+							</div>
+						)}
+					</div>
+					<div className="sim-controls"></div>
+				</div>
+				<div className="sim-history">
+					<div className="sim-history-header">Simulation History</div>
+				</div>
+			</div>
 		</div>
 	);
 }

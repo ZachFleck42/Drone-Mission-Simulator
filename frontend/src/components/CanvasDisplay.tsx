@@ -179,7 +179,7 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 			<group>
 				<TerrainGrid
 					environment={data[currentFrameIndex].environment}
-					tileSize={2}
+					tileSize={1}
 				/>
 				<TargetMesh
 					targetRef={targetRef}
