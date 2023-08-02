@@ -49,6 +49,21 @@ html {
 	border-bottom: 1px solid black;
 }
 
+.sim-display-header {
+	justify-content: space-between;
+	border-bottom: 1px solid black;
+}
+
+.sim-display-title {
+	flex: 1;
+	margin-right: 10px;
+}
+
+.toggle-label {
+	flex: 0;
+	margin-left: 10px;
+}
+
 .sim-controls {
 	height: 200px;
 }

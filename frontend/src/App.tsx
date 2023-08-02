@@ -42,10 +42,11 @@ function App() {
 				</div>
 				<div className="sim-display">
 					<div className="sim-display-header">
-						Simulation
-						<label>
+						<div className="sim-display-title">Simulation</div>
+						<label className="threeD-toggle">
 							<Toggle
 								icons={false}
+								defaultChecked={true}
 								onChange={() => {
 									setDimensions(!threeD);
 								}}
