@@ -6,18 +6,20 @@ import ParamInputs from './components/ParamInputs';
 import GridDisplay from './components/GridDisplay';
 import SimulationCanvas from './components/CanvasDisplay';
 import FrameControls from './components/FrameControls';
+import HistoryList from './components/SimHistory';
 
 const API = 'http://127.0.0.1:8080/sim';
 
 function App() {
-	const [apiData, setApiData] = useState<Simulation>([]);
+	const [activeData, setActiveData] = useState<Simulation>([]);
+	const [simHistory, setSimHistory] = useState<Simulation[]>([]);
 	const [currentFrameIndex, setCurrentFrameIndex] = useState<number>(0);
 	const [isPlaying, setIsPlaying] = useState<boolean>(false);
 	const [threeD, setDimensions] = useState<boolean>(true);
 
 	const handleServerResponse = (responseData: Simulation) => {
-		console.log('Response data from SimulationParams:', responseData);
-		setApiData(responseData);
+		setSimHistory((oldData) => [...oldData, responseData]);
+		setActiveData(responseData);
 		setCurrentFrameIndex(0);
 		setIsPlaying(false);
 	};
@@ -32,7 +34,7 @@ function App() {
 					</div>
 					<div className="sim-controls">
 						<FrameControls
-							maxFrames={apiData.length}
+							maxFrames={activeData.length}
 							currentFrameIndex={currentFrameIndex}
 							setCurrentFrameIndex={setCurrentFrameIndex}
 							isPlaying={isPlaying}
@@ -54,13 +56,13 @@ function App() {
 						</label>
 					</div>
 					<div className="sim-canvas">
-						{apiData.length <= 0 ? (
+						{activeData.length === 0 ? (
 							<div>Waiting for data...</div>
 						) : (
 							<>
 								{threeD ? (
 									<SimulationCanvas
-										data={apiData}
+										data={activeData}
 										currentFrameIndex={currentFrameIndex}
 										setCurrentFrameIndex={setCurrentFrameIndex}
 										isPlaying={isPlaying}
@@ -68,7 +70,7 @@ function App() {
 									/>
 								) : (
 									<GridDisplay
-										data={apiData}
+										data={activeData}
 										currentFrameIndex={currentFrameIndex}
 									/>
 								)}
@@ -78,6 +80,7 @@ function App() {
 				</div>
 				<div className="sim-history">
 					<div className="sim-history-header">Simulation History</div>
+					<HistoryList simulations={simHistory} />
 				</div>
 			</div>
 		</div>
