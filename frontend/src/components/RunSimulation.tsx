@@ -108,8 +108,8 @@ function RunSimulation({
 	};
 
 	return (
-		<div className="run-simulation">
-			<div className="simulation-params">
+		<div className="params-container">
+			<div className="params-input">
 				{inputFields.map((field) => (
 					<input
 						key={field.key}
@@ -121,10 +121,12 @@ function RunSimulation({
 					/>
 				))}
 			</div>
-			<button onClick={resetToDefault} disabled={!userInteraction}>
-				Reset to Default
-			</button>
-			<button onClick={handleSubmit}>Get simulation data</button>
+			<div className="params-submit">
+				<button onClick={resetToDefault} disabled={!userInteraction}>
+					Reset to Default
+				</button>
+				<button onClick={handleSubmit}>Get simulation data</button>
+			</div>
 		</div>
 	);
 }
