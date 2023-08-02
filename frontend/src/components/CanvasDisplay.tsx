@@ -9,13 +9,32 @@ import up from '../assets/textures/skybox/arid2_up.jpg';
 import dn from '../assets/textures/skybox/arid2_dn.jpg';
 import bk from '../assets/textures/skybox/arid2_bk.jpg';
 import ft from '../assets/textures/skybox/arid2_ft.jpg';
+import dirt2 from '../assets/textures/dirt2.png';
 
-interface GridTileProps extends MeshProps {
+const loader = new THREE.CubeTextureLoader();
+const skyBoxTexture = loader.load([rt, lf, up, dn, bk, ft]);
+const loader2 = new THREE.TextureLoader();
+const dirtTextue = loader2.load(dirt2);
+
+interface TerrainBackgroundProps extends MeshProps {
+	size: number;
+}
+
+function TerrainBackground({ ...props }: TerrainBackgroundProps) {
+	return (
+		<mesh receiveShadow>
+			<boxGeometry args={[props.size, 0.1, props.size]} />
+			<meshStandardMaterial map={dirtTextue} color={'#d0a770'} />
+		</mesh>
+	);
+}
+
+interface TerrainTileProps extends MeshProps {
 	color: string;
 	size: number;
 }
 
-function TerrainTile({ color, size, ...props }: GridTileProps) {
+function TerrainTile({ color, size, ...props }: TerrainTileProps) {
 	const tileRef = useRef<THREE.Mesh>(null!);
 	const [hovered, setHover] = useState(false);
 
@@ -42,11 +61,11 @@ interface GridProps {
 	tileSize: number;
 }
 
-function TerrainGrid({ environment, tileSize }: GridProps) {
+function TerrainTiles({ environment, tileSize }: GridProps) {
 	const { terrain } = environment;
 
 	return (
-		<group rotation={[-Math.PI / 2, 0, 0]}>
+		<group name="tiles" rotation={[-Math.PI / 2, 0, 0]}>
 			{terrain.grid.map((row, rowIndex) => {
 				return row.map((tile, colIndex) => {
 					const { x, y, hostile } = tile;
@@ -70,8 +89,6 @@ function TerrainGrid({ environment, tileSize }: GridProps) {
 	);
 }
 
-const loader = new THREE.CubeTextureLoader();
-const skyBoxTexture = loader.load([rt, lf, up, dn, bk, ft]);
 function SkyBox() {
 	const { scene } = useThree();
 	scene.background = skyBoxTexture;
@@ -97,7 +114,7 @@ function DroneMesh({ drone, droneRef }: DroneProps) {
 	});
 
 	return (
-		<group>
+		<group name="drone">
 			<mesh castShadow ref={droneRef}>
 				<sphereGeometry args={[0.25, 32, 16]} />
 				<meshStandardMaterial color={'blue'} />
@@ -107,14 +124,20 @@ function DroneMesh({ drone, droneRef }: DroneProps) {
 				const [x, y] = tile;
 				const tilePosition: any = [x, 0.01, -y];
 				return (
-					<mesh
-						key={`visible-tile-${index}`}
-						position={tilePosition}
-						receiveShadow
-						scale={[1, 0.1, 1]}>
-						<boxGeometry args={[1, 1, 1]} />
-						<meshStandardMaterial color={'yellow'} transparent opacity={0.5} />
-					</mesh>
+					<group name="drone-tiles">
+						<mesh
+							key={`visible-tile-${index}`}
+							position={tilePosition}
+							receiveShadow
+							scale={[1, 0.1, 1]}>
+							<boxGeometry args={[1, 1, 1]} />
+							<meshStandardMaterial
+								color={'yellow'}
+								transparent
+								opacity={0.5}
+							/>
+						</mesh>
+					</group>
 				);
 			})}
 		</group>
@@ -188,8 +211,9 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 				shadow-camera-top={grid_size * 2}
 			/>
 			<SkyBox />
+			<TerrainBackground size={grid_size} />
 			<group name="sim-objects">
-				<TerrainGrid
+				<TerrainTiles
 					environment={data[currentFrameIndex].environment}
 					tileSize={1}
 				/>
