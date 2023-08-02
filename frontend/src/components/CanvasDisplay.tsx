@@ -11,10 +11,11 @@ import bk from '../assets/textures/skybox/arid2_bk.jpg';
 import ft from '../assets/textures/skybox/arid2_ft.jpg';
 import dirt from '../assets/textures/dirt.jpg';
 
-const loader = new THREE.CubeTextureLoader();
-const skyBoxTexture = loader.load([rt, lf, up, dn, bk, ft]);
-const loader2 = new THREE.TextureLoader();
-const dirtTextue = loader2.load(dirt);
+const textureLoader = new THREE.TextureLoader();
+const dirtTextue = textureLoader.load(dirt);
+
+const cubrTextureLoader = new THREE.CubeTextureLoader();
+const skyBoxTexture = cubrTextureLoader.load([rt, lf, up, dn, bk, ft]);
 
 interface TerrainMeshProps extends MeshProps {
 	size: number;

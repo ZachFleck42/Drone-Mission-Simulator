@@ -32,15 +32,7 @@ function App() {
 					<div className="sim-inputs">
 						<ParamInputs api={API} onServerResponse={handleServerResponse} />
 					</div>
-					<div className="sim-controls">
-						<FrameControls
-							maxFrames={activeData.length}
-							currentFrameIndex={currentFrameIndex}
-							setCurrentFrameIndex={setCurrentFrameIndex}
-							isPlaying={isPlaying}
-							setIsPlaying={setIsPlaying}
-						/>
-					</div>
+					<div className="sim-controls"></div>
 				</div>
 				<div className="sim-display">
 					<div className="sim-display-header">
@@ -76,6 +68,13 @@ function App() {
 								)}
 							</>
 						)}
+						<FrameControls
+							maxFrames={activeData.length}
+							currentFrameIndex={currentFrameIndex}
+							setCurrentFrameIndex={setCurrentFrameIndex}
+							isPlaying={isPlaying}
+							setIsPlaying={setIsPlaying}
+						/>
 					</div>
 				</div>
 				<div className="sim-history">
