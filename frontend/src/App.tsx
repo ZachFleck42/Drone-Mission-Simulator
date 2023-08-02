@@ -5,7 +5,7 @@ import RunSimulation from './components/RunSimulation';
 import GridDisplay from './components/GridDisplay';
 import { Canvas } from '@react-three/fiber';
 import SimulationCanvas from './components/CanvasDisplay';
-import { Grid } from '@react-three/drei';
+import SimControls from './components/SimControls';
 
 const API = 'http://127.0.0.1:8080/sim';
 
@@ -14,7 +14,7 @@ function App() {
 	const [currentFrameIndex, setCurrentFrameIndex] = useState<number>(0);
 	const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
-	let threeD = false;
+	let threeD = true;
 
 	const handleServerResponse = (responseData: Simulation) => {
 		console.log('Response data from SimulationParams:', responseData);
@@ -51,15 +51,20 @@ function App() {
 									<GridDisplay
 										data={apiData}
 										currentFrameIndex={currentFrameIndex}
-										setCurrentFrameIndex={setCurrentFrameIndex}
-										isPlaying={isPlaying}
-										setIsPlaying={setIsPlaying}
 									/>
 								)}
 							</>
 						)}
 					</div>
-					<div className="sim-controls"></div>
+					<div className="sim-controls">
+						<SimControls
+							maxFrames={apiData.length}
+							currentFrameIndex={currentFrameIndex}
+							setCurrentFrameIndex={setCurrentFrameIndex}
+							isPlaying={isPlaying}
+							setIsPlaying={setIsPlaying}
+						/>
+					</div>
 				</div>
 				<div className="sim-history">
 					<div className="sim-history-header">Simulation History</div>
