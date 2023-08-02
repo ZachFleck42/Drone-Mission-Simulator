@@ -15,7 +15,7 @@ html {
 	border: 1px solid black;
 	display: flex;
 	background-color: #d4d4d8;
-	border-radius: 10px;
+	border-radius: 8px;
 }
 
 .sim-params,
@@ -83,13 +83,15 @@ html {
 
 .params-input {
 	margin-bottom: 15px;
+	border: none;
 }
 
 .params-input input {
 	width: 74%;
 	padding: 8px;
 	margin-bottom: 8px;
-	border-radius: 3px;
+	border-radius: 2px;
+	border: 1px solid black;
 }
 
 .input-field {

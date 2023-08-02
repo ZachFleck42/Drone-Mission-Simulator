@@ -16,31 +16,15 @@ const skyBoxTexture = loader.load([rt, lf, up, dn, bk, ft]);
 const loader2 = new THREE.TextureLoader();
 const dirtTextue = loader2.load(dirt);
 
-interface TerrainBackgroundProps extends MeshProps {
+interface TerrainMeshProps extends MeshProps {
 	size: number;
 }
 
-function TerrainBackground({ ...props }: TerrainBackgroundProps) {
+function TerrainMesh({ ...props }: TerrainMeshProps) {
 	return (
 		<mesh position={props.position} receiveShadow>
 			<boxGeometry args={[props.size, 0.1, props.size]} />
 			<meshStandardMaterial map={dirtTextue} />
-		</mesh>
-	);
-}
-
-interface TerrainTileProps extends MeshProps {
-	color: string;
-	size: number;
-}
-
-function TerrainTile({ color, size, ...props }: TerrainTileProps) {
-	const tileRef = useRef<THREE.Mesh>(null!);
-
-	return (
-		<mesh {...props} ref={tileRef} receiveShadow scale={[size, size, 1]}>
-			<boxGeometry args={[1, 1, 0.001]} />
-			<meshStandardMaterial transparent opacity={0.4} color={color} />
 		</mesh>
 	);
 }
@@ -65,12 +49,18 @@ function TerrainTiles({ environment, tileSize }: GridProps) {
 							0.1,
 						];
 						return (
-							<TerrainTile
+							<mesh
+								receiveShadow
+								scale={[tileSize, tileSize, 1]}
 								key={`tile-${rowIndex}-${colIndex}`}
-								position={position}
-								color={'#b91c1c'}
-								size={tileSize}
-							/>
+								position={position}>
+								<boxGeometry args={[1, 1, 0.001]} />
+								<meshStandardMaterial
+									transparent
+									opacity={0.4}
+									color={'#b91c1c'}
+								/>
+							</mesh>
 						);
 					} else {
 						return null;
@@ -196,7 +186,7 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 				shadow-camera-top={grid_size * 2}
 			/>
 			<SkyBox />
-			<TerrainBackground
+			<TerrainMesh
 				size={grid_size}
 				position={[grid_center_x, 0, grid_center_z]}
 			/>
