@@ -86,7 +86,7 @@ html {
 }
 
 .params-input input {
-	width: 80%;
+	width: 72%;
 	padding: 8px;
 	margin-bottom: 8px;
 	border-radius: 3px;
@@ -108,11 +108,11 @@ html {
 }
 
 .submit-inputs {
-	background-color: #007bff;
+	background-color: #4361ee;
 }
 
 .reset-inputs {
-	background-color: #89cff0;
+	background-color: #74c6ec;
 }
 
 .sim-canvas {
