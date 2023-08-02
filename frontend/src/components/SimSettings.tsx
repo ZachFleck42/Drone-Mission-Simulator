@@ -29,7 +29,7 @@ export default function SimSettings({
 	setUnrevealedTiles: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
 	return (
-		<div className="sim-settings-toggles">
+		<div className="sim-settings-toggles-container">
 			<div className="toggle-item">
 				<p>Enable 3D:</p>
 				<Toggle

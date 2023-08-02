@@ -42,20 +42,23 @@ function App() {
 						<ParamInputs api={API} onServerResponse={handleServerResponse} />
 					</div>
 					<div className="sim-settings">
-						<SimSettings
-							threeD={threeD}
-							setThreeD={setThreeD}
-							animated={animated}
-							setAnimated={setAnimated}
-							visTiles={visTiles}
-							setVisTiles={setVisTiles}
-							hostileTiles={hostileTiles}
-							setHostileTiles={setHostileTiles}
-							pathHistory={pathHistory}
-							setPathHistory={setPathHistory}
-							unrevealedTiles={unrevealedTiles}
-							setUnrevealedTiles={setUnrevealedTiles}
-						/>
+						<div className="sim-settings-header">Display Settings</div>
+						<div className="sim-settings-toggles">
+							<SimSettings
+								threeD={threeD}
+								setThreeD={setThreeD}
+								animated={animated}
+								setAnimated={setAnimated}
+								visTiles={visTiles}
+								setVisTiles={setVisTiles}
+								hostileTiles={hostileTiles}
+								setHostileTiles={setHostileTiles}
+								pathHistory={pathHistory}
+								setPathHistory={setPathHistory}
+								unrevealedTiles={unrevealedTiles}
+								setUnrevealedTiles={setUnrevealedTiles}
+							/>
+						</div>
 					</div>
 				</div>
 				<div className="sim-display">
@@ -64,7 +67,7 @@ function App() {
 					</div>
 					<div className="sim-canvas">
 						{activeData.length === 0 ? (
-							<div>Waiting for data...</div>
+							<div className="loading-text">Waiting for data...</div>
 						) : (
 							<>
 								{threeD ? (
