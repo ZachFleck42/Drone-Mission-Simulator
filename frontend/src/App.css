@@ -9,8 +9,7 @@ html {
 }
 
 .simulator {
-	width: 1200px;
-	height: 640px;
+	margin-top: 100px;
 	border: 1px solid black;
 	display: flex;
 }
@@ -20,7 +19,6 @@ html {
 .sim-history {
 	display: flex;
 	flex-direction: column;
-	border: 1px solid black;
 }
 
 .sim-params {
@@ -29,6 +27,8 @@ html {
 
 .sim-display {
 	width: 600px;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
 }
 
 .sim-history {
@@ -42,12 +42,22 @@ html {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	border: 1px solid black;
+	border-bottom: 1px solid black;
 }
 
 .sim-controls {
 	height: 200px;
-	border: 1px solid black;
+}
+
+.sim-inputs {
+	height: 398px;
+	border-bottom: 1px solid black;
+}
+
+.sim-canvas {
+	width: 100%;
+	height: 100%;
+	max-height: 600px;
 }
 
 .frame-buttons {

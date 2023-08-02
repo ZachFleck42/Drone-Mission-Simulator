@@ -27,7 +27,7 @@ function App() {
 			<div className="simulator">
 				<div className="sim-params">
 					<div className="sim-params-header">Simulation Parameters</div>
-					<div className="user-inputs">
+					<div className="sim-inputs">
 						<RunSimulation api={API} onServerResponse={handleServerResponse} />
 					</div>
 					<div className="sim-controls">
@@ -42,29 +42,32 @@ function App() {
 				</div>
 				<div className="sim-display">
 					<div className="sim-display-header">Simulation</div>
-					{apiData.length <= 0 ? (
-						<span>Waiting for data</span>
-					) : (
-						<>
-							{threeD ? (
-								<SimulationCanvas
-									data={apiData}
-									currentFrameIndex={currentFrameIndex}
-									setCurrentFrameIndex={setCurrentFrameIndex}
-									isPlaying={isPlaying}
-									setIsPlaying={setIsPlaying}
-								/>
-							) : (
-								<GridDisplay
-									data={apiData}
-									currentFrameIndex={currentFrameIndex}
-								/>
-							)}
-						</>
-					)}
+					<div className="sim-canvas">
+						{apiData.length <= 0 ? (
+							<span>Waiting for data</span>
+						) : (
+							<>
+								{threeD ? (
+									<SimulationCanvas
+										data={apiData}
+										currentFrameIndex={currentFrameIndex}
+										setCurrentFrameIndex={setCurrentFrameIndex}
+										isPlaying={isPlaying}
+										setIsPlaying={setIsPlaying}
+									/>
+								) : (
+									<GridDisplay
+										data={apiData}
+										currentFrameIndex={currentFrameIndex}
+									/>
+								)}
+							</>
+						)}
+					</div>
 				</div>
 				<div className="sim-history">
 					<div className="sim-history-header">Simulation History</div>
+					<p>I will put things here just because</p>
 				</div>
 			</div>
 		</div>
