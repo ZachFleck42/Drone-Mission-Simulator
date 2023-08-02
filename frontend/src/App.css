@@ -56,7 +56,24 @@ html {
 
 .sim-settings {
 	height: 260px;
-	/* background-color: #f5f5f5; */
+}
+
+.sim-settings-toggles {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 10px;
+}
+
+.toggle-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+}
+
+.toggle-item p {
+	margin: 0;
 }
 
 .sim-params-inputs {

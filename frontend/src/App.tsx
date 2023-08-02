@@ -19,6 +19,7 @@ function App() {
 	const [simHistory, setSimHistory] = useState<Simulation[]>([]);
 	const [currentFrameIndex, setCurrentFrameIndex] = useState<number>(0);
 	const [isPlaying, setIsPlaying] = useState<boolean>(false);
+	const [animated, setAnimated] = useState<boolean>(true);
 	const [threeD, setThreeD] = useState<boolean>(true);
 	const [visTiles, setVisTiles] = useState<boolean>(true);
 	const [hostileTiles, setHostileTiles] = useState<boolean>(true);
@@ -44,6 +45,8 @@ function App() {
 						<SimSettings
 							threeD={threeD}
 							setThreeD={setThreeD}
+							animated={animated}
+							setAnimated={setAnimated}
 							visTiles={visTiles}
 							setVisTiles={setVisTiles}
 							hostileTiles={hostileTiles}

@@ -4,6 +4,8 @@ import Toggle from 'react-toggle';
 export default function SimSettings({
 	threeD,
 	setThreeD,
+	animated,
+	setAnimated,
 	visTiles,
 	setVisTiles,
 	hostileTiles,
@@ -15,6 +17,8 @@ export default function SimSettings({
 }: {
 	threeD: boolean;
 	setThreeD: React.Dispatch<React.SetStateAction<boolean>>;
+	animated: boolean;
+	setAnimated: React.Dispatch<React.SetStateAction<boolean>>;
 	visTiles: boolean;
 	setVisTiles: React.Dispatch<React.SetStateAction<boolean>>;
 	hostileTiles: boolean;
@@ -26,41 +30,66 @@ export default function SimSettings({
 }) {
 	return (
 		<div className="sim-settings-toggles">
-			<Toggle
-				icons={false}
-				defaultChecked={threeD}
-				onChange={() => {
-					setThreeD(!threeD);
-				}}
-			/>
-			<Toggle
-				icons={false}
-				defaultChecked={visTiles}
-				onChange={() => {
-					setVisTiles(!visTiles);
-				}}
-			/>
-			<Toggle
-				icons={false}
-				defaultChecked={hostileTiles}
-				onChange={() => {
-					setHostileTiles(!hostileTiles);
-				}}
-			/>
-			<Toggle
-				icons={false}
-				defaultChecked={pathHistory}
-				onChange={() => {
-					setPathHistory(!pathHistory);
-				}}
-			/>
-			<Toggle
-				icons={false}
-				defaultChecked={unrevealedTiles}
-				onChange={() => {
-					setUnrevealedTiles(!unrevealedTiles);
-				}}
-			/>
+			<div className="toggle-item">
+				<p>Enable 3D:</p>
+				<Toggle
+					icons={false}
+					defaultChecked={threeD}
+					onChange={() => {
+						setThreeD(!threeD);
+					}}
+				/>
+			</div>
+			<div className="toggle-item">
+				<p>Enable animation:</p>
+				<Toggle
+					icons={false}
+					defaultChecked={animated}
+					onChange={() => {
+						setAnimated(!animated);
+					}}
+				/>
+			</div>
+			<div className="toggle-item">
+				<p>Show visible tiles:</p>
+				<Toggle
+					icons={false}
+					defaultChecked={visTiles}
+					onChange={() => {
+						setVisTiles(!visTiles);
+					}}
+				/>
+			</div>
+			<div className="toggle-item">
+				<p>Show hostile tiles:</p>
+				<Toggle
+					icons={false}
+					defaultChecked={hostileTiles}
+					onChange={() => {
+						setHostileTiles(!hostileTiles);
+					}}
+				/>
+			</div>
+			<div className="toggle-item">
+				<p>Show unrevealed tiles:</p>
+				<Toggle
+					icons={false}
+					defaultChecked={unrevealedTiles}
+					onChange={() => {
+						setUnrevealedTiles(!unrevealedTiles);
+					}}
+				/>
+			</div>
+			<div className="toggle-item">
+				<p>Show path history:</p>
+				<Toggle
+					icons={false}
+					defaultChecked={pathHistory}
+					onChange={() => {
+						setPathHistory(!pathHistory);
+					}}
+				/>
+			</div>
 		</div>
 	);
 }
