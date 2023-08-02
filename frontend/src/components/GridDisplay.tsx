@@ -25,32 +25,30 @@ function GridDisplay({
 
 	return (
 		<div className="grid-display">
-			<div className="grid-container">
-				{currentGrid.map((row, rowIndex) => (
-					<div className="grid-row" key={rowIndex}>
-						{row.map((cell, colIndex) => {
-							const isTargetCell =
-								targetPosition.x === rowIndex && targetPosition.y === colIndex;
-							const isDroneCell =
-								dronePosition.x === rowIndex && dronePosition.y === colIndex;
-							const isCellVisible = visibleTiles.some(
-								([x, y]) => rowIndex === x && colIndex === y,
-							);
-							const cellClassName = `grid-cell${
-								cell.hostile ? ' hostile' : ''
-							}${isCellVisible ? ' visible' : ''}${
-								isCellVisible && cell.hostile ? ' visible-hostile' : ''
-							}${isTargetCell ? ' target' : ''}`;
-							return (
-								<div className={cellClassName} key={colIndex}>
-									{isTargetCell ? 'T' : ''}
-									{isDroneCell ? 'D' : ''}
-								</div>
-							);
-						})}
-					</div>
-				))}
-			</div>
+			{currentGrid.map((row, rowIndex) => (
+				<div className="grid-row" key={rowIndex}>
+					{row.map((cell, colIndex) => {
+						const isTargetCell =
+							targetPosition.x === rowIndex && targetPosition.y === colIndex;
+						const isDroneCell =
+							dronePosition.x === rowIndex && dronePosition.y === colIndex;
+						const isCellVisible = visibleTiles.some(
+							([x, y]) => rowIndex === x && colIndex === y,
+						);
+						const cellClassName = `grid-cell${cell.hostile ? ' hostile' : ''}${
+							isCellVisible ? ' visible' : ''
+						}${isCellVisible && cell.hostile ? ' visible-hostile' : ''}${
+							isTargetCell ? ' target' : ''
+						}`;
+						return (
+							<div className={cellClassName} key={colIndex}>
+								{isTargetCell ? 'T' : ''}
+								{isDroneCell ? 'D' : ''}
+							</div>
+						);
+					})}
+				</div>
+			))}
 		</div>
 	);
 }

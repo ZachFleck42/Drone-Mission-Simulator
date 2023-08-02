@@ -44,7 +44,7 @@ function App() {
 					<div className="sim-display-header">Simulation</div>
 					<div className="sim-canvas">
 						{apiData.length <= 0 ? (
-							<span>Waiting for data</span>
+							<div>Waiting for data...</div>
 						) : (
 							<>
 								{threeD ? (
