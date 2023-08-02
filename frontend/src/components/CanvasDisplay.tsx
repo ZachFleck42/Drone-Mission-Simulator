@@ -9,7 +9,7 @@ import up from '../assets/textures/skybox/arid2_up.jpg';
 import dn from '../assets/textures/skybox/arid2_dn.jpg';
 import bk from '../assets/textures/skybox/arid2_bk.jpg';
 import ft from '../assets/textures/skybox/arid2_ft.jpg';
-import dirt from '../assets/textures/dirt.png';
+import dirt from '../assets/textures/dirt.jpg';
 
 const loader = new THREE.CubeTextureLoader();
 const skyBoxTexture = loader.load([rt, lf, up, dn, bk, ft]);
@@ -24,7 +24,7 @@ function TerrainBackground({ ...props }: TerrainBackgroundProps) {
 	return (
 		<mesh position={props.position} receiveShadow>
 			<boxGeometry args={[props.size, 0.1, props.size]} />
-			<meshStandardMaterial map={dirtTextue} color={'#d0a770'} />
+			<meshStandardMaterial map={dirtTextue} />
 		</mesh>
 	);
 }
@@ -36,23 +36,11 @@ interface TerrainTileProps extends MeshProps {
 
 function TerrainTile({ color, size, ...props }: TerrainTileProps) {
 	const tileRef = useRef<THREE.Mesh>(null!);
-	const [hovered, setHover] = useState(false);
 
 	return (
-		<mesh
-			{...props}
-			ref={tileRef}
-			receiveShadow
-			onClick={(event) => console.log(tileRef.current.position)}
-			onPointerOver={(event) => setHover(true)}
-			onPointerOut={(event) => setHover(false)}
-			scale={[size, size, 1]}>
+		<mesh {...props} ref={tileRef} receiveShadow scale={[size, size, 1]}>
 			<boxGeometry args={[1, 1, 0.001]} />
-			<meshStandardMaterial
-				color={hovered ? 'white' : color}
-				transparent
-				opacity={0.5}
-			/>
+			<meshStandardMaterial transparent opacity={0.4} color={color} />
 		</mesh>
 	);
 }
@@ -70,20 +58,23 @@ function TerrainTiles({ environment, tileSize }: GridProps) {
 			{terrain.grid.map((row, rowIndex) => {
 				return row.map((tile, colIndex) => {
 					const { x, y, hostile } = tile;
-					const position: [number, number, number] = [
-						x * tileSize,
-						y * tileSize,
-						0.05,
-					];
-					const color = hostile ? 'red' : '#d0a770';
-					return (
-						<TerrainTile
-							key={`tile-${rowIndex}-${colIndex}`}
-							position={position}
-							color={color}
-							size={tileSize}
-						/>
-					);
+					if (hostile) {
+						const position: [number, number, number] = [
+							x * tileSize,
+							y * tileSize,
+							0.1,
+						];
+						return (
+							<TerrainTile
+								key={`tile-${rowIndex}-${colIndex}`}
+								position={position}
+								color={'#b91c1c'}
+								size={tileSize}
+							/>
+						);
+					} else {
+						return null;
+					}
 				});
 			})}
 		</group>
@@ -123,21 +114,15 @@ function DroneMesh({ drone, droneRef }: DroneProps) {
 
 			{visibleTiles.map((tile, index) => {
 				const [x, y] = tile;
-				const tilePosition: any = [x, 0.051, -y];
+				const tilePosition: any = [x, 0.15, -y];
 				return (
-					<group name="drone-tiles">
-						<mesh
-							key={`visible-tile-${index}`}
-							position={tilePosition}
-							receiveShadow>
-							<boxGeometry args={[1, 0.0001, 1]} />
-							<meshStandardMaterial
-								color={'yellow'}
-								transparent
-								opacity={0.5}
-							/>
-						</mesh>
-					</group>
+					<mesh
+						key={`visible-tile-${index}`}
+						position={tilePosition}
+						receiveShadow>
+						<boxGeometry args={[1, 0.0001, 1]} />
+						<meshStandardMaterial color={'green'} transparent opacity={0.2} />
+					</mesh>
 				);
 			})}
 		</group>
