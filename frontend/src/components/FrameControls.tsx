@@ -55,9 +55,14 @@ export default function FrameControls({
 				disabled={isPlaying || currentFrameIndex === 0}>
 				&lt;
 			</button>
-			<span>
-				{currentFrameIndex} / {frameLimit}
-			</span>
+			<button onClick={togglePlayPause}>
+				{currentFrameIndex === frameLimit
+					? 'Replay'
+					: isPlaying
+					? 'Pause'
+					: 'Play'}
+			</button>
+
 			<button
 				onClick={() => setCurrentFrameIndex((prevIndex) => prevIndex + 1)}
 				disabled={isPlaying || currentFrameIndex === frameLimit}>
@@ -67,13 +72,6 @@ export default function FrameControls({
 				onClick={() => setCurrentFrameIndex(frameLimit)}
 				disabled={isPlaying || currentFrameIndex === frameLimit}>
 				&gt; &gt;
-			</button>
-			<button onClick={togglePlayPause}>
-				{currentFrameIndex === frameLimit
-					? 'Replay'
-					: isPlaying
-					? 'Pause'
-					: 'Play'}
 			</button>
 		</div>
 	);
