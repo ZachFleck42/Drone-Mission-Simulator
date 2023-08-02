@@ -117,11 +117,11 @@ export default function ParamInputs({
 						name={field.key}
 						value={interactedFields[field.key] ? userInput[field.key] : ''}
 						onChange={handleInputChange}
-						placeholder={`${field.label} (Default is ${field.default})`}
+						placeholder={`${field.label} (Default: ${field.default})`}
 					/>
 				))}
 			</div>
-			<div className="params-submit">
+			<div className="params-buttons">
 				<button onClick={resetToDefault} disabled={!userInteraction}>
 					Reset to Default
 				</button>
