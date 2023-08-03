@@ -71,7 +71,7 @@ html {
 	background-color: #f5f5f5;
 }
 
-.current-sim-info-container {
+.sim-info-container {
 	height: 220px;
 	background-color: #f5f5f5;
 	overflow: hidden;
@@ -81,7 +81,7 @@ html {
 .sim-display-header,
 .sim-history-header,
 .sim-settings-header,
-.current-sim-info-header {
+.sim-info-header {
 	height: 40px;
 	display: flex;
 	justify-content: center;

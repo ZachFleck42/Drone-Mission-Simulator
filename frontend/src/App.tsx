@@ -65,9 +65,7 @@ function App() {
 					</div>
 				</div>
 				<div className="sim-display">
-					<div className="sim-display-header">
-						<div className="sim-display-title">Simulation</div>
-					</div>
+					<div className="sim-display-header">Simulation</div>
 					<div className="sim-canvas">
 						{activeData.length === 0 ? (
 							<div className="loading-text">Waiting for data...</div>
@@ -107,7 +105,7 @@ function App() {
 				<div className="sim-history">
 					<div className="sim-history-header">History</div>
 					<HistoryList sims={simHistory} />
-					<div className="current-sim-info-header">Current Simulation Info</div>
+					<div className="sim-info-header">Current Simulation Info</div>
 					<CurrentSimInfo sim={activeData} />
 				</div>
 			</div>
