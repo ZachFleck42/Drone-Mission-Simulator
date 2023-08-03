@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Simulation, SimulationHistory } from '../types/Simulation';
 import editSVG from '../assets/edit.svg';
 import trashSVG from '../assets/delete.svg';
+import rightSVG from '../assets/right.svg';
 
 interface HistoryListProps {
 	simHistory: SimulationHistory[];
@@ -61,13 +62,17 @@ export default function HistoryList({
 
 	const handleDeleteClick = (index: number) => {
 		const updatedSims = [...simHistory];
-		const deletedSimulation = updatedSims.splice(index, 1)[0]; // Remove and store the deleted simulation
+		const deletedSimulation = updatedSims.splice(index, 1)[0];
 		setSimHistory(updatedSims);
 
 		if (activeData === deletedSimulation.data) {
 			setCurrentFrameIndex(0);
 			setIsPlaying(false);
 		}
+	};
+
+	const handleExpandClick = (index: number) => {
+		// console.log(index);
 	};
 
 	return (
@@ -119,6 +124,11 @@ export default function HistoryList({
 						onClick={() => handleDeleteClick(index)}
 						className="sim-history-item-delete-icon"
 					/>
+					{/* <img
+						src={rightSVG}
+						onClick={() => handleExpandClick(index)}
+						className="sim-history-item-expand-icon"
+					/> */}
 				</div>
 			))}
 		</div>

@@ -246,6 +246,7 @@ html {
 .sim-history-item-edit-icon {
 	width: 24px;
 	height: 24px;
+	cursor: pointer;
 }
 
 .sim-history-item-name-edit-field {
@@ -257,11 +258,20 @@ html {
 }
 
 .sim-history-item-edit-save {
+	cursor: pointer;
 }
 
 .sim-history-item-delete-icon {
-	width: 23px;
-	height: 23px;
+	width: 24px;
+	height: 24px;
+	cursor: pointer;
+}
+
+.sim-history-item-expand-icon {
+	margin-left: 12px;
+	width: 24px;
+	height: 24px;
+	cursor: pointer;
 }
 
 .sim-history-item.even {

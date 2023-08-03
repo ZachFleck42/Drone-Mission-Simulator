@@ -38,15 +38,12 @@ function App() {
 	};
 
 	useEffect(() => {
-		setSimHistory((oldData) => {
-			const sortedHistory = [...oldData].sort(
-				(a, b) => Number(b.timestamp) - Number(a.timestamp),
-			);
-			return sortedHistory;
-		});
+		const sortedHistory = [...simHistory].sort(
+			(a, b) => Number(b.timestamp) - Number(a.timestamp),
+		);
 
-		if (simHistory.length > 0) {
-			setActiveData(simHistory[0].data);
+		if (sortedHistory.length > 0) {
+			setActiveData(sortedHistory[0].data);
 		} else {
 			setActiveData([]);
 		}
