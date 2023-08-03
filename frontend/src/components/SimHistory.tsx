@@ -61,10 +61,13 @@ export default function HistoryList({
 
 	const handleDeleteClick = (index: number) => {
 		const updatedSims = [...simHistory];
-		updatedSims.splice(index, 1);
-		setCurrentFrameIndex(0);
-		setIsPlaying(false);
+		const deletedSimulation = updatedSims.splice(index, 1)[0]; // Remove and store the deleted simulation
 		setSimHistory(updatedSims);
+
+		if (activeData === deletedSimulation.data) {
+			setCurrentFrameIndex(0);
+			setIsPlaying(false);
+		}
 	};
 
 	return (
