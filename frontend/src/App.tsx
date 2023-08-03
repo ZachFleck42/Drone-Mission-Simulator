@@ -7,7 +7,6 @@ import SimulationCanvas from './components/CanvasDisplay';
 import FrameControls from './components/FrameControls';
 import HistoryList from './components/SimHistory';
 import SimSettings from './components/SimSettings';
-import { getCurrentDateTime } from './utils/utils';
 
 const API = 'http://127.0.0.1:8080/sim';
 
@@ -28,7 +27,7 @@ function App() {
 			...oldData,
 			{
 				name: '',
-				timestamp: getCurrentDateTime(),
+				timestamp: Date.now().toString(),
 				data: responseData,
 			},
 		]);
