@@ -108,7 +108,7 @@ function App() {
 						{activeData.length === 0 ? (
 							<div className="sim-history-loading">Waiting for data...</div>
 						) : (
-							<HistoryList sims={simHistory} />
+							<HistoryList sims={simHistory} setSimHistory={setSimHistory} />
 						)}
 					</div>
 					<div className="sim-info-header">Current Simulation Info</div>

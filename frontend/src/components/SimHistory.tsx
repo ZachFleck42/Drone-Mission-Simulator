@@ -19,9 +19,10 @@ function formatTimestamp(timestamp: string): string {
 
 interface HistoryListProps {
 	sims: SimulationHistory[];
+	setSimHistory: React.Dispatch<React.SetStateAction<SimulationHistory[]>>;
 }
 
-export default function HistoryList({ sims }: HistoryListProps) {
+export default function HistoryList({ sims, setSimHistory }: HistoryListProps) {
 	const sortedSims = [...sims].sort(
 		(a, b) => Number(b.timestamp) - Number(a.timestamp),
 	);
@@ -34,10 +35,6 @@ export default function HistoryList({ sims }: HistoryListProps) {
 	useEffect(() => {
 		setRemoveLastBorder(sims.length > 5);
 	}, [sims]);
-
-	const handleDeleteClick = (index: number) => {
-		console.log(index);
-	};
 
 	const [editingIndex, setEditingIndex] = useState<number | null>(null);
 	const [editedName, setEditedName] = useState<string>('');
@@ -57,6 +54,18 @@ export default function HistoryList({ sims }: HistoryListProps) {
 		setEditingIndex(null);
 	};
 
+	const handleNameKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+		if (event.key === 'Enter' && editingIndex !== null) {
+			handleNameSubmit(editingIndex);
+		}
+	};
+
+	const handleDeleteClick = (index: number) => {
+		const updatedSims = [...sortedSims];
+		updatedSims.splice(index, 1);
+		setSimHistory(updatedSims);
+	};
+
 	return (
 		<div className="sim-history-list">
 			{sortedSims.map((simulation, index) => (
@@ -73,6 +82,8 @@ export default function HistoryList({ sims }: HistoryListProps) {
 									value={editedName}
 									className="sim-history-item-name-edit-field"
 									onChange={handleNameChange}
+									onKeyUp={handleNameKeyUp}
+									autoFocus
 								/>
 							) : simulation.name ? (
 								simulation.name
