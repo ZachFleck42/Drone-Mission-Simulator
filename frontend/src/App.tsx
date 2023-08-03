@@ -7,16 +7,13 @@ import SimulationCanvas from './components/CanvasDisplay';
 import FrameControls from './components/FrameControls';
 import HistoryList from './components/SimHistory';
 import SimSettings from './components/SimSettings';
+import { getCurrentDateTime } from './utils/utils';
 
 const API = 'http://127.0.0.1:8080/sim';
 
-function timeout(delay: number) {
-	return new Promise((res) => setTimeout(res, delay));
-}
-
 function App() {
 	const [activeData, setActiveData] = useState<Simulation>([]);
-	const [simHistory, setSimHistory] = useState<Simulation[]>([]);
+	const [simHistory, setSimHistory] = useState<[string, Simulation][]>([]);
 	const [currentFrameIndex, setCurrentFrameIndex] = useState<number>(0);
 	const [isPlaying, setIsPlaying] = useState<boolean>(false);
 	const [animated, setAnimated] = useState<boolean>(true);
@@ -27,8 +24,12 @@ function App() {
 	const [unrevealedTiles, setUnrevealedTiles] = useState<boolean>(false);
 
 	const handleServerResponse = (responseData: Simulation) => {
+		setSimHistory((oldData) => [
+			...oldData,
+			[getCurrentDateTime(), responseData],
+		]);
+
 		setActiveData(responseData);
-		setSimHistory((oldData) => [...oldData, responseData]);
 		setCurrentFrameIndex(0);
 		setIsPlaying(false);
 	};
@@ -104,6 +105,7 @@ function App() {
 				<div className="sim-history">
 					<div className="sim-history-header">Simulation History</div>
 					<HistoryList simulations={simHistory} />
+					<div className="current-sim-stats" />
 				</div>
 			</div>
 		</div>
