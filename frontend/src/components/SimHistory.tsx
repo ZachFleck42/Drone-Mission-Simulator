@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { SimulationHistory } from '../types/Simulation';
+import { Simulation, SimulationHistory } from '../types/Simulation';
 import editSVG from '../assets/edit.svg';
 import trashSVG from '../assets/delete.svg';
 
 interface HistoryListProps {
 	simHistory: SimulationHistory[];
 	setSimHistory: React.Dispatch<React.SetStateAction<SimulationHistory[]>>;
+	activeData: Simulation;
+	setActiveData: React.Dispatch<React.SetStateAction<Simulation>>;
+	setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
+	setCurrentFrameIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
 function formatTimestamp(timestamp: string): string {
@@ -25,6 +29,10 @@ function formatTimestamp(timestamp: string): string {
 export default function HistoryList({
 	simHistory,
 	setSimHistory,
+	activeData,
+	setActiveData,
+	setIsPlaying,
+	setCurrentFrameIndex,
 }: HistoryListProps) {
 	const [editingIndex, setEditingIndex] = useState<number | null>(null);
 	const [editedName, setEditedName] = useState<string>('');
@@ -54,6 +62,8 @@ export default function HistoryList({
 	const handleDeleteClick = (index: number) => {
 		const updatedSims = [...simHistory];
 		updatedSims.splice(index, 1);
+		setCurrentFrameIndex(0);
+		setIsPlaying(false);
 		setSimHistory(updatedSims);
 	};
 

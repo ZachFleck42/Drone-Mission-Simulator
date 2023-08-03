@@ -47,8 +47,6 @@ function App() {
 
 		if (simHistory.length > 0) {
 			setActiveData(simHistory[0].data);
-			setCurrentFrameIndex(0);
-			setIsPlaying(false);
 		} else {
 			setActiveData([]);
 		}
@@ -127,6 +125,10 @@ function App() {
 							<HistoryList
 								simHistory={simHistory}
 								setSimHistory={setSimHistory}
+								activeData={activeData}
+								setActiveData={setActiveData}
+								setIsPlaying={setIsPlaying}
+								setCurrentFrameIndex={setCurrentFrameIndex}
 							/>
 						)}
 					</div>
