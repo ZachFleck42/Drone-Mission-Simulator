@@ -7,6 +7,7 @@ import SimulationCanvas from './components/CanvasDisplay';
 import FrameControls from './components/FrameControls';
 import HistoryList from './components/SimHistory';
 import SimSettings from './components/SimSettings';
+import CurrentSimInfo from './components/SimInfo';
 
 const API = 'http://127.0.0.1:8080/sim';
 
@@ -107,7 +108,7 @@ function App() {
 					<div className="sim-history-header">History</div>
 					<HistoryList sims={simHistory} />
 					<div className="current-sim-info-header">Current Simulation Info</div>
-					<div className="current-sim-info" />
+					<CurrentSimInfo sim={activeData} />
 				</div>
 			</div>
 		</div>

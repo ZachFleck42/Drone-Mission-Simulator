@@ -64,14 +64,14 @@ html {
 }
 
 .even {
-	background-color: #f5f5f5;
-}
-
-.odd {
 	background-color: white;
 }
 
-.current-sim-info {
+.odd {
+	background-color: #f5f5f5;
+}
+
+.current-sim-info-container {
 	height: 220px;
 	background-color: #f5f5f5;
 	overflow: hidden;
