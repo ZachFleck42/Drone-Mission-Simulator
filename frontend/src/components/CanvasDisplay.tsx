@@ -30,16 +30,17 @@ function TerrainMesh({ ...props }: TerrainMeshProps) {
 	);
 }
 
-interface GridProps {
+interface GridProps extends MeshProps {
 	environment: Environment;
 	tileSize: number;
+	visible: boolean;
 }
 
-function TerrainTiles({ environment, tileSize }: GridProps) {
+function TerrainTiles({ environment, tileSize, visible }: GridProps) {
 	const { terrain } = environment;
 
 	return (
-		<group name="tiles" rotation={[-Math.PI / 2, 0, 0]}>
+		<group name="tiles" rotation={[-Math.PI / 2, 0, 0]} visible={visible}>
 			{terrain.grid.map((row, rowIndex) => {
 				return row.map((tile, colIndex) => {
 					const { x, y, hostile } = tile;
@@ -80,11 +81,12 @@ function SkyBox() {
 
 interface VisibleTilesProps {
 	tiles: [number, number][];
+	visible: boolean;
 }
 
-function VisibleTiles({ ...props }: VisibleTilesProps) {
+function VisibleTiles({ visible, ...props }: VisibleTilesProps) {
 	return (
-		<group name="visible-tiles">
+		<group name="visible-tiles" visible={visible}>
 			{props.tiles.map((tile, index) => {
 				const [x, y] = tile;
 				const tilePosition: any = [x, 0.15, -y];
@@ -215,6 +217,7 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 				<TerrainTiles
 					environment={data[currentFrameIndex].environment}
 					tileSize={1}
+					visible={props.showHostileTiles}
 				/>
 				<TargetMesh
 					targetRef={targetRef}
@@ -226,7 +229,10 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 					drone={data[currentFrameIndex].drone}
 					showAnimation={props.showAnimation}
 				/>
-				<VisibleTiles tiles={data[currentFrameIndex].drone.visible_tiles} />
+				<VisibleTiles
+					tiles={data[currentFrameIndex].drone.visible_tiles}
+					visible={props.showVisTiles}
+				/>
 			</group>
 		</Canvas>
 	);
