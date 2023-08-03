@@ -42,9 +42,33 @@ html {
 
 .sim-history-container {
 	height: 340px;
-	overflow: hidden;
 	background-color: #f5f5f5;
 	border-bottom: 1px solid black;
+	overflow-y: auto;
+}
+
+.sim-history-item {
+	border-bottom: 1px solid black;
+}
+
+.sim-history-item-text {
+	padding: 8px 0px 8px 12px;
+}
+
+.sim-history-item-name {
+	margin-bottom: 12px;
+}
+
+/* .sim-history-item:last-child {
+	border-bottom: none;
+} */
+
+.even {
+	background-color: #f5f5f5;
+}
+
+.odd {
+	background-color: white;
 }
 
 .current-sim-info {

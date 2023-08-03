@@ -19,20 +19,28 @@ function formatTimestamp(timestamp: string): string {
 }
 
 export default function HistoryList({ sims }: HistoryListProps) {
+	const sortedSims = [...sims].sort(
+		(a, b) => Number(b.timestamp) - Number(a.timestamp),
+	);
+
 	const handleSimulationClick = (simulation: SimulationHistory) => {
 		console.log(simulation.timestamp);
 	};
 
 	return (
 		<div className="sim-history-container">
-			{sims.map((simulation, index) => (
+			{sortedSims.map((simulation, index) => (
 				<div
 					key={index}
-					className="sim-history-item"
+					className={`sim-history-item ${index % 2 === 0 ? 'even' : 'odd'}`}
 					onClick={() => handleSimulationClick(simulation)}>
-					<div className="sim-history-item-name">{simulation.name}</div>
-					<div className="sim-history-item-time">
-						{formatTimestamp(simulation.timestamp)}
+					<div className="sim-history-item-text">
+						<div className="sim-history-item-name">
+							{simulation.name ? simulation.name : 'No name'}
+						</div>
+						<div className="sim-history-item-time">
+							{formatTimestamp(simulation.timestamp)}
+						</div>
 					</div>
 				</div>
 			))}
