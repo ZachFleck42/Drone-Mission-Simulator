@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { SimulationHistory } from '../types/Simulation';
 import editSVG from '../assets/edit.svg';
+import trashSVG from '../assets/delete.svg';
 
 function formatTimestamp(timestamp: string): string {
 	const date = new Date(Number(timestamp));
@@ -34,7 +35,10 @@ export default function HistoryList({ sims }: HistoryListProps) {
 		setRemoveLastBorder(sims.length > 5);
 	}, [sims]);
 
-	// Add isEditing state for each item
+	const handleDeleteClick = (index: number) => {
+		console.log(index);
+	};
+
 	const [editingIndex, setEditingIndex] = useState<number | null>(null);
 	const [editedName, setEditedName] = useState<string>('');
 
@@ -54,17 +58,14 @@ export default function HistoryList({ sims }: HistoryListProps) {
 	};
 
 	return (
-		<div
-			className={`sim-history-container ${
-				removeLastBorder ? 'remove-border' : ''
-			}`}>
+		<div className="sim-history-list">
 			{sortedSims.map((simulation, index) => (
 				<div
 					key={index}
 					className={`sim-history-item ${index % 2 === 0 ? 'even' : 'odd'} ${
 						editingIndex === index ? 'editing' : ''
-					}`}>
-					<div className="sim-history-item-content">
+					} ${removeLastBorder ? 'remove-border' : ''}`}>
+					<div className="sim-history-item-text">
 						<div className="sim-history-item-name">
 							{editingIndex === index ? (
 								<input
@@ -81,18 +82,23 @@ export default function HistoryList({ sims }: HistoryListProps) {
 						<div className="sim-history-item-time">
 							{formatTimestamp(simulation.timestamp)}
 						</div>
-						<div className="sim-history-item-edit">
-							{editingIndex === index ? (
-								<button onClick={() => handleNameSubmit(index)}>Save</button>
-							) : (
-								<img
-									src={editSVG}
-									className="edit-icon"
-									onClick={() => handleEditClick(index)}
-								/>
-							)}
-						</div>
 					</div>
+					<div className="sim-history-item-edit">
+						{editingIndex === index ? (
+							<button onClick={() => handleNameSubmit(index)}>Save</button>
+						) : (
+							<img
+								src={editSVG}
+								onClick={() => handleEditClick(index)}
+								className="edit-icon"
+							/>
+						)}
+					</div>
+					<img
+						src={trashSVG}
+						onClick={() => handleDeleteClick(index)}
+						className="delete-icon"
+					/>
 				</div>
 			))}
 		</div>

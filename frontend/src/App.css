@@ -49,6 +49,8 @@ html {
 }
 
 .sim-history-item {
+	display: flex;
+	align-items: center;
 	border-bottom: 1px solid black;
 }
 
@@ -202,6 +204,11 @@ html {
 }
 
 .edit-icon {
+	width: 23px;
+	height: 23px;
+}
+
+.delete-icon {
 	width: 23px;
 	height: 23px;
 }
