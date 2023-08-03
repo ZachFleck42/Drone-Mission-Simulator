@@ -78,11 +78,6 @@ function SkyBox() {
 	return null;
 }
 
-interface DroneProps extends MeshProps {
-	drone: Drone;
-	droneRef: React.MutableRefObject<THREE.Mesh>;
-}
-
 interface VisibleTilesProps {
 	tiles: [number, number][];
 }
@@ -107,16 +102,27 @@ function VisibleTiles({ ...props }: VisibleTilesProps) {
 	);
 }
 
-function DroneMesh({ drone, droneRef }: DroneProps) {
+interface DroneProps extends MeshProps {
+	drone: Drone;
+	droneRef: React.MutableRefObject<THREE.Mesh>;
+	showAnimation: boolean;
+}
+
+function DroneMesh({ drone, droneRef, showAnimation }: DroneProps) {
 	const [position, setPosition] = useState({ x: 0, y: 0 });
 
 	useFrame((_, delta) => {
 		const { x, y } = drone;
-		const speed = 1.5;
-		const newX = position.x + (x - position.x) * speed * delta;
-		const newY = position.y + (-y - position.y) * speed * delta;
-		setPosition({ x: newX, y: newY });
-		droneRef.current.position.set(newX, 1.5, newY);
+
+		if (showAnimation) {
+			const speed = 1.8;
+			const newX = position.x + (x - position.x) * speed * delta;
+			const newY = position.y + (-y - position.y) * speed * delta;
+			setPosition({ x: newX, y: newY });
+			droneRef.current.position.set(newX, 1.5, newY);
+		} else {
+			droneRef.current.position.set(x, 1.5, -y);
+		}
 	});
 
 	return (
@@ -130,18 +136,23 @@ function DroneMesh({ drone, droneRef }: DroneProps) {
 interface TargetProps extends MeshProps {
 	environment: Environment;
 	targetRef: React.MutableRefObject<THREE.Mesh>;
+	showAnimation: boolean;
 }
 
-function TargetMesh({ environment, targetRef }: TargetProps) {
+function TargetMesh({ environment, targetRef, showAnimation }: TargetProps) {
 	const [position, setPosition] = useState({ x: 0, y: 0 });
 
 	useFrame((_, delta) => {
 		const { x, y } = environment.target;
-		const speed = 2;
-		const newX = position.x + (x - position.x) * speed * delta;
-		const newY = position.y + (-y - position.y) * speed * delta;
-		setPosition({ x: newX, y: newY });
-		targetRef.current.position.set(newX, 0.5, newY);
+		if (showAnimation) {
+			const speed = 2;
+			const newX = position.x + (x - position.x) * speed * delta;
+			const newY = position.y + (-y - position.y) * speed * delta;
+			setPosition({ x: newX, y: newY });
+			targetRef.current.position.set(newX, 0.5, newY);
+		} else {
+			targetRef.current.position.set(x, 0.5, -y);
+		}
 	});
 
 	return (
@@ -155,6 +166,11 @@ function TargetMesh({ environment, targetRef }: TargetProps) {
 interface SimulationCanvasProps {
 	data: Simulation;
 	currentFrameIndex: number;
+	showAnimation: boolean;
+	showVisTiles: boolean;
+	showHostileTiles: boolean;
+	showPathHistory: boolean;
+	showUnrevealedTiles: boolean;
 }
 
 function SimulationCanvas(props: SimulationCanvasProps) {
@@ -203,8 +219,13 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 				<TargetMesh
 					targetRef={targetRef}
 					environment={data[currentFrameIndex].environment}
+					showAnimation={props.showAnimation}
 				/>
-				<DroneMesh droneRef={droneRef} drone={data[currentFrameIndex].drone} />
+				<DroneMesh
+					droneRef={droneRef}
+					drone={data[currentFrameIndex].drone}
+					showAnimation={props.showAnimation}
+				/>
 				<VisibleTiles tiles={data[currentFrameIndex].drone.visible_tiles} />
 			</group>
 		</Canvas>

@@ -74,6 +74,11 @@ function App() {
 									<SimulationCanvas
 										data={activeData}
 										currentFrameIndex={currentFrameIndex}
+										showAnimation={animated}
+										showVisTiles={visTiles}
+										showHostileTiles={hostileTiles}
+										showPathHistory={pathHistory}
+										showUnrevealedTiles={unrevealedTiles}
 									/>
 								) : (
 									<GridDisplay
