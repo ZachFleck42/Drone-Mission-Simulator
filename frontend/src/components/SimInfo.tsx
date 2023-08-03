@@ -9,7 +9,7 @@ export default function CurrentSimInfo({
 	sim,
 	currentFrameIndex,
 }: CurrentSimInfoProps) {
-	const max_frames = sim.length;
+	const max_frames = sim.length - 1;
 	const frame = sim[currentFrameIndex];
 
 	const [target_x, target_y] = [
@@ -22,10 +22,26 @@ export default function CurrentSimInfo({
 
 	return (
 		<div className="sim-info">
-			<div className="sim-info-text">
-				<div className="sim-info-item">
-					<div className="sim-info-item-name">Frame / Max Frames</div>
-					<div className="sim-info-item-value"></div>
+			<div className="sim-info-item">
+				<div className="sim-info-item-name">Current frame:</div>
+				<div className="sim-info-item-value">
+					{currentFrameIndex} / {max_frames}
+				</div>
+			</div>
+			<div className="sim-info-item">
+				<div className="sim-info-item-name">Drone status:</div>
+				<div className="sim-info-item-value">{drone_status}</div>
+			</div>
+			<div className="sim-info-item">
+				<div className="sim-info-item-name">Drone position:</div>
+				<div className="sim-info-item-value">
+					{drone_x}, {drone_y}
+				</div>
+			</div>
+			<div className="sim-info-item">
+				<div className="sim-info-item-name">Target position:</div>
+				<div className="sim-info-item-value">
+					{target_x}, {target_y}
 				</div>
 			</div>
 		</div>
