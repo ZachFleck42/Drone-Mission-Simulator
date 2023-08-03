@@ -47,7 +47,7 @@ function App() {
 						<ParamInputs api={API} onServerResponse={handleServerResponse} />
 					</div>
 					<div className="sim-settings-header">Display Settings</div>
-					<div className="sim-settings-toggles">
+					<div className="sim-settings-toggles-container">
 						<SimSettings
 							threeD={threeD}
 							setThreeD={setThreeD}
@@ -66,7 +66,7 @@ function App() {
 				</div>
 				<div className="sim-display">
 					<div className="sim-display-header">Simulation</div>
-					<div className="sim-canvas">
+					<div className="sim-display-container">
 						{activeData.length === 0 ? (
 							<div style={{ color: 'white' }}>Waiting for data...</div>
 						) : (
@@ -104,9 +104,15 @@ function App() {
 				</div>
 				<div className="sim-history">
 					<div className="sim-history-header">History</div>
-					<HistoryList sims={simHistory} />
+					<div className="sim-history-container">
+						{activeData.length === 0 ? (
+							<div className="sim-history-loading">Waiting for data...</div>
+						) : (
+							<HistoryList sims={simHistory} />
+						)}
+					</div>
 					<div className="sim-info-header">Current Simulation Info</div>
-					<div className="sim-info">
+					<div className="sim-info-container">
 						{activeData.length === 0 ? (
 							<div className="sim-info-loading">Waiting for data...</div>
 						) : (

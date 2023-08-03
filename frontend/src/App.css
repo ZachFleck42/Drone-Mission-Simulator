@@ -44,7 +44,8 @@ html {
 	height: 340px;
 	background-color: #f5f5f5;
 	border-bottom: 1px solid black;
-	overflow-y: auto;
+	overflow: auto;
+	position: relative;
 }
 
 .sim-history-item {
@@ -71,16 +72,17 @@ html {
 	background-color: #f5f5f5;
 }
 
-.sim-info {
+.sim-info-container {
 	height: 220px;
 	background-color: #f5f5f5;
 	overflow: hidden;
 	position: relative;
 }
 
+.sim-history-loading,
 .sim-info-loading {
 	position: absolute;
-	top: 45%;
+	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 }
@@ -102,13 +104,13 @@ html {
 	margin-left: 10px;
 }
 
-.sim-settings-toggles {
+.sim-settings-toggles-container {
 	height: 220px;
 	background-color: #f5f5f5;
 	overflow: hidden;
 }
 
-.sim-settings-toggles-container {
+.sim-settings-toggles {
 	margin-top: 12px;
 	margin-left: 16px;
 	margin-right: 43px;
@@ -188,7 +190,7 @@ html {
 	margin-left: 8px;
 }
 
-.sim-canvas {
+.sim-display-container {
 	height: 100%;
 	max-height: 600px;
 	display: flex;

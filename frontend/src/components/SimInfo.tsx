@@ -21,7 +21,7 @@ export default function CurrentSimInfo({
 	const drone_status = frame.drone.status;
 
 	return (
-		<div className="sim-info-container">
+		<div className="sim-info">
 			<div className="sim-info-text">
 				<div className="sim-info-item">
 					<div className="sim-info-item-name">Frame / Max Frames</div>

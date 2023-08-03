@@ -34,7 +34,7 @@ export default function HistoryList({ sims }: HistoryListProps) {
 	}, [sims]);
 
 	return (
-		<div className={'sim-history-container'}>
+		<div className={'sim-history-list'}>
 			{sortedSims.map((simulation, index) => (
 				<div
 					key={index}
