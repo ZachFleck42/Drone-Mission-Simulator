@@ -1,12 +1,25 @@
-import { Simulation } from '../types/Simulation';
+import { SimulationHistory } from '../types/Simulation';
 
 interface HistoryListProps {
-	simulations: [string, Simulation][];
+	sims: SimulationHistory[];
 }
 
-export default function HistoryList({ simulations }: HistoryListProps) {
-	const sizes = simulations.map((sim: [string, Simulation], index) => (
-		<p key={index}>{sim[1][index].environment.terrain.size}</p>
-	));
-	return <div className="sim-history-container">{sizes}</div>;
+export default function HistoryList({ sims }: HistoryListProps) {
+	const handleSimulationClick = (simulation: SimulationHistory) => {
+		console.log(simulation.timestamp);
+	};
+
+	return (
+		<div className="sim-history-container">
+			{sims.map((simulation, index) => (
+				<div
+					key={index}
+					className="sim-history-item"
+					onClick={() => handleSimulationClick(simulation)}>
+					<div className="sim-history-item-name">{simulation.name}</div>
+					<div className="sim-history-item-time">{simulation.timestamp}</div>
+				</div>
+			))}
+		</div>
+	);
 }

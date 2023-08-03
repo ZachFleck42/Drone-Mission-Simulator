@@ -51,3 +51,9 @@ export interface Frame {
 }
 
 export type Simulation = Frame[];
+
+export interface SimulationHistory {
+	name: string;
+	timestamp: string;
+	data: Simulation;
+}

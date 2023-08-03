@@ -41,15 +41,23 @@ html {
 }
 
 .sim-history-container {
-	height: 600px;
+	height: 340px;
 	overflow: hidden;
 	background-color: #f5f5f5;
+	border-bottom: 1px solid black;
+}
+
+.current-sim-info {
+	height: 220px;
+	background-color: #f5f5f5;
+	overflow: hidden;
 }
 
 .sim-params-header,
 .sim-display-header,
 .sim-history-header,
-.sim-settings-header {
+.sim-settings-header,
+.current-sim-info-header {
 	height: 40px;
 	display: flex;
 	justify-content: center;

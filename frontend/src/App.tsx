@@ -1,6 +1,6 @@
 import './App.css';
 import { useState } from 'react';
-import { Simulation } from './types/Simulation';
+import { Simulation, SimulationHistory } from './types/Simulation';
 import ParamInputs from './components/ParamInputs';
 import GridDisplay from './components/GridDisplay';
 import SimulationCanvas from './components/CanvasDisplay';
@@ -13,7 +13,7 @@ const API = 'http://127.0.0.1:8080/sim';
 
 function App() {
 	const [activeData, setActiveData] = useState<Simulation>([]);
-	const [simHistory, setSimHistory] = useState<[string, Simulation][]>([]);
+	const [simHistory, setSimHistory] = useState<SimulationHistory[]>([]);
 	const [currentFrameIndex, setCurrentFrameIndex] = useState<number>(0);
 	const [isPlaying, setIsPlaying] = useState<boolean>(false);
 	const [animated, setAnimated] = useState<boolean>(true);
@@ -26,7 +26,11 @@ function App() {
 	const handleServerResponse = (responseData: Simulation) => {
 		setSimHistory((oldData) => [
 			...oldData,
-			[getCurrentDateTime(), responseData],
+			{
+				name: '',
+				timestamp: getCurrentDateTime(),
+				data: responseData,
+			},
 		]);
 
 		setActiveData(responseData);
@@ -42,24 +46,22 @@ function App() {
 					<div className="sim-params-inputs">
 						<ParamInputs api={API} onServerResponse={handleServerResponse} />
 					</div>
-					<div className="sim-settings">
-						<div className="sim-settings-header">Display Settings</div>
-						<div className="sim-settings-toggles">
-							<SimSettings
-								threeD={threeD}
-								setThreeD={setThreeD}
-								animated={animated}
-								setAnimated={setAnimated}
-								visTiles={visTiles}
-								setVisTiles={setVisTiles}
-								hostileTiles={hostileTiles}
-								setHostileTiles={setHostileTiles}
-								pathHistory={pathHistory}
-								setPathHistory={setPathHistory}
-								unrevealedTiles={unrevealedTiles}
-								setUnrevealedTiles={setUnrevealedTiles}
-							/>
-						</div>
+					<div className="sim-settings-header">Display Settings</div>
+					<div className="sim-settings-toggles">
+						<SimSettings
+							threeD={threeD}
+							setThreeD={setThreeD}
+							animated={animated}
+							setAnimated={setAnimated}
+							visTiles={visTiles}
+							setVisTiles={setVisTiles}
+							hostileTiles={hostileTiles}
+							setHostileTiles={setHostileTiles}
+							pathHistory={pathHistory}
+							setPathHistory={setPathHistory}
+							unrevealedTiles={unrevealedTiles}
+							setUnrevealedTiles={setUnrevealedTiles}
+						/>
 					</div>
 				</div>
 				<div className="sim-display">
@@ -104,8 +106,9 @@ function App() {
 				</div>
 				<div className="sim-history">
 					<div className="sim-history-header">Simulation History</div>
-					<HistoryList simulations={simHistory} />
-					<div className="current-sim-stats" />
+					<HistoryList sims={simHistory} />
+					<div className="current-sim-info-header">Current Simulation Info</div>
+					<div className="current-sim-info" />
 				</div>
 			</div>
 		</div>
