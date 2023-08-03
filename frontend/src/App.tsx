@@ -41,13 +41,13 @@ function App() {
 	return (
 		<div className="App">
 			<div className="simulator">
-				<div className="sim-params">
-					<div className="sim-params-header">Parameters</div>
-					<div className="sim-params-inputs">
+				<div className="sim-inputs">
+					<div className="sim-inputs-header">Parameters</div>
+					<div className="sim-inputs-container">
 						<ParamInputs api={API} onServerResponse={handleServerResponse} />
 					</div>
 					<div className="sim-settings-header">Display Settings</div>
-					<div className="sim-settings-toggles-container">
+					<div className="sim-settings-container">
 						<SimSettings
 							threeD={threeD}
 							setThreeD={setThreeD}

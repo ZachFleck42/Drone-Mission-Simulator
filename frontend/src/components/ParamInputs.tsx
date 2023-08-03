@@ -110,7 +110,7 @@ export default function ParamInputs({
 
 	return (
 		<div className="params-container">
-			<div className="params-input">
+			<div className="params-fields">
 				{inputFields.map((field) => (
 					<div key={field.key} className="input-field">
 						<input
