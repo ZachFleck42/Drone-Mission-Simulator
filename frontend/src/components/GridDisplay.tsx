@@ -24,9 +24,9 @@ function GridDisplay({
 	const currentGrid = terrainGrids[currentFrameIndex];
 
 	return (
-		<div className="grid-display">
+		<div className="sim-grid-display">
 			{currentGrid.map((row, rowIndex) => (
-				<div className="grid-row" key={rowIndex}>
+				<div className="sim-grid-display-row" key={rowIndex}>
 					{row.map((cell, colIndex) => {
 						const isTargetCell =
 							targetPosition.x === rowIndex && targetPosition.y === colIndex;
@@ -35,11 +35,11 @@ function GridDisplay({
 						const isCellVisible = visibleTiles.some(
 							([x, y]) => rowIndex === x && colIndex === y,
 						);
-						const cellClassName = `grid-cell${cell.hostile ? ' hostile' : ''}${
-							isCellVisible ? ' visible' : ''
-						}${isCellVisible && cell.hostile ? ' visible-hostile' : ''}${
-							isTargetCell ? ' target' : ''
-						}`;
+						const cellClassName = `sim-grid-display-cell${
+							cell.hostile ? ' hostile' : ''
+						}${isCellVisible ? ' visible' : ''}${
+							isCellVisible && cell.hostile ? ' visible-hostile' : ''
+						}${isTargetCell ? ' target' : ''}`;
 						return (
 							<div className={cellClassName} key={colIndex}>
 								{isTargetCell ? 'T' : ''}

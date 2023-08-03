@@ -71,7 +71,7 @@ export default function HistoryList({ sims }: HistoryListProps) {
 								<input
 									type="text"
 									value={editedName}
-									className="sim-history-item-edit-field"
+									className="sim-history-item-name-edit-field"
 									onChange={handleNameChange}
 								/>
 							) : simulation.name ? (
@@ -84,7 +84,7 @@ export default function HistoryList({ sims }: HistoryListProps) {
 							{formatTimestamp(simulation.timestamp)}
 						</div>
 					</div>
-					<div className="sim-history-item-edit">
+					<div className="sim-history-item-edit-name">
 						{editingIndex === index ? (
 							<button
 								className="sim-history-item-edit-save"
@@ -95,14 +95,14 @@ export default function HistoryList({ sims }: HistoryListProps) {
 							<img
 								src={editSVG}
 								onClick={() => handleEditClick(index)}
-								className="edit-icon"
+								className="sim-history-item-edit-icon"
 							/>
 						)}
 					</div>
 					<img
 						src={trashSVG}
 						onClick={() => handleDeleteClick(index)}
-						className="delete-icon"
+						className="sim-history-item-delete-icon"
 					/>
 				</div>
 			))}

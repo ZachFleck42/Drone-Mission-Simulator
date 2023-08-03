@@ -10,12 +10,12 @@ html {
 }
 
 .simulator {
-	max-height: 641px;
+	display: flex;
 	margin-top: 100px;
 	border: 1px solid black;
-	display: flex;
-	background-color: #d4d4d8;
 	border-radius: 8px;
+	background-color: #d4d4d8;
+	max-height: 641px;
 	overflow: hidden;
 }
 
@@ -26,26 +26,191 @@ html {
 	flex-direction: column;
 }
 
+.sim-inputs-header,
+.sim-display-header,
+.sim-history-header,
+.sim-settings-header,
+.sim-info-header {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-bottom: 1px solid black;
+	height: 40px;
+}
+
 .sim-inputs {
 	width: 300px;
 }
 
+.sim-inputs-container {
+	border-bottom: 1px solid black;
+	background-color: #f5f5f5;
+	height: 340px;
+}
+
+.sim-params-container {
+	margin-top: 15px;
+	margin-left: 7px;
+	padding: 10px;
+	width: 100%;
+}
+
+.sim-params-fields {
+	margin-bottom: 15px;
+	border: none;
+}
+
+.sim-params-fields input {
+	margin-bottom: 8px;
+	border: 1px solid black;
+	border-radius: 2px;
+	padding: 8px;
+	width: 74%;
+}
+
+.sim-param-input-field {
+	display: flex;
+	align-items: center;
+}
+
+.sim-param-tooltip-icon {
+	margin-left: 8px;
+	width: 23px;
+	height: 23px;
+}
+
+.sim-params-buttons button:disabled {
+	background-color: #ccc;
+	cursor: not-allowed;
+}
+
+.sim-params-reset,
+.sim-params-submit {
+	margin-right: 8px;
+	border: none;
+	border-radius: 3px;
+	padding: 8px 12px;
+	color: white;
+	cursor: pointer;
+}
+
+.sim-params-reset {
+	background-color: #525252;
+}
+
+.sim-params-submit {
+	background-color: #2563eb;
+}
+
+.sim-settings-container {
+	background-color: #f5f5f5;
+	height: 220px;
+	overflow: hidden;
+}
+
+.sim-settings-toggles {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin: 12px 43px 0px 16px;
+}
+
+.sim-settings-toggle-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+}
+
+.sim-settings-toggle-item p {
+	margin: 0;
+}
+
 .sim-display {
-	width: 600px;
 	border-left: 1px solid black;
 	border-right: 1px solid black;
+	width: 600px;
+}
+
+.sim-display-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	background-color: black;
+	height: 100%;
+	max-height: 600px;
+}
+
+.sim-grid-display {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: white;
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+	max-width: 600px;
+	max-height: 600px;
+}
+
+.sim-grid-display-row {
+	display: flex;
+}
+
+.sim-grid-display-cell {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 1px solid #666;
+	width: 20px;
+	height: 20px;
+	font-weight: bold;
+}
+
+.sim-grid-display-cell.hostile {
+	background-color: red;
+}
+
+.sim-grid-display-cell.visible {
+	background-color: yellow;
+}
+
+.sim-grid-display-cell.visible-hostile {
+	background-color: #ff6932;
+}
+
+.sim-frame-controls {
+	position: absolute;
+	bottom: 12px;
+	left: 50%;
+	z-index: 1;
+	transform: translateX(-50%);
+}
+
+.sim-frame-controls button {
+	margin: 0 3px;
 }
 
 .sim-history {
 	width: 300px;
 }
 
+.sim-history-loading,
+.sim-info-loading {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
 .sim-history-container {
-	height: 340px;
-	background-color: #f5f5f5;
-	border-bottom: 1px solid black;
-	overflow: auto;
 	position: relative;
+	border-bottom: 1px solid black;
+	background-color: #f5f5f5;
+	height: 340px;
+	overflow: auto;
 }
 
 .sim-history-item {
@@ -54,40 +219,51 @@ html {
 	border-bottom: 1px solid black;
 }
 
-.sim-history-item-text {
-	padding: 8px 0px 8px 12px;
+.sim-history-item.even {
+	background-color: white;
 }
 
-.sim-history-item-edit-field {
-	width: 84%;
-	height: 16px;
-	padding: none;
-	margin: none;
-}
-
-.sim-history-item-name {
-	margin-bottom: 12px;
+.sim-history-item.odd {
+	background-color: #f5f5f5;
 }
 
 .sim-history-item:last-child.remove-border {
 	border-bottom: none;
 }
 
-.even {
-	background-color: white;
+.sim-history-item-text {
+	padding: 8px 0px 8px 12px;
 }
 
-.odd {
-	background-color: #f5f5f5;
+.sim-history-item-name {
+	margin-bottom: 12px;
+}
+
+.sim-history-item-name-edit-field {
+	margin: none;
+	padding: none;
+	width: 84%;
+	height: 16px;
+}
+
+.sim-history-item-edit-icon {
+	margin: 5px 12px 0px 24px;
+	width: 23px;
+	height: 23px;
+}
+
+.sim-history-item-delete-icon {
+	width: 23px;
+	height: 23px;
 }
 
 .sim-info-container {
-	height: 220px;
-	background-color: #f5f5f5;
-	overflow: hidden;
-	position: relative;
 	display: flex;
 	flex-direction: column;
+	position: relative;
+	background-color: #f5f5f5;
+	height: 220px;
+	overflow: hidden;
 }
 
 .sim-info {
@@ -102,192 +278,8 @@ html {
 }
 
 .sim-info-item-value {
-	text-align: right;
 	margin-right: 43px;
-}
-
-.sim-history-loading,
-.sim-info-loading {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-}
-
-.sim-inputs-header,
-.sim-display-header,
-.sim-history-header,
-.sim-settings-header,
-.sim-info-header {
-	height: 40px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	border-bottom: 1px solid black;
-}
-
-.sim-settings-container {
-	height: 220px;
-	background-color: #f5f5f5;
-	overflow: hidden;
-}
-
-.sim-settings-toggles {
-	margin: 12px 43px 0px 16px;
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-}
-
-.toggle-item {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	width: 100%;
-}
-
-.toggle-item p {
-	margin: 0;
-}
-
-.sim-inputs-container {
-	height: 340px;
-	border-bottom: 1px solid black;
-	background-color: #f5f5f5;
-}
-
-.params-container {
-	width: 100%;
-	padding: 10px;
-	margin-top: 15px;
-	margin-left: 7px;
-}
-
-.params-fields {
-	margin-bottom: 15px;
-	border: none;
-}
-
-.params-fields input {
-	width: 74%;
-	padding: 8px;
-	margin-bottom: 8px;
-	border-radius: 2px;
-	border: 1px solid black;
-}
-
-.input-field {
-	display: flex;
-	align-items: center;
-}
-
-.params-buttons button:disabled {
-	background-color: #ccc;
-	cursor: not-allowed;
-}
-
-.submit-inputs,
-.reset-inputs {
-	padding: 8px 12px;
-	margin-right: 8px;
-	border: none;
-	border-radius: 3px;
-	color: white;
-	cursor: pointer;
-}
-
-.submit-inputs {
-	background-color: #2563eb;
-}
-
-.reset-inputs {
-	background-color: #525252;
-}
-
-.tooltip-icon {
-	width: 23px;
-	height: 23px;
-	margin-left: 8px;
-}
-
-.edit-icon {
-	margin-left: 24px;
-	margin-right: 12px;
-	margin-top: 5px;
-	width: 23px;
-	height: 23px;
-}
-
-.delete-icon {
-	width: 23px;
-	height: 23px;
-}
-
-.sim-display-container {
-	height: 100%;
-	max-height: 600px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	position: relative;
-	background-color: black;
-}
-
-.frame-controls {
-	position: absolute;
-	bottom: 12px;
-	left: 50%;
-	transform: translateX(-50%);
-	z-index: 1;
-}
-
-.frame-buttons {
-	display: flex;
-	align-items: center;
-}
-
-.frame-buttons button {
-	margin: 0 5px;
-	padding: 5px 10px;
-}
-
-.grid-display {
-	max-width: 600px;
-	max-height: 600px;
-	height: 100%;
-	width: 100%;
-	background-color: white;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	overflow: hidden;
-}
-
-.grid-row {
-	display: flex;
-}
-
-.grid-cell {
-	width: 20px;
-	height: 20px;
-	border: 1px solid #666;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	font-weight: bold;
-}
-
-.grid-cell.hostile {
-	background-color: red;
-}
-
-.grid-cell.visible {
-	background-color: yellow;
-}
-
-.grid-cell.visible-hostile {
-	background-color: #ff6932;
+	text-align: right;
 }
 
 .react-toggle {

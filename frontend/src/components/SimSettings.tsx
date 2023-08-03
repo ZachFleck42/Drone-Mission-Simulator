@@ -30,7 +30,7 @@ export default function SimSettings({
 }) {
 	return (
 		<div className="sim-settings-toggles">
-			<div className="toggle-item">
+			<div className="sim-settings-toggle-item">
 				<p>Enable 3D:</p>
 				<Toggle
 					icons={false}
@@ -40,7 +40,7 @@ export default function SimSettings({
 					}}
 				/>
 			</div>
-			<div className="toggle-item">
+			<div className="sim-settings-toggle-item">
 				<p>Enable animation:</p>
 				<Toggle
 					icons={false}
@@ -50,7 +50,7 @@ export default function SimSettings({
 					}}
 				/>
 			</div>
-			<div className="toggle-item">
+			<div className="sim-settings-toggle-item">
 				<p>Show visible tiles:</p>
 				<Toggle
 					icons={false}
@@ -60,7 +60,7 @@ export default function SimSettings({
 					}}
 				/>
 			</div>
-			<div className="toggle-item">
+			<div className="sim-settings-toggle-item">
 				<p>Show hostile tiles:</p>
 				<Toggle
 					icons={false}
@@ -70,7 +70,7 @@ export default function SimSettings({
 					}}
 				/>
 			</div>
-			<div className="toggle-item">
+			<div className="sim-settings-toggle-item">
 				<p>Show unrevealed tiles:</p>
 				<Toggle
 					icons={false}
@@ -80,7 +80,7 @@ export default function SimSettings({
 					}}
 				/>
 			</div>
-			<div className="toggle-item">
+			<div className="sim-settings-toggle-item">
 				<p>Show path history:</p>
 				<Toggle
 					icons={false}

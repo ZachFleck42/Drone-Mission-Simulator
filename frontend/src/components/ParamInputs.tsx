@@ -109,10 +109,10 @@ export default function ParamInputs({
 	};
 
 	return (
-		<div className="params-container">
-			<div className="params-fields">
+		<div className="sim-params-container">
+			<div className="sim-params-fields">
 				{inputFields.map((field) => (
-					<div key={field.key} className="input-field">
+					<div key={field.key} className="sim-param-input-field">
 						<input
 							type="number"
 							name={field.key}
@@ -120,18 +120,18 @@ export default function ParamInputs({
 							onChange={handleInputChange}
 							placeholder={`${field.label} (Default: ${field.default})`}
 						/>
-						<img src={tooltip} alt="icon" className="tooltip-icon" />
+						<img src={tooltip} alt="icon" className="sim-param-tooltip-icon" />
 					</div>
 				))}
 			</div>
-			<div className="params-buttons">
+			<div className="sim-params-buttons">
 				<button
-					className="reset-inputs"
+					className="sim-params-reset"
 					onClick={resetToDefault}
 					disabled={!userInteraction}>
 					Reset to Default
 				</button>
-				<button className="submit-inputs" onClick={handleSubmit}>
+				<button className="sim-params-submit" onClick={handleSubmit}>
 					Run simulation
 				</button>
 			</div>

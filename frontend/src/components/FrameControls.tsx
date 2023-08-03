@@ -44,7 +44,7 @@ export default function FrameControls({
 	}, [isPlaying, frameLimit, setCurrentFrameIndex]);
 
 	return (
-		<div className="frame-controls">
+		<div className="sim-frame-controls">
 			<button
 				onClick={() => setCurrentFrameIndex(0)}
 				disabled={isPlaying || currentFrameIndex === 0}>
