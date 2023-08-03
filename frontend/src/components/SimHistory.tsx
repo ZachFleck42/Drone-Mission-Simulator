@@ -3,6 +3,7 @@ import { Simulation, SimulationHistory } from '../types/Simulation';
 import editSVG from '../assets/edit.svg';
 import trashSVG from '../assets/delete.svg';
 import rightSVG from '../assets/right.svg';
+import downSVG from '../assets/down.svg';
 
 interface HistoryListProps {
 	simHistory: SimulationHistory[];
@@ -37,6 +38,7 @@ export default function HistoryList({
 }: HistoryListProps) {
 	const [editingIndex, setEditingIndex] = useState<number | null>(null);
 	const [editedName, setEditedName] = useState<string>('');
+	const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
 	const handleEditClick = (index: number) => {
 		setEditingIndex(index);
@@ -64,6 +66,7 @@ export default function HistoryList({
 		const updatedSims = [...simHistory];
 		const deletedSimulation = updatedSims.splice(index, 1)[0];
 		setSimHistory(updatedSims);
+		setEditingIndex(null);
 
 		if (activeData === deletedSimulation.data) {
 			setCurrentFrameIndex(0);
@@ -72,7 +75,7 @@ export default function HistoryList({
 	};
 
 	const handleExpandClick = (index: number) => {
-		// console.log(index);
+		setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
 	};
 
 	return (
@@ -82,7 +85,7 @@ export default function HistoryList({
 					key={index}
 					className={`sim-history-item ${index % 2 === 0 ? 'even' : 'odd'} ${
 						editingIndex === index ? 'editing' : ''
-					}`}>
+					} ${expandedIndex === index ? 'expanded' : ''}`}>
 					<div className="sim-history-item-text">
 						<div className="sim-history-item-name">
 							{editingIndex === index ? (
@@ -119,16 +122,20 @@ export default function HistoryList({
 							/>
 						)}
 					</div>
-					<img
-						src={trashSVG}
-						onClick={() => handleDeleteClick(index)}
-						className="sim-history-item-delete-icon"
-					/>
-					{/* <img
-						src={rightSVG}
-						onClick={() => handleExpandClick(index)}
-						className="sim-history-item-expand-icon"
-					/> */}
+					<div className="sim-history-item-delete">
+						<img
+							src={trashSVG}
+							onClick={() => handleDeleteClick(index)}
+							className="sim-history-item-delete-icon"
+						/>
+					</div>
+					<div className="sim-history-expand">
+						<img
+							src={expandedIndex === index ? downSVG : rightSVG}
+							onClick={() => handleExpandClick(index)}
+							className="sim-history-item-expand-icon"
+						/>
+					</div>
 				</div>
 			))}
 		</div>
