@@ -1,5 +1,5 @@
 import './App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Simulation, SimulationHistory } from './types/Simulation';
 import ParamInputs from './components/ParamInputs';
 import GridDisplay from './components/GridDisplay';
@@ -24,19 +24,35 @@ function App() {
 	const [unrevealedTiles, setUnrevealedTiles] = useState<boolean>(false);
 
 	const handleServerResponse = (responseData: Simulation) => {
-		setSimHistory((oldData) => [
-			...oldData,
-			{
-				name: '',
-				timestamp: Date.now().toString(),
-				data: responseData,
-			},
-		]);
+		const newHistoryEntry = {
+			name: '',
+			timestamp: Date.now().toString(),
+			data: responseData,
+		};
+
+		setSimHistory((oldData) => [newHistoryEntry, ...oldData]);
 
 		setActiveData(responseData);
 		setCurrentFrameIndex(0);
 		setIsPlaying(false);
 	};
+
+	useEffect(() => {
+		setSimHistory((oldData) => {
+			const sortedHistory = [...oldData].sort(
+				(a, b) => Number(b.timestamp) - Number(a.timestamp),
+			);
+			return sortedHistory;
+		});
+
+		if (simHistory.length > 0) {
+			setActiveData(simHistory[0].data);
+			setCurrentFrameIndex(0);
+			setIsPlaying(false);
+		} else {
+			setActiveData([]);
+		}
+	}, [simHistory]);
 
 	return (
 		<div className="App">
@@ -108,7 +124,10 @@ function App() {
 						{activeData.length === 0 ? (
 							<div className="sim-history-loading">Waiting for data...</div>
 						) : (
-							<HistoryList sims={simHistory} setSimHistory={setSimHistory} />
+							<HistoryList
+								simHistory={simHistory}
+								setSimHistory={setSimHistory}
+							/>
 						)}
 					</div>
 					<div className="sim-info-header">Current Simulation Info</div>

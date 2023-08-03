@@ -1,7 +1,12 @@
-import { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { SimulationHistory } from '../types/Simulation';
 import editSVG from '../assets/edit.svg';
 import trashSVG from '../assets/delete.svg';
+
+interface HistoryListProps {
+	simHistory: SimulationHistory[];
+	setSimHistory: React.Dispatch<React.SetStateAction<SimulationHistory[]>>;
+}
 
 function formatTimestamp(timestamp: string): string {
 	const date = new Date(Number(timestamp));
@@ -17,31 +22,16 @@ function formatTimestamp(timestamp: string): string {
 	return formattedTimestamp;
 }
 
-interface HistoryListProps {
-	sims: SimulationHistory[];
-	setSimHistory: React.Dispatch<React.SetStateAction<SimulationHistory[]>>;
-}
-
-export default function HistoryList({ sims, setSimHistory }: HistoryListProps) {
-	const sortedSims = [...sims].sort(
-		(a, b) => Number(b.timestamp) - Number(a.timestamp),
-	);
-
-	const handleSimulationClick = (simulation: SimulationHistory) => {
-		console.log(simulation.timestamp);
-	};
-
-	const [removeLastBorder, setRemoveLastBorder] = useState(false);
-	useEffect(() => {
-		setRemoveLastBorder(sims.length > 5);
-	}, [sims]);
-
+export default function HistoryList({
+	simHistory,
+	setSimHistory,
+}: HistoryListProps) {
 	const [editingIndex, setEditingIndex] = useState<number | null>(null);
 	const [editedName, setEditedName] = useState<string>('');
 
 	const handleEditClick = (index: number) => {
 		setEditingIndex(index);
-		setEditedName(sortedSims[index].name);
+		setEditedName(simHistory[index].name);
 	};
 
 	const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,8 +39,9 @@ export default function HistoryList({ sims, setSimHistory }: HistoryListProps) {
 	};
 
 	const handleNameSubmit = (index: number) => {
-		const updatedSims = [...sortedSims];
+		const updatedSims = [...simHistory];
 		updatedSims[index].name = editedName;
+		setSimHistory(updatedSims);
 		setEditingIndex(null);
 	};
 
@@ -61,19 +52,19 @@ export default function HistoryList({ sims, setSimHistory }: HistoryListProps) {
 	};
 
 	const handleDeleteClick = (index: number) => {
-		const updatedSims = [...sortedSims];
+		const updatedSims = [...simHistory];
 		updatedSims.splice(index, 1);
 		setSimHistory(updatedSims);
 	};
 
 	return (
 		<div className="sim-history-list">
-			{sortedSims.map((simulation, index) => (
+			{simHistory.map((simulation, index) => (
 				<div
 					key={index}
 					className={`sim-history-item ${index % 2 === 0 ? 'even' : 'odd'} ${
 						editingIndex === index ? 'editing' : ''
-					} ${removeLastBorder ? 'remove-border' : ''}`}>
+					}`}>
 					<div className="sim-history-item-text">
 						<div className="sim-history-item-name">
 							{editingIndex === index ? (
