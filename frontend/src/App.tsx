@@ -68,7 +68,7 @@ function App() {
 					<div className="sim-display-header">Simulation</div>
 					<div className="sim-canvas">
 						{activeData.length === 0 ? (
-							<div className="loading-text">Waiting for data...</div>
+							<div style={{ color: 'white' }}>Waiting for data...</div>
 						) : (
 							<>
 								{threeD ? (
@@ -106,7 +106,16 @@ function App() {
 					<div className="sim-history-header">History</div>
 					<HistoryList sims={simHistory} />
 					<div className="sim-info-header">Current Simulation Info</div>
-					<CurrentSimInfo sim={activeData} />
+					<div className="sim-info">
+						{activeData.length === 0 ? (
+							<div className="sim-info-loading">Waiting for data...</div>
+						) : (
+							<CurrentSimInfo
+								sim={activeData}
+								currentFrameIndex={currentFrameIndex}
+							/>
+						)}
+					</div>
 				</div>
 			</div>
 		</div>
