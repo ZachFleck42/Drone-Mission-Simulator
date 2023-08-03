@@ -155,9 +155,6 @@ function TargetMesh({ environment, targetRef }: TargetProps) {
 interface SimulationCanvasProps {
 	data: Simulation;
 	currentFrameIndex: number;
-	setCurrentFrameIndex: React.Dispatch<React.SetStateAction<number>>;
-	isPlaying: boolean;
-	setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function SimulationCanvas(props: SimulationCanvasProps) {

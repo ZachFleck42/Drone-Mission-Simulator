@@ -74,9 +74,6 @@ function App() {
 									<SimulationCanvas
 										data={activeData}
 										currentFrameIndex={currentFrameIndex}
-										setCurrentFrameIndex={setCurrentFrameIndex}
-										isPlaying={isPlaying}
-										setIsPlaying={setIsPlaying}
 									/>
 								) : (
 									<GridDisplay

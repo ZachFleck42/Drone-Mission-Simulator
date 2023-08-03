@@ -127,7 +127,7 @@ html {
 .submit-inputs,
 .reset-inputs {
 	padding: 8px 12px;
-	margin-right: 10px;
+	margin-right: 8px;
 	border: none;
 	border-radius: 3px;
 	color: white;
@@ -164,14 +164,13 @@ html {
 
 .frame-controls {
 	position: absolute;
-	bottom: 0;
+	bottom: 12px;
 	left: 50%;
 	transform: translateX(-50%);
 	z-index: 1;
 }
 
 .frame-buttons {
-	margin-top: 10px;
 	display: flex;
 	align-items: center;
 }
