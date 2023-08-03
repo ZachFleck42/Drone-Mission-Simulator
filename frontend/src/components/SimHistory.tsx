@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import { SimulationHistory } from '../types/Simulation';
 
 interface HistoryListProps {
@@ -27,12 +28,19 @@ export default function HistoryList({ sims }: HistoryListProps) {
 		console.log(simulation.timestamp);
 	};
 
+	const [removeLastBorder, setRemoveLastBorder] = useState(false);
+	useEffect(() => {
+		setRemoveLastBorder(sims.length > 5);
+	}, [sims]);
+
 	return (
-		<div className="sim-history-container">
+		<div className={'sim-history-container'}>
 			{sortedSims.map((simulation, index) => (
 				<div
 					key={index}
-					className={`sim-history-item ${index % 2 === 0 ? 'even' : 'odd'}`}
+					className={`sim-history-item ${index % 2 === 0 ? 'even' : 'odd'} ${
+						removeLastBorder ? 'remove-border' : ''
+					}`}
 					onClick={() => handleSimulationClick(simulation)}>
 					<div className="sim-history-item-text">
 						<div className="sim-history-item-name">

@@ -59,9 +59,9 @@ html {
 	margin-bottom: 12px;
 }
 
-/* .sim-history-item:last-child {
+.sim-history-item:last-child.remove-border {
 	border-bottom: none;
-} */
+}
 
 .even {
 	background-color: #f5f5f5;

@@ -41,7 +41,7 @@ function App() {
 		<div className="App">
 			<div className="simulator">
 				<div className="sim-params">
-					<div className="sim-params-header">Simulation Parameters</div>
+					<div className="sim-params-header">Parameters</div>
 					<div className="sim-params-inputs">
 						<ParamInputs api={API} onServerResponse={handleServerResponse} />
 					</div>
@@ -104,7 +104,7 @@ function App() {
 					</div>
 				</div>
 				<div className="sim-history">
-					<div className="sim-history-header">Simulation History</div>
+					<div className="sim-history-header">History</div>
 					<HistoryList sims={simHistory} />
 					<div className="current-sim-info-header">Current Simulation Info</div>
 					<div className="current-sim-info" />
