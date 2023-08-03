@@ -58,6 +58,13 @@ html {
 	padding: 8px 0px 8px 12px;
 }
 
+.sim-history-item-edit-field {
+	width: 84%;
+	height: 16px;
+	padding: none;
+	margin: none;
+}
+
 .sim-history-item-name {
 	margin-bottom: 12px;
 }
@@ -204,6 +211,9 @@ html {
 }
 
 .edit-icon {
+	margin-left: 24px;
+	margin-right: 12px;
+	margin-top: 5px;
 	width: 23px;
 	height: 23px;
 }
