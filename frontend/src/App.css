@@ -75,8 +75,8 @@ html {
 
 .sim-param-tooltip-icon {
 	margin-left: 8px;
-	width: 23px;
-	height: 23px;
+	width: 24px;
+	height: 24px;
 }
 
 .sim-params-buttons button:disabled {
@@ -112,7 +112,7 @@ html {
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
-	margin: 12px 43px 0px 16px;
+	margin: 12px 43px 0 16px;
 }
 
 .sim-settings-toggle-item {
@@ -217,6 +217,51 @@ html {
 	display: flex;
 	align-items: center;
 	border-bottom: 1px solid black;
+	height: 60px;
+}
+
+.sim-history-item-text {
+	margin: 8px 0 0 12px;
+	width: 160px;
+	overflow-x: hidden;
+}
+
+.sim-history-item-name {
+	height: 24px;
+}
+
+.sim-history-item-time {
+	height: 24px;
+	color: #737373;
+}
+
+.sim-history-item-edit-name {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 64px;
+	height: 100%;
+}
+
+.sim-history-item-edit-icon {
+	width: 24px;
+	height: 24px;
+}
+
+.sim-history-item-name-edit-field {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	width: 90%;
+	height: 22px;
+}
+
+.sim-history-item-edit-save {
+}
+
+.sim-history-item-delete-icon {
+	width: 23px;
+	height: 23px;
 }
 
 .sim-history-item.even {
@@ -229,32 +274,6 @@ html {
 
 .sim-history-item:last-child.remove-border {
 	border-bottom: none;
-}
-
-.sim-history-item-text {
-	padding: 8px 0px 8px 12px;
-}
-
-.sim-history-item-name {
-	margin-bottom: 12px;
-}
-
-.sim-history-item-name-edit-field {
-	margin: none;
-	padding: none;
-	width: 84%;
-	height: 16px;
-}
-
-.sim-history-item-edit-icon {
-	margin: 5px 12px 0px 24px;
-	width: 23px;
-	height: 23px;
-}
-
-.sim-history-item-delete-icon {
-	width: 23px;
-	height: 23px;
 }
 
 .sim-info-container {
