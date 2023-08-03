@@ -1,9 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SimulationHistory } from '../types/Simulation';
-
-interface HistoryListProps {
-	sims: SimulationHistory[];
-}
+import editSVG from '../assets/edit.svg';
 
 function formatTimestamp(timestamp: string): string {
 	const date = new Date(Number(timestamp));
@@ -15,8 +12,12 @@ function formatTimestamp(timestamp: string): string {
 	const minutes = String(date.getMinutes()).padStart(2, '0');
 	const seconds = String(date.getSeconds()).padStart(2, '0');
 
-	const formattedTimestamp = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
+	const formattedTimestamp = `${year}/${month}/${day} - ${hours}:${minutes}:${seconds}`;
 	return formattedTimestamp;
+}
+
+interface HistoryListProps {
+	sims: SimulationHistory[];
 }
 
 export default function HistoryList({ sims }: HistoryListProps) {
@@ -33,21 +34,63 @@ export default function HistoryList({ sims }: HistoryListProps) {
 		setRemoveLastBorder(sims.length > 5);
 	}, [sims]);
 
+	// Add isEditing state for each item
+	const [editingIndex, setEditingIndex] = useState<number | null>(null);
+	const [editedName, setEditedName] = useState<string>('');
+
+	const handleEditClick = (index: number) => {
+		setEditingIndex(index);
+		setEditedName(sortedSims[index].name);
+	};
+
+	const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setEditedName(event.target.value);
+	};
+
+	const handleNameSubmit = (index: number) => {
+		const updatedSims = [...sortedSims];
+		updatedSims[index].name = editedName;
+		setEditingIndex(null);
+	};
+
 	return (
-		<div className={'sim-history-list'}>
+		<div
+			className={`sim-history-container ${
+				removeLastBorder ? 'remove-border' : ''
+			}`}>
 			{sortedSims.map((simulation, index) => (
 				<div
 					key={index}
 					className={`sim-history-item ${index % 2 === 0 ? 'even' : 'odd'} ${
-						removeLastBorder ? 'remove-border' : ''
-					}`}
-					onClick={() => handleSimulationClick(simulation)}>
-					<div className="sim-history-item-text">
+						editingIndex === index ? 'editing' : ''
+					}`}>
+					<div className="sim-history-item-content">
 						<div className="sim-history-item-name">
-							{simulation.name ? simulation.name : 'No name'}
+							{editingIndex === index ? (
+								<input
+									type="text"
+									value={editedName}
+									onChange={handleNameChange}
+								/>
+							) : simulation.name ? (
+								simulation.name
+							) : (
+								'No name'
+							)}
 						</div>
 						<div className="sim-history-item-time">
 							{formatTimestamp(simulation.timestamp)}
+						</div>
+						<div className="sim-history-item-edit">
+							{editingIndex === index ? (
+								<button onClick={() => handleNameSubmit(index)}>Save</button>
+							) : (
+								<img
+									src={editSVG}
+									className="edit-icon"
+									onClick={() => handleEditClick(index)}
+								/>
+							)}
 						</div>
 					</div>
 				</div>
