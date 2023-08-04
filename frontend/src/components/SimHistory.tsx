@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Simulation, SimulationHistory } from '../types/Simulation';
 import editSVG from '../assets/edit.svg';
 import trashSVG from '../assets/delete.svg';
@@ -39,6 +39,11 @@ export default function HistoryList({
 	const [editingIndex, setEditingIndex] = useState<number | null>(null);
 	const [editedName, setEditedName] = useState<string>('');
 	const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+	const [removeLastBorder, setRemoveLastBorder] = useState(false);
+
+	useEffect(() => {
+		setRemoveLastBorder(simHistory.length > 5);
+	}, [simHistory]);
 
 	const handleEditClick = (index: number) => {
 		setEditingIndex(index);
@@ -49,17 +54,17 @@ export default function HistoryList({
 		setEditedName(event.target.value);
 	};
 
+	const handleNameKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+		if (event.key === 'Enter' && editingIndex !== null) {
+			handleNameSubmit(editingIndex);
+		}
+	};
+
 	const handleNameSubmit = (index: number) => {
 		const updatedSims = [...simHistory];
 		updatedSims[index].name = editedName;
 		setSimHistory(updatedSims);
 		setEditingIndex(null);
-	};
-
-	const handleNameKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-		if (event.key === 'Enter' && editingIndex !== null) {
-			handleNameSubmit(editingIndex);
-		}
 	};
 
 	const handleDeleteClick = (index: number) => {
@@ -85,7 +90,9 @@ export default function HistoryList({
 					key={index}
 					className={`sim-history-item ${index % 2 === 0 ? 'even' : 'odd'} ${
 						editingIndex === index ? 'editing' : ''
-					} ${expandedIndex === index ? 'expanded' : ''}`}>
+					} ${expandedIndex === index ? 'expanded' : ''}${
+						removeLastBorder ? 'remove-border' : ''
+					}`}>
 					<div className="sim-history-item-text">
 						<div className="sim-history-item-name">
 							{editingIndex === index ? (
