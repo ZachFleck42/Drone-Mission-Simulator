@@ -1,6 +1,6 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import { Simulation, SimulationHistory } from './types/Simulation';
+import { Simulation } from './types/Simulation';
 import ParamInputs from './components/ParamInputs';
 import GridDisplay from './components/GridDisplay';
 import SimulationRender from './components/WebGL/SimulationScene';
@@ -14,10 +14,11 @@ const API = 'http://127.0.0.1:8080/sim';
 function App() {
 	const [activeData, setActiveData] = useState<Simulation>({
 		id: '',
+		name: '',
 		timestamp: 0,
 		frames: [],
 	});
-	const [simHistory, setSimHistory] = useState<SimulationHistory[]>([]);
+	const [simHistory, setSimHistory] = useState<Simulation[]>([]);
 	const [currentFrameIndex, setCurrentFrameIndex] = useState<number>(0);
 	const [isPlaying, setIsPlaying] = useState<boolean>(false);
 	const [animated, setAnimated] = useState<boolean>(false);
@@ -28,14 +29,7 @@ function App() {
 	const [unknownTiles, setUnknownTiles] = useState<boolean>(false);
 
 	const handleServerResponse = (responseData: Simulation) => {
-		const newHistoryEntry = {
-			name: '',
-			timestamp: Date.now().toString(),
-			simulation: responseData,
-		};
-
-		setSimHistory((oldData) => [newHistoryEntry, ...oldData]);
-
+		setSimHistory((oldData) => [responseData, ...oldData]);
 		setActiveData(responseData);
 		setCurrentFrameIndex(0);
 		setIsPlaying(false);
@@ -43,14 +37,15 @@ function App() {
 
 	useEffect(() => {
 		const sortedHistory = [...simHistory].sort(
-			(a, b) => Number(b.simulation.timestamp) - Number(a.simulation.timestamp),
+			(a, b) => Number(b.timestamp) - Number(a.timestamp),
 		);
 
 		if (sortedHistory.length > 0) {
-			setActiveData(sortedHistory[0].simulation);
+			setActiveData(sortedHistory[0]);
 		} else {
 			setActiveData({
 				id: '',
+				name: '',
 				timestamp: 0,
 				frames: [],
 			});

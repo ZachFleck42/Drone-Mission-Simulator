@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Simulation, SimulationHistory } from '../types/Simulation';
+import { Simulation } from '../types/Simulation';
 import editSVG from '../assets/icons/edit.svg';
 import saveSVG from '../assets/icons/save.svg';
 import trashSVG from '../assets/icons/delete.svg';
@@ -7,8 +7,8 @@ import rightSVG from '../assets/icons/right.svg';
 import downSVG from '../assets/icons/down.svg';
 
 interface HistoryListProps {
-	simHistory: SimulationHistory[];
-	setSimHistory: React.Dispatch<React.SetStateAction<SimulationHistory[]>>;
+	simHistory: Simulation[];
+	setSimHistory: React.Dispatch<React.SetStateAction<Simulation[]>>;
 	activeData: Simulation;
 	setActiveData: React.Dispatch<React.SetStateAction<Simulation>>;
 	setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
@@ -83,14 +83,14 @@ export default function HistoryList({
 		setSimHistory(updatedSims);
 		setEditingIndex(null);
 
-		if (activeData === deletedSimulation.simulation) {
+		if (activeData === deletedSimulation) {
 			setCurrentFrameIndex(0);
 			setIsPlaying(false);
 		}
 	};
 
 	const handleDoubleClick = (index: number) => {
-		setActiveData(simHistory[index].simulation);
+		setActiveData(simHistory[index]);
 	};
 
 	const handleExpandClick = (index: number) => {
@@ -109,7 +109,7 @@ export default function HistoryList({
 					${index % 2 === 0 ? 'even' : 'odd'}
 					${editingIndex === index ? 'editing' : ''}
 					${expandedIndex === index ? 'expanded' : ''}
-					${activeData.id === entry.simulation.id ? 'active' : ''}
+					${activeData.id === entry.id ? 'active' : ''}
 					${removeLastBorder ? 'remove-border' : ''}`}>
 					<div className="sim-history-item-content">
 						<div className="sim-history-item-text">
@@ -130,7 +130,7 @@ export default function HistoryList({
 								)}
 							</div>
 							<div className="sim-history-item-time">
-								{formatTimestamp(entry.simulation.timestamp)}
+								{formatTimestamp(entry.timestamp)}
 							</div>
 						</div>
 						<div className="sim-history-item-edit-name">
@@ -169,7 +169,7 @@ export default function HistoryList({
 								Terrain grid size:
 							</div>
 							<div className="sim-history-expanded-item-value">
-								{entry.simulation.frames[0].environment.terrain.size}
+								{entry.frames[0].environment.terrain.size}
 							</div>
 						</div>
 						<div className="sim-history-expanded-item">
@@ -177,7 +177,7 @@ export default function HistoryList({
 								Terrain hostile rate:
 							</div>
 							<div className="sim-history-expanded-item-value">
-								{entry.simulation.frames[0].environment.terrain.hostile_rate}
+								{entry.frames[0].environment.terrain.hostile_rate}
 							</div>
 						</div>
 						<div className="sim-history-expanded-item">
@@ -185,7 +185,7 @@ export default function HistoryList({
 								Target move rate:
 							</div>
 							<div className="sim-history-expanded-item-value">
-								{entry.simulation.frames[0].environment.target.move_rate}
+								{entry.frames[0].environment.target.move_rate}
 							</div>
 						</div>
 						<div className="sim-history-expanded-item">
@@ -193,7 +193,7 @@ export default function HistoryList({
 								Drone move range:
 							</div>
 							<div className="sim-history-expanded-item-value">
-								{entry.simulation.frames[0].drone.move_range}
+								{entry.frames[0].drone.move_range}
 							</div>
 						</div>
 						<div className="sim-history-expanded-item">
@@ -201,7 +201,7 @@ export default function HistoryList({
 								Drone visiblity range:
 							</div>
 							<div className="sim-history-expanded-item-value">
-								{entry.simulation.frames[0].drone.visibility_range}
+								{entry.frames[0].drone.visibility_range}
 							</div>
 						</div>
 						<div className="sim-history-expanded-item">
@@ -209,7 +209,7 @@ export default function HistoryList({
 								Simulation ticks:
 							</div>
 							<div className="sim-history-expanded-item-value">
-								{entry.simulation.frames.length - 1}
+								{entry.frames.length - 1}
 							</div>
 						</div>
 					</div>

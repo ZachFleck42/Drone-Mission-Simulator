@@ -54,11 +54,7 @@ export interface Frame {
 
 export interface Simulation {
 	id: string;
+	name: string;
 	timestamp: number;
 	frames: Frame[];
-}
-
-export interface SimulationHistory {
-	name: string;
-	simulation: Simulation;
 }
