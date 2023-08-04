@@ -41,7 +41,7 @@ export default function SimSettings({
 				/>
 			</div>
 			<div className="sim-settings-toggle-item">
-				<p>Enable animation:</p>
+				<p>'Smooth' animation:</p>
 				<Toggle
 					icons={false}
 					defaultChecked={animated}

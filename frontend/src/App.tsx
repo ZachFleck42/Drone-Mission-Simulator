@@ -20,7 +20,7 @@ function App() {
 	const [simHistory, setSimHistory] = useState<SimulationHistory[]>([]);
 	const [currentFrameIndex, setCurrentFrameIndex] = useState<number>(0);
 	const [isPlaying, setIsPlaying] = useState<boolean>(false);
-	const [animated, setAnimated] = useState<boolean>(true);
+	const [animated, setAnimated] = useState<boolean>(false);
 	const [threeD, setThreeD] = useState<boolean>(true);
 	const [visTiles, setVisTiles] = useState<boolean>(true);
 	const [hostileTiles, setHostileTiles] = useState<boolean>(true);
