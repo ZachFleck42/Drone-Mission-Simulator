@@ -134,9 +134,9 @@ html {
 
 .sim-display-container {
 	display: flex;
+	position: relative;
 	justify-content: center;
 	align-items: center;
-	position: relative;
 	background-color: black;
 	height: 100%;
 	max-height: 600px;
@@ -249,6 +249,12 @@ html {
 }
 
 .sim-history-item-edit-icon {
+	width: 24px;
+	height: 24px;
+	cursor: pointer;
+}
+
+.sim-history-item-save-icon {
 	width: 24px;
 	height: 24px;
 	cursor: pointer;

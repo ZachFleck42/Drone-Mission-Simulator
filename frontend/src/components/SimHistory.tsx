@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Simulation, SimulationHistory } from '../types/Simulation';
 import editSVG from '../assets/edit.svg';
+import saveSVG from '../assets/save.svg';
 import trashSVG from '../assets/delete.svg';
 import rightSVG from '../assets/right.svg';
 import downSVG from '../assets/down.svg';
@@ -63,6 +64,10 @@ export default function HistoryList({
 		if (event.key === 'Enter' && editingIndex !== null) {
 			handleNameSubmit(editingIndex);
 		}
+
+		if (event.key === 'Escape' && editingIndex !== null) {
+			setEditingIndex(null);
+		}
 	};
 
 	const handleNameSubmit = (index: number) => {
@@ -123,11 +128,11 @@ export default function HistoryList({
 						</div>
 						<div className="sim-history-item-edit-name">
 							{editingIndex === index ? (
-								<button
-									className="sim-history-item-edit-save"
-									onClick={() => handleNameSubmit(index)}>
-									Save
-								</button>
+								<img
+									src={saveSVG}
+									className="sim-history-item-save-icon"
+									onClick={() => handleNameSubmit(index)}
+								/>
 							) : (
 								<img
 									src={editSVG}
