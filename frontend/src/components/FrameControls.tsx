@@ -1,6 +1,9 @@
 import { useEffect } from 'react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import playSVG from '../assets/icons/play.svg';
+import pauseSVG from '../assets/icons/pause.svg';
+import replaySVG from '../assets/icons/replay.svg';
 
 interface FrameControlsProps {
 	maxFrames: number;
@@ -70,12 +73,25 @@ export default function FrameControls({
 					disabled={isPlaying || currentFrameIndex === 0}>
 					&lt;
 				</button>
-				<button onClick={togglePlayPause}>
-					{currentFrameIndex === frameLimit
-						? 'Replay'
-						: isPlaying
-						? 'Pause'
-						: 'Play'}
+				<button
+					className="sim-frame-controls-button-play"
+					onClick={togglePlayPause}>
+					{currentFrameIndex === frameLimit ? (
+						<img
+							className="sim-frame-controls-button-replay-icon"
+							src={replaySVG}
+						/>
+					) : isPlaying ? (
+						<img
+							className="sim-frame-controls-button-pause-icon"
+							src={pauseSVG}
+						/>
+					) : (
+						<img
+							className="sim-frame-controls-button-play-icon"
+							src={playSVG}
+						/>
+					)}
 				</button>
 
 				<button

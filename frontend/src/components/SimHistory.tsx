@@ -155,7 +155,7 @@ export default function HistoryList({
 								className="sim-history-item-delete-icon"
 							/>
 						</div>
-						<div className="sim-history-expand">
+						<div className="sim-history-item-expand">
 							<img
 								src={expandedIndex === index ? downSVG : rightSVG}
 								onClick={() => handleExpandClick(index)}

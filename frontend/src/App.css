@@ -192,18 +192,32 @@ html {
 	border-radius: 5px;
 	padding: 10px 20px 10px 10px;
 	background: rgba(0, 0, 0, 0.5);
-	width: 400px;
+	width: 500px;
 }
 
 .sim-frame-controls-buttons {
 	display: flex;
-	margin-right: 20px;
 	gap: 3px;
+	margin-right: 10px;
 	height: 20px;
+	width: 240px;
 }
 
 .sim-frame-controls-buttons button {
 	cursor: pointer;
+}
+
+.sim-frame-controls-button-play-icon,
+.sim-frame-controls-button-pause-icon,
+.sim-frame-controls-button-replay-icon {
+	width: 18px;
+	height: 18px;
+}
+
+.sim-frame-controls-button-play {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .sim-frame-controls-button-single-frame {
@@ -297,7 +311,7 @@ html {
 	height: 100%;
 }
 
-.sim-history-expand {
+.sim-history-item-expand {
 	display: flex;
 	justify-content: center;
 	align-items: center;
