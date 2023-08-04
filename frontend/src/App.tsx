@@ -87,7 +87,7 @@ function App() {
 					<div className="sim-display-header">Simulation</div>
 					<div className="sim-display-container">
 						{simHistory.length === 0 ? (
-							<div style={{ color: 'white' }}>Waiting for data...</div>
+							<div className="sim-display-loading">Waiting for data...</div>
 						) : (
 							<>
 								{threeD ? (
