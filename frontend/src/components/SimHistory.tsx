@@ -88,7 +88,7 @@ export default function HistoryList({
 			{simHistory.map((simulation, index) => (
 				<div
 					key={index}
-					// style={{ height: expandedIndex === index ? '100px' : '60px' }}
+					style={{ height: expandedIndex === index ? '200px' : '58px' }}
 					className={`sim-history-item ${index % 2 === 0 ? 'even' : 'odd'} ${
 						editingIndex === index ? 'editing' : ''
 					} ${expandedIndex === index ? 'expanded' : ''}${
@@ -145,7 +145,54 @@ export default function HistoryList({
 								className="sim-history-item-expand-icon"
 							/>
 						</div>
-						{/* <div className="test">Hi</div> */}
+					</div>
+					<div className="sim-history-item-expanded">
+						<div className="sim-history-expanded-item">
+							<div className="sim-history-expanded-item-key">
+								Terrain grid size:
+							</div>
+							<div className="sim-history-expanded-item-value">
+								{simulation.data[0].environment.terrain.size}
+							</div>
+						</div>
+						<div className="sim-history-expanded-item">
+							<div className="sim-history-expanded-item-key">
+								Terrain hostile rate:
+							</div>
+							<div className="sim-history-expanded-item-value"></div>
+						</div>
+						<div className="sim-history-expanded-item">
+							<div className="sim-history-expanded-item-key">
+								Target move rate:
+							</div>
+							<div className="sim-history-expanded-item-value">
+								{simulation.data[0].environment.target.move_rate}
+							</div>
+						</div>
+						<div className="sim-history-expanded-item">
+							<div className="sim-history-expanded-item-key">
+								Drone move range:
+							</div>
+							<div className="sim-history-expanded-item-value">
+								{simulation.data[0].drone.move_range}
+							</div>
+						</div>
+						<div className="sim-history-expanded-item">
+							<div className="sim-history-expanded-item-key">
+								Drone visiblity range:
+							</div>
+							<div className="sim-history-expanded-item-value">
+								{simulation.data[0].drone.visibility_range}
+							</div>
+						</div>
+						<div className="sim-history-expanded-item">
+							<div className="sim-history-expanded-item-key">
+								Simulation ticks:
+							</div>
+							<div className="sim-history-expanded-item-value">
+								{simulation.data.length - 1}
+							</div>
+						</div>
 					</div>
 				</div>
 			))}
