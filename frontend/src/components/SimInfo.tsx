@@ -1,16 +1,16 @@
 import { Simulation } from '../types/Simulation';
 
 interface CurrentSimInfoProps {
-	sim: Simulation;
+	simulation: Simulation;
 	currentFrameIndex: number;
 }
 
 export default function CurrentSimInfo({
-	sim,
+	simulation,
 	currentFrameIndex,
 }: CurrentSimInfoProps) {
-	const max_frames = sim.length - 1;
-	const frame = sim[currentFrameIndex];
+	const max_frames = simulation.frames.length - 1;
+	const frame = simulation.frames[currentFrameIndex];
 
 	const [target_x, target_y] = [
 		frame.environment.target.x,

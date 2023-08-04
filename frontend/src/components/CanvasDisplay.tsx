@@ -216,7 +216,7 @@ function TargetMesh({ environment, targetRef, showAnimation }: TargetProps) {
 }
 
 interface SimulationCanvasProps {
-	data: Simulation;
+	simulation: Simulation;
 	currentFrameIndex: number;
 	showAnimation: boolean;
 	showVisTiles: boolean;
@@ -226,9 +226,9 @@ interface SimulationCanvasProps {
 }
 
 function SimulationCanvas(props: SimulationCanvasProps) {
-	const { data, currentFrameIndex } = props;
+	const { simulation, currentFrameIndex } = props;
 
-	const grid_size = data[0].environment.terrain.size;
+	const grid_size = simulation.frames[0].environment.terrain.size;
 	const [grid_center_x, grid_center_z] = [
 		(grid_size - 1) / 2,
 		-(grid_size - 1) / 2,
@@ -265,30 +265,30 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 			/>
 			<group name="sim-objects">
 				<TerrainTiles
-					environment={data[currentFrameIndex].environment}
+					environment={simulation.frames[currentFrameIndex].environment}
 					tileSize={1}
 					visible={props.showHostileTiles}
 				/>
 				<TargetMesh
 					targetRef={targetRef}
-					environment={data[currentFrameIndex].environment}
+					environment={simulation.frames[currentFrameIndex].environment}
 					showAnimation={props.showAnimation}
 				/>
 				<DroneMesh
 					droneRef={droneRef}
-					drone={data[currentFrameIndex].drone}
+					drone={simulation.frames[currentFrameIndex].drone}
 					showAnimation={props.showAnimation}
 				/>
 				<VisibleTiles
-					tiles={data[currentFrameIndex].drone.visible_tiles}
+					tiles={simulation.frames[currentFrameIndex].drone.visible_tiles}
 					visible={props.showVisTiles}
 				/>
 				<PathTiles
-					tiles={data[currentFrameIndex].drone.path_history}
+					tiles={simulation.frames[currentFrameIndex].drone.path_history}
 					visible={props.showPathHistory}
 				/>
 				<UnknownTiles
-					tiles={data[currentFrameIndex].drone.unknown_tiles}
+					tiles={simulation.frames[currentFrameIndex].drone.unknown_tiles}
 					visible={props.showUnknownTiles}
 				/>
 			</group>

@@ -1,25 +1,27 @@
 import { Simulation } from '../types/Simulation';
 
 function GridDisplay({
-	data,
+	simulation,
 	currentFrameIndex,
 }: {
-	data: Simulation;
+	simulation: Simulation;
 	currentFrameIndex: number;
 }) {
-	const terrainGrids = data.map((item) => item.environment.terrain.grid);
+	const terrainGrids = simulation.frames.map(
+		(item) => item.environment.terrain.grid,
+	);
 
 	const targetPosition: { x: number; y: number } = {
-		x: data[currentFrameIndex].environment.target.x,
-		y: data[currentFrameIndex].environment.target.y,
+		x: simulation.frames[currentFrameIndex].environment.target.x,
+		y: simulation.frames[currentFrameIndex].environment.target.y,
 	};
 
 	const dronePosition: { x: number; y: number } = {
-		x: data[currentFrameIndex].drone.x,
-		y: data[currentFrameIndex].drone.y,
+		x: simulation.frames[currentFrameIndex].drone.x,
+		y: simulation.frames[currentFrameIndex].drone.y,
 	};
 	const visibleTiles: [number, number][] =
-		data[currentFrameIndex].drone.visible_tiles;
+		simulation.frames[currentFrameIndex].drone.visible_tiles;
 
 	const currentGrid = terrainGrids[currentFrameIndex];
 

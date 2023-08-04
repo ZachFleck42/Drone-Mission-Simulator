@@ -1,4 +1,5 @@
 use rand::Rng;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 /// Returns a copy of a random element in the provided data structure.
 /// Structure must implement the 'Clone' trait.
@@ -45,4 +46,15 @@ pub fn get_distance_to_tile(
     let dx = origin_x as f64 - target_x as f64;
     let dy = origin_y as f64 - target_y as f64;
     (dx * dx + dy * dy).sqrt()
+}
+
+pub fn get_timestamp() -> u64 {
+    let current_time = SystemTime::now();
+    let since_epoch = current_time
+        .duration_since(UNIX_EPOCH)
+        .expect("Time went backwards");
+
+    let timestamp = since_epoch.as_secs() * 1000 + u64::from(since_epoch.subsec_millis());
+
+    timestamp
 }

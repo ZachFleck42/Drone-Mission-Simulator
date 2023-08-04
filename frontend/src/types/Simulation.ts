@@ -52,10 +52,13 @@ export interface Frame {
 	drone: Drone;
 }
 
-export type Simulation = Frame[];
+export interface Simulation {
+	id: string;
+	timestamp: number;
+	frames: Frame[];
+}
 
 export interface SimulationHistory {
 	name: string;
-	timestamp: string;
-	data: Simulation;
+	simulation: Simulation;
 }

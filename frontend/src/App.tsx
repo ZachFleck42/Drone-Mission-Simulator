@@ -12,7 +12,11 @@ import CurrentSimInfo from './components/SimInfo';
 const API = 'http://127.0.0.1:8080/sim';
 
 function App() {
-	const [activeData, setActiveData] = useState<Simulation>([]);
+	const [activeData, setActiveData] = useState<Simulation>({
+		id: '',
+		timestamp: 0,
+		frames: [],
+	});
 	const [simHistory, setSimHistory] = useState<SimulationHistory[]>([]);
 	const [currentFrameIndex, setCurrentFrameIndex] = useState<number>(0);
 	const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -27,7 +31,7 @@ function App() {
 		const newHistoryEntry = {
 			name: '',
 			timestamp: Date.now().toString(),
-			data: responseData,
+			simulation: responseData,
 		};
 
 		setSimHistory((oldData) => [newHistoryEntry, ...oldData]);
@@ -39,13 +43,17 @@ function App() {
 
 	useEffect(() => {
 		const sortedHistory = [...simHistory].sort(
-			(a, b) => Number(b.timestamp) - Number(a.timestamp),
+			(a, b) => Number(b.simulation.timestamp) - Number(a.simulation.timestamp),
 		);
 
 		if (sortedHistory.length > 0) {
-			setActiveData(sortedHistory[0].data);
+			setActiveData(sortedHistory[0].simulation);
 		} else {
-			setActiveData([]);
+			setActiveData({
+				id: '',
+				timestamp: 0,
+				frames: [],
+			});
 		}
 	}, [simHistory]);
 
@@ -78,13 +86,13 @@ function App() {
 				<div className="sim-display">
 					<div className="sim-display-header">Simulation</div>
 					<div className="sim-display-container">
-						{activeData.length === 0 ? (
+						{simHistory.length === 0 ? (
 							<div style={{ color: 'white' }}>Waiting for data...</div>
 						) : (
 							<>
 								{threeD ? (
 									<SimulationCanvas
-										data={activeData}
+										simulation={activeData}
 										currentFrameIndex={currentFrameIndex}
 										showAnimation={animated}
 										showVisTiles={visTiles}
@@ -94,17 +102,17 @@ function App() {
 									/>
 								) : (
 									<GridDisplay
-										data={activeData}
+										simulation={activeData}
 										currentFrameIndex={currentFrameIndex}
 									/>
 								)}
 							</>
 						)}
-						{activeData.length === 0 ? (
+						{simHistory.length === 0 ? (
 							''
 						) : (
 							<FrameControls
-								maxFrames={activeData.length}
+								maxFrames={activeData.frames.length}
 								currentFrameIndex={currentFrameIndex}
 								setCurrentFrameIndex={setCurrentFrameIndex}
 								isPlaying={isPlaying}
@@ -116,7 +124,7 @@ function App() {
 				<div className="sim-history">
 					<div className="sim-history-header">History</div>
 					<div className="sim-history-container">
-						{activeData.length === 0 ? (
+						{simHistory.length === 0 ? (
 							<div className="sim-history-loading">Waiting for data...</div>
 						) : (
 							<HistoryList
@@ -131,11 +139,11 @@ function App() {
 					</div>
 					<div className="sim-info-header">Current Simulation Info</div>
 					<div className="sim-info-container">
-						{activeData.length === 0 ? (
+						{simHistory.length === 0 ? (
 							<div className="sim-info-loading">Waiting for data...</div>
 						) : (
 							<CurrentSimInfo
-								sim={activeData}
+								simulation={activeData}
 								currentFrameIndex={currentFrameIndex}
 							/>
 						)}

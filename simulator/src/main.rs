@@ -1,8 +1,11 @@
 #[allow(dead_code)]
 mod simulator;
+use simulator::simulation::Frame;
+use simulator::utils::get_timestamp;
 
 use actix_cors::Cors;
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use nanoid::nanoid;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -13,6 +16,13 @@ struct SimulationParameters {
     drone_move_range: usize,
     drone_vis_range: usize,
     sim_max_frames: usize,
+}
+
+#[derive(Serialize)]
+struct APIResponse {
+    id: String,
+    timestamp: u64,
+    frames: Vec<Frame>,
 }
 
 #[get("/hello")]
@@ -48,8 +58,13 @@ async fn sim(simulation_request: web::Json<SimulationParameters>) -> impl Respon
         Some(simulation_request.sim_max_frames),
     );
 
-    let simulation_frames = sim.run();
-    HttpResponse::Ok().json(simulation_frames)
+    let response = APIResponse {
+        id: nanoid!(),
+        timestamp: get_timestamp(),
+        frames: sim.run(),
+    };
+
+    HttpResponse::Ok().json(response)
 }
 
 #[actix_web::main]

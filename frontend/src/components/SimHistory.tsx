@@ -15,8 +15,8 @@ interface HistoryListProps {
 	setCurrentFrameIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
-function formatTimestamp(timestamp: string): string {
-	const date = new Date(Number(timestamp));
+function formatTimestamp(timestamp: number): string {
+	const date = new Date(timestamp);
 
 	const year = date.getFullYear();
 	const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -83,7 +83,7 @@ export default function HistoryList({
 		setSimHistory(updatedSims);
 		setEditingIndex(null);
 
-		if (activeData === deletedSimulation.data) {
+		if (activeData === deletedSimulation.simulation) {
 			setCurrentFrameIndex(0);
 			setIsPlaying(false);
 		}
@@ -95,15 +95,16 @@ export default function HistoryList({
 
 	return (
 		<div className="sim-history-list">
-			{simHistory.map((simulation, index) => (
+			{simHistory.map((entry, index) => (
 				<div
 					key={index}
 					style={{ height: expandedIndex === index ? '200px' : '58px' }}
-					className={`sim-history-item ${index % 2 === 0 ? 'even' : 'odd'} ${
-						editingIndex === index ? 'editing' : ''
-					} ${expandedIndex === index ? 'expanded' : ''}${
-						removeLastBorder ? 'remove-border' : ''
-					}`}>
+					className={`
+					sim-history-item
+					${index % 2 === 0 ? 'even' : 'odd'}
+					${editingIndex === index ? 'editing' : ''}
+					${expandedIndex === index ? 'expanded' : ''}
+					${removeLastBorder ? 'remove-border' : ''}`}>
 					<div className="sim-history-item-content">
 						<div className="sim-history-item-text">
 							<div className="sim-history-item-name">
@@ -116,14 +117,14 @@ export default function HistoryList({
 										onKeyUp={handleNameKeyUp}
 										autoFocus
 									/>
-								) : simulation.name ? (
-									simulation.name
+								) : entry.name ? (
+									entry.name
 								) : (
 									'Unnamed Simulation'
 								)}
 							</div>
 							<div className="sim-history-item-time">
-								{formatTimestamp(simulation.timestamp)}
+								{formatTimestamp(entry.simulation.timestamp)}
 							</div>
 						</div>
 						<div className="sim-history-item-edit-name">
@@ -162,7 +163,7 @@ export default function HistoryList({
 								Terrain grid size:
 							</div>
 							<div className="sim-history-expanded-item-value">
-								{simulation.data[0].environment.terrain.size}
+								{entry.simulation.frames[0].environment.terrain.size}
 							</div>
 						</div>
 						<div className="sim-history-expanded-item">
@@ -170,7 +171,7 @@ export default function HistoryList({
 								Terrain hostile rate:
 							</div>
 							<div className="sim-history-expanded-item-value">
-								{simulation.data[0].environment.terrain.hostile_rate}
+								{entry.simulation.frames[0].environment.terrain.hostile_rate}
 							</div>
 						</div>
 						<div className="sim-history-expanded-item">
@@ -178,7 +179,7 @@ export default function HistoryList({
 								Target move rate:
 							</div>
 							<div className="sim-history-expanded-item-value">
-								{simulation.data[0].environment.target.move_rate}
+								{entry.simulation.frames[0].environment.target.move_rate}
 							</div>
 						</div>
 						<div className="sim-history-expanded-item">
@@ -186,7 +187,7 @@ export default function HistoryList({
 								Drone move range:
 							</div>
 							<div className="sim-history-expanded-item-value">
-								{simulation.data[0].drone.move_range}
+								{entry.simulation.frames[0].drone.move_range}
 							</div>
 						</div>
 						<div className="sim-history-expanded-item">
@@ -194,7 +195,7 @@ export default function HistoryList({
 								Drone visiblity range:
 							</div>
 							<div className="sim-history-expanded-item-value">
-								{simulation.data[0].drone.visibility_range}
+								{entry.simulation.frames[0].drone.visibility_range}
 							</div>
 						</div>
 						<div className="sim-history-expanded-item">
@@ -202,7 +203,7 @@ export default function HistoryList({
 								Simulation ticks:
 							</div>
 							<div className="sim-history-expanded-item-value">
-								{simulation.data.length - 1}
+								{entry.simulation.frames.length - 1}
 							</div>
 						</div>
 					</div>
