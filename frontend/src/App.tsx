@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Simulation, SimulationHistory } from './types/Simulation';
 import ParamInputs from './components/ParamInputs';
 import GridDisplay from './components/GridDisplay';
-import SimulationCanvas from './components/CanvasDisplay';
+import SimulationRender from './components/WebGL/SimulationScene';
 import FrameControls from './components/FrameControls';
 import HistoryList from './components/SimHistory';
 import SimSettings from './components/SimSettings';
@@ -91,7 +91,7 @@ function App() {
 						) : (
 							<>
 								{threeD ? (
-									<SimulationCanvas
+									<SimulationRender
 										simulation={activeData}
 										currentFrameIndex={currentFrameIndex}
 										showAnimation={animated}
