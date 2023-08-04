@@ -233,11 +233,13 @@ html {
 
 .sim-history-item-name {
 	height: 24px;
+	user-select: none;
 }
 
 .sim-history-item-time {
 	height: 24px;
 	color: #737373;
+	user-select: none;
 }
 
 .sim-history-item-edit-name {
@@ -248,16 +250,15 @@ html {
 	height: 100%;
 }
 
-.sim-history-item-edit-icon {
+.sim-history-item-edit-icon,
+.sim-history-item-save-icon,
+.sim-history-item-delete-icon,
+.sim-history-item-expand-icon,
+.sim-history-item-collapse-icon {
 	width: 24px;
 	height: 24px;
 	cursor: pointer;
-}
-
-.sim-history-item-save-icon {
-	width: 24px;
-	height: 24px;
-	cursor: pointer;
+	user-select: none;
 }
 
 .sim-history-item-name-edit-field {
@@ -268,21 +269,11 @@ html {
 	height: 22px;
 }
 
-.sim-history-item-edit-save {
-	cursor: pointer;
-}
-
 .sim-history-item-delete {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	height: 100%;
-}
-
-.sim-history-item-delete-icon {
-	width: 24px;
-	height: 24px;
-	cursor: pointer;
 }
 
 .sim-history-expand {
@@ -293,16 +284,8 @@ html {
 	height: 100%;
 }
 
-.sim-history-item-expand-icon {
-	width: 24px;
-	height: 24px;
-	cursor: pointer;
-}
-
-.sim-history-item-collapse-icon {
-	width: 24px;
-	height: 24px;
-	cursor: pointer;
+.sim-history-item.active {
+	background-color: #dbeafe !important;
 }
 
 .sim-history-item.even {

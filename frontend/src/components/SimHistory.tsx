@@ -89,6 +89,10 @@ export default function HistoryList({
 		}
 	};
 
+	const handleDoubleClick = (index: number) => {
+		setActiveData(simHistory[index].simulation);
+	};
+
 	const handleExpandClick = (index: number) => {
 		setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
 	};
@@ -99,11 +103,13 @@ export default function HistoryList({
 				<div
 					key={index}
 					style={{ height: expandedIndex === index ? '200px' : '58px' }}
+					onDoubleClick={() => handleDoubleClick(index)}
 					className={`
 					sim-history-item
 					${index % 2 === 0 ? 'even' : 'odd'}
 					${editingIndex === index ? 'editing' : ''}
 					${expandedIndex === index ? 'expanded' : ''}
+					${activeData.id === entry.simulation.id ? 'active' : ''}
 					${removeLastBorder ? 'remove-border' : ''}`}>
 					<div className="sim-history-item-content">
 						<div className="sim-history-item-text">
