@@ -189,6 +189,9 @@ html {
 	align-items: center;
 	transform: translateX(-50%);
 	z-index: 1;
+	border-radius: 5px;
+	padding: 10px 20px 10px 10px;
+	background: rgba(0, 0, 0, 0.5);
 	width: 400px;
 }
 
@@ -197,6 +200,10 @@ html {
 	margin-right: 20px;
 	gap: 3px;
 	height: 20px;
+}
+
+.sim-frame-controls-buttons button {
+	cursor: pointer;
 }
 
 .sim-frame-controls-button-single-frame {
@@ -371,4 +378,24 @@ html {
 
 .react-toggle--checked:hover:not(.react-toggle--disabled) .react-toggle-track {
 	background-color: #2563eb !important;
+}
+
+.rc-slider-track {
+	background-color: #60a5fa !important;
+}
+
+.rc-slider-handle {
+	border: solid 2px #96dbfa;
+}
+
+.rc-slider-handle-dragging.rc-slider-handle-dragging.rc-slider-handle-dragging {
+	box-shadow: none !important;
+}
+
+.rc-slider-handle:focus-visible {
+	box-shadow: none !important;
+}
+
+.rc-slider-handle:active {
+	box-shadow: none !important;
 }
