@@ -36,6 +36,7 @@ export interface Drone {
 	visibility_range: number;
 	status: string;
 	visible_tiles: [number, number][];
+	unknown_tiles: [number, number][];
 	path_history: [number, number][];
 	data: {
 		grid_size: number;

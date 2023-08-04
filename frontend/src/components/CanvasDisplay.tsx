@@ -104,6 +104,56 @@ function VisibleTiles({ visible, ...props }: VisibleTilesProps) {
 	);
 }
 
+interface PathTileProps {
+	tiles: [number, number][];
+	visible: boolean;
+}
+
+function PathTiles({ visible, ...props }: VisibleTilesProps) {
+	return (
+		<group name="path-tiles" visible={visible}>
+			{props.tiles.map((tile, index) => {
+				const [x, y] = tile;
+				const tilePosition: any = [x, 0.25, -y];
+				return (
+					<mesh
+						key={`path-tile-${index}`}
+						position={tilePosition}
+						receiveShadow>
+						<boxGeometry args={[1, 0.0001, 1]} />
+						<meshStandardMaterial color={'blue'} transparent opacity={0.2} />
+					</mesh>
+				);
+			})}
+		</group>
+	);
+}
+
+interface UnknownTilesProps {
+	tiles: [number, number][];
+	visible: boolean;
+}
+
+function UnknownTiles({ visible, ...props }: UnknownTilesProps) {
+	return (
+		<group name="unknown-tiles" visible={visible}>
+			{props.tiles.map((tile, index) => {
+				const [x, y] = tile;
+				const tilePosition: any = [x, 0.2, -y];
+				return (
+					<mesh
+						key={`unknown-tile-${index}`}
+						position={tilePosition}
+						receiveShadow>
+						<boxGeometry args={[1, 0.0001, 1]} />
+						<meshStandardMaterial color={'white'} transparent opacity={0.2} />
+					</mesh>
+				);
+			})}
+		</group>
+	);
+}
+
 interface DroneProps extends MeshProps {
 	drone: Drone;
 	droneRef: React.MutableRefObject<THREE.Mesh>;
@@ -172,7 +222,7 @@ interface SimulationCanvasProps {
 	showVisTiles: boolean;
 	showHostileTiles: boolean;
 	showPathHistory: boolean;
-	showUnrevealedTiles: boolean;
+	showUnknownTiles: boolean;
 }
 
 function SimulationCanvas(props: SimulationCanvasProps) {
@@ -232,6 +282,14 @@ function SimulationCanvas(props: SimulationCanvasProps) {
 				<VisibleTiles
 					tiles={data[currentFrameIndex].drone.visible_tiles}
 					visible={props.showVisTiles}
+				/>
+				<PathTiles
+					tiles={data[currentFrameIndex].drone.path_history}
+					visible={props.showPathHistory}
+				/>
+				<UnknownTiles
+					tiles={data[currentFrameIndex].drone.unknown_tiles}
+					visible={props.showUnknownTiles}
 				/>
 			</group>
 		</Canvas>

@@ -51,6 +51,7 @@ pub struct Drone {
     pub visibility_range: usize,
     pub status: Status,
     pub visible_tiles: Vec<(usize, usize)>,
+    pub unknown_tiles: Vec<(usize, usize)>,
     pub path_history: Vec<(usize, usize)>,
     pub data: EnvData,
     pub flags: Vec<Flags>,
@@ -93,6 +94,11 @@ impl Drone {
             start_y,
         ));
 
+        let grid_center = grid_size / 2;
+        let mut unknown_tiles =
+            get_surrounding_tiles(grid_size, grid_center + 1, grid_center, grid_center);
+        unknown_tiles.push((grid_center, grid_center));
+
         Drone {
             x: start_x,
             y: start_y,
@@ -100,6 +106,7 @@ impl Drone {
             visibility_range,
             status: Status::Searching,
             visible_tiles,
+            unknown_tiles,
             path_history: vec![(start_x, start_y)],
             data,
             flags: vec![Flags::MonitoringClockwise],
@@ -117,6 +124,8 @@ impl Drone {
             } else {
                 self.data.grid[x][y].hostile = Hostile::False;
             }
+
+            self.unknown_tiles = self.get_all_unrevealed_tiles();
 
             if x == environment.target.x && y == environment.target.y {
                 self.data.grid[x][y].content = TileContent::Target;

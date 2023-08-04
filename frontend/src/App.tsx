@@ -21,7 +21,7 @@ function App() {
 	const [visTiles, setVisTiles] = useState<boolean>(true);
 	const [hostileTiles, setHostileTiles] = useState<boolean>(true);
 	const [pathHistory, setPathHistory] = useState<boolean>(false);
-	const [unrevealedTiles, setUnrevealedTiles] = useState<boolean>(false);
+	const [unknownTiles, setUnknownTiles] = useState<boolean>(false);
 
 	const handleServerResponse = (responseData: Simulation) => {
 		const newHistoryEntry = {
@@ -70,8 +70,8 @@ function App() {
 							setHostileTiles={setHostileTiles}
 							pathHistory={pathHistory}
 							setPathHistory={setPathHistory}
-							unrevealedTiles={unrevealedTiles}
-							setUnrevealedTiles={setUnrevealedTiles}
+							unrevealedTiles={unknownTiles}
+							setUnrevealedTiles={setUnknownTiles}
 						/>
 					</div>
 				</div>
@@ -90,7 +90,7 @@ function App() {
 										showVisTiles={visTiles}
 										showHostileTiles={hostileTiles}
 										showPathHistory={pathHistory}
-										showUnrevealedTiles={unrevealedTiles}
+										showUnknownTiles={unknownTiles}
 									/>
 								) : (
 									<GridDisplay
