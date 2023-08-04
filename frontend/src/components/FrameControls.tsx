@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
 interface FrameControlsProps {
@@ -56,34 +57,46 @@ export default function FrameControls({
 
 	return (
 		<div className="sim-frame-controls">
-			<button
-				onClick={() => setCurrentFrameIndex(0)}
-				disabled={isPlaying || currentFrameIndex === 0}>
-				&lt; &lt;
-			</button>
-			<button
-				onClick={() => setCurrentFrameIndex((prevIndex) => prevIndex - 1)}
-				disabled={isPlaying || currentFrameIndex === 0}>
-				&lt;
-			</button>
-			<button onClick={togglePlayPause}>
-				{currentFrameIndex === frameLimit
-					? 'Replay'
-					: isPlaying
-					? 'Pause'
-					: 'Play'}
-			</button>
+			<div className="sim-frame-controls-buttons">
+				<button
+					className="sim-frame-controls-button-max-frame"
+					onClick={() => setCurrentFrameIndex(0)}
+					disabled={isPlaying || currentFrameIndex === 0}>
+					&lt;&lt;
+				</button>
+				<button
+					className="sim-frame-controls-button-single-frame"
+					onClick={() => setCurrentFrameIndex((prevIndex) => prevIndex - 1)}
+					disabled={isPlaying || currentFrameIndex === 0}>
+					&lt;
+				</button>
+				<button onClick={togglePlayPause}>
+					{currentFrameIndex === frameLimit
+						? 'Replay'
+						: isPlaying
+						? 'Pause'
+						: 'Play'}
+				</button>
 
-			<button
-				onClick={() => setCurrentFrameIndex((prevIndex) => prevIndex + 1)}
-				disabled={isPlaying || currentFrameIndex === frameLimit}>
-				&gt;
-			</button>
-			<button
-				onClick={() => setCurrentFrameIndex(frameLimit)}
-				disabled={isPlaying || currentFrameIndex === frameLimit}>
-				&gt; &gt;
-			</button>
+				<button
+					className="sim-frame-controls-button-single-frame"
+					onClick={() => setCurrentFrameIndex((prevIndex) => prevIndex + 1)}
+					disabled={isPlaying || currentFrameIndex === frameLimit}>
+					&gt;
+				</button>
+				<button
+					className="sim-frame-controls-button-max-frame"
+					onClick={() => setCurrentFrameIndex(frameLimit)}
+					disabled={isPlaying || currentFrameIndex === frameLimit}>
+					&gt;&gt;
+				</button>
+			</div>
+			<Slider
+				value={currentFrameIndex}
+				min={0}
+				max={frameLimit}
+				onChange={(value) => handleSliderChange(value)}
+			/>
 		</div>
 	);
 }

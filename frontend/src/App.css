@@ -182,15 +182,29 @@ html {
 }
 
 .sim-frame-controls {
+	display: flex;
 	position: absolute;
 	bottom: 12px;
 	left: 50%;
-	z-index: 1;
+	align-items: center;
 	transform: translateX(-50%);
+	z-index: 1;
+	width: 400px;
 }
 
-.sim-frame-controls button {
-	margin: 0 3px;
+.sim-frame-controls-buttons {
+	display: flex;
+	margin-right: 20px;
+	gap: 3px;
+	height: 20px;
+}
+
+.sim-frame-controls-button-single-frame {
+	width: 24px;
+}
+
+.sim-frame-controls-button-max-frame {
+	width: 30px;
 }
 
 .sim-history {
