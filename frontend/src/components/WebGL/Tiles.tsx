@@ -55,7 +55,7 @@ export function UnknownTiles({ visible, ...props }: TileProps) {
 						position={tilePosition}
 						receiveShadow>
 						<boxGeometry args={[1, 0.0001, 1]} />
-						<meshStandardMaterial color={'white'} transparent opacity={0.2} />
+						<meshStandardMaterial color={'yellow'} transparent opacity={0.2} />
 					</mesh>
 				);
 			})}

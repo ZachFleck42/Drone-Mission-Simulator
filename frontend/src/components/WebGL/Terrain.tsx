@@ -4,17 +4,17 @@ import { Environment } from '../../types/Simulation';
 import dirt from '../../assets/textures/dirt.jpg';
 
 const textureLoader = new THREE.TextureLoader();
-const dirtTextue = textureLoader.load(dirt);
+const dirtTexture = textureLoader.load(dirt);
 
 interface GroundMeshProps extends MeshProps {
 	size: number;
 }
 
-export function GroundMesh({ ...props }: GroundMeshProps) {
+export function GroundMesh({ size, ...props }: GroundMeshProps) {
 	return (
 		<mesh position={props.position} receiveShadow>
-			<boxGeometry args={[props.size, 0.1, props.size]} />
-			<meshStandardMaterial map={dirtTextue} />
+			<boxGeometry args={[size, 0.1, size]} />
+			<meshStandardMaterial map={dirtTexture} />
 		</mesh>
 	);
 }
@@ -47,8 +47,6 @@ export function TerrainTiles({ environment, visible }: TerrainTileProps) {
 								/>
 							</mesh>
 						);
-					} else {
-						return null;
 					}
 				});
 			})}

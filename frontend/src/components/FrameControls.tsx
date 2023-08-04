@@ -1,4 +1,13 @@
 import { useEffect } from 'react';
+import 'rc-slider/assets/index.css';
+
+interface FrameControlsProps {
+	maxFrames: number;
+	currentFrameIndex: number;
+	setCurrentFrameIndex: React.Dispatch<React.SetStateAction<number>>;
+	isPlaying: boolean;
+	setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 export default function FrameControls({
 	maxFrames,
@@ -6,13 +15,7 @@ export default function FrameControls({
 	setCurrentFrameIndex,
 	isPlaying,
 	setIsPlaying,
-}: {
-	maxFrames: number;
-	currentFrameIndex: number;
-	setCurrentFrameIndex: React.Dispatch<React.SetStateAction<number>>;
-	isPlaying: boolean;
-	setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+}: FrameControlsProps) {
 	const frameLimit = maxFrames - 1;
 
 	const togglePlayPause = () => {
@@ -20,6 +23,14 @@ export default function FrameControls({
 			setCurrentFrameIndex(0);
 		}
 		setIsPlaying((prevState) => !prevState);
+	};
+
+	const handleSliderChange = (value: number | number[]) => {
+		if (typeof value === 'number') {
+			setCurrentFrameIndex(value);
+		} else if (Array.isArray(value) && value.length > 0) {
+			setCurrentFrameIndex(value[0]);
+		}
 	};
 
 	useEffect(() => {

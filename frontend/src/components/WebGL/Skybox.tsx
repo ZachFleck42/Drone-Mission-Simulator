@@ -7,8 +7,8 @@ import dn from '../../assets/textures/skybox/arid2_dn.jpg';
 import bk from '../../assets/textures/skybox/arid2_bk.jpg';
 import ft from '../../assets/textures/skybox/arid2_ft.jpg';
 
-const cubrTextureLoader = new THREE.CubeTextureLoader();
-const skyBoxTexture = cubrTextureLoader.load([rt, lf, up, dn, bk, ft]);
+const cubeTextureLoader = new THREE.CubeTextureLoader();
+const skyBoxTexture = cubeTextureLoader.load([rt, lf, up, dn, bk, ft]);
 
 export default function SkyBox() {
 	const { scene } = useThree();
