@@ -190,7 +190,7 @@ html {
 	transform: translateX(-50%);
 	z-index: 1;
 	border-radius: 5px;
-	padding: 10px 20px 10px 10px;
+	padding: 10px;
 	background: rgba(0, 0, 0, 0.5);
 	width: 500px;
 }
@@ -226,6 +226,15 @@ html {
 
 .sim-frame-controls-button-max-frame {
 	width: 30px;
+}
+
+.sim-frame-controls-frame-readout {
+	margin-left: 10px;
+	width: auto;
+	white-space: nowrap;
+	color: white;
+	text-align: right;
+	font-size: 16px;
 }
 
 .sim-history {

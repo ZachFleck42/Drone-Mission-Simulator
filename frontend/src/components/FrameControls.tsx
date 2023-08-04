@@ -14,13 +14,13 @@ interface FrameControlsProps {
 }
 
 export default function FrameControls({
-	maxFrames,
+	maxFrames: noFrames,
 	currentFrameIndex,
 	setCurrentFrameIndex,
 	isPlaying,
 	setIsPlaying,
 }: FrameControlsProps) {
-	const frameLimit = maxFrames - 1;
+	const frameLimit = noFrames - 1;
 
 	const togglePlayPause = () => {
 		if (currentFrameIndex === frameLimit) {
@@ -113,6 +113,9 @@ export default function FrameControls({
 				max={frameLimit}
 				onChange={(value) => handleSliderChange(value)}
 			/>
+			<div className="sim-frame-controls-frame-readout">
+				{currentFrameIndex} / {frameLimit}
+			</div>
 		</div>
 	);
 }
