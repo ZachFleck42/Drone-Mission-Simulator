@@ -14,6 +14,7 @@ export interface DroneGridPoint {
 export interface Terrain {
 	size: number;
 	grid: EnvGridPoint[][];
+	hostile_rate: number;
 }
 
 export interface Target {

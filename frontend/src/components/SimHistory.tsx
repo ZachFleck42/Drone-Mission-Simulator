@@ -159,7 +159,9 @@ export default function HistoryList({
 							<div className="sim-history-expanded-item-key">
 								Terrain hostile rate:
 							</div>
-							<div className="sim-history-expanded-item-value"></div>
+							<div className="sim-history-expanded-item-value">
+								{simulation.data[0].environment.terrain.hostile_rate}
+							</div>
 						</div>
 						<div className="sim-history-expanded-item">
 							<div className="sim-history-expanded-item-key">

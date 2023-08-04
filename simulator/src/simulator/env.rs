@@ -15,6 +15,7 @@ pub struct Tile {
 pub struct Terrain {
     pub size: usize,
     pub grid: Vec<Vec<Tile>>,
+    pub hostile_rate: usize,
 }
 
 #[derive(Clone, Serialize)]
@@ -47,7 +48,11 @@ impl Terrain {
             grid.push(row);
         }
 
-        Terrain { size, grid }
+        Terrain {
+            size,
+            grid,
+            hostile_rate,
+        }
     }
 
     pub fn print(&self) {
