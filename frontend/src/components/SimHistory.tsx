@@ -43,6 +43,8 @@ export default function HistoryList({
 
 	useEffect(() => {
 		setRemoveLastBorder(simHistory.length > 5);
+		setEditingIndex(null);
+		setExpandedIndex(null);
 	}, [simHistory]);
 
 	const handleEditClick = (index: number) => {
@@ -51,7 +53,10 @@ export default function HistoryList({
 	};
 
 	const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setEditedName(event.target.value);
+		const inputValue = event.target.value;
+		if (inputValue.length <= 20) {
+			setEditedName(inputValue);
+		}
 	};
 
 	const handleNameKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
