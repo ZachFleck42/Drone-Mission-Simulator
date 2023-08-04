@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import React, { useState } from 'react';
-import tooltip from '../assets/icons/tooltip.svg';
+import { Tooltip } from 'react-tooltip';
+import tooltipSVG from '../assets/icons/tooltip.svg';
 
 interface SimParams {
 	terrain_grid_size: number;
@@ -15,13 +16,46 @@ const inputFields: Array<{
 	key: keyof SimParams;
 	label: string;
 	default: number;
+	tooltip_content: string;
 }> = [
-	{ key: 'terrain_grid_size', label: 'Terrain grid size', default: 16 },
-	{ key: 'terrain_hostile_rate', label: 'Terrain hostile rate', default: 10 },
-	{ key: 'target_move_rate', label: 'Target move rate', default: 10 },
-	{ key: 'drone_move_range', label: 'Drone move range', default: 1 },
-	{ key: 'drone_vis_range', label: 'Drone visibility range', default: 2 },
-	{ key: 'sim_max_frames', label: 'Simulation ticks', default: 64 },
+	{
+		key: 'terrain_grid_size',
+		label: 'Terrain grid size',
+		default: 16,
+		tooltip_content: `Terrain will be generated as a square of dimensions size * size`,
+	},
+	{
+		key: 'terrain_hostile_rate',
+		label: 'Terrain hostile rate',
+		default: 10,
+		tooltip_content: `The % chance of for any given terrain to be 'hostile', or impossible for the drone to move over`,
+	},
+	{
+		key: 'target_move_rate',
+		label: 'Target move rate',
+		default: 10,
+		tooltip_content:
+			'The % chance of the target moving during each tick of the simulation',
+	},
+	{
+		key: 'drone_move_range',
+		label: 'Drone move range',
+		default: 1,
+		tooltip_content:
+			'The amount of tiles the drone can move during one tick of the simulation',
+	},
+	{
+		key: 'drone_vis_range',
+		label: 'Drone visibility range',
+		default: 2,
+		tooltip_content: `The radius of tiles the drone can 'see' from its current position`,
+	},
+	{
+		key: 'sim_max_frames',
+		label: 'Simulation ticks',
+		default: 64,
+		tooltip_content: `How many cycles of target/drone movement the simulation should render`,
+	},
 ];
 
 export default function ParamInputs({
@@ -86,6 +120,18 @@ export default function ParamInputs({
 			params.terrain_grid_size = 2;
 		}
 
+		if (params.terrain_hostile_rate > 98) {
+			params.terrain_hostile_rate = 98;
+		}
+
+		if (params.target_move_rate > 99) {
+			params.target_move_rate = 99;
+		}
+
+		if (params.drone_vis_range > params.terrain_grid_size) {
+			params.drone_vis_range = params.terrain_grid_size;
+		}
+
 		try {
 			const response: AxiosResponse = await axios.post(api, params);
 			onServerResponse(response.data);
@@ -111,7 +157,7 @@ export default function ParamInputs({
 	return (
 		<div className="sim-params-container">
 			<div className="sim-params-fields">
-				{inputFields.map((field) => (
+				{inputFields.map((field, index) => (
 					<div key={field.key} className="sim-param-input-field">
 						<input
 							type="number"
@@ -120,7 +166,18 @@ export default function ParamInputs({
 							onChange={handleInputChange}
 							placeholder={`${field.label} (Default: ${field.default})`}
 						/>
-						<img src={tooltip} alt="icon" className="sim-param-tooltip-icon" />
+						<img
+							src={tooltipSVG}
+							alt="icon"
+							className="sim-param-tooltip-icon"
+							id={field.key}
+						/>
+						<Tooltip
+							className="sim-param-tooltip"
+							anchorSelect={`#${field.key}`}
+							content={`${field.tooltip_content}`}
+							style={{ zIndex: '1' }}
+						/>
 					</div>
 				))}
 			</div>
