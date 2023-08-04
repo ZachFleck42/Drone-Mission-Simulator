@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Simulation, SimulationHistory } from '../types/Simulation';
-import editSVG from '../assets/edit.svg';
-import saveSVG from '../assets/save.svg';
-import trashSVG from '../assets/delete.svg';
-import rightSVG from '../assets/right.svg';
-import downSVG from '../assets/down.svg';
+import editSVG from '../assets/icons/edit.svg';
+import saveSVG from '../assets/icons/save.svg';
+import trashSVG from '../assets/icons/delete.svg';
+import rightSVG from '../assets/icons/right.svg';
+import downSVG from '../assets/icons/down.svg';
 
 interface HistoryListProps {
 	simHistory: SimulationHistory[];

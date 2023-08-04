@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import React, { useState } from 'react';
-import tooltip from '../assets/tooltip.svg';
+import tooltip from '../assets/icons/tooltip.svg';
 
 interface SimParams {
 	terrain_grid_size: number;
