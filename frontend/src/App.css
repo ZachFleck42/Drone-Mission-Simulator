@@ -214,10 +214,14 @@ html {
 }
 
 .sim-history-item {
-	display: flex;
-	align-items: center;
 	border-bottom: 1px solid black;
 	height: 60px;
+}
+
+.sim-history-item-content {
+	position: relative;
+	display: flex;
+	align-items: center;
 }
 
 .sim-history-item-text {

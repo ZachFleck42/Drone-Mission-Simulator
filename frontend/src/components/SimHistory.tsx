@@ -88,60 +88,64 @@ export default function HistoryList({
 			{simHistory.map((simulation, index) => (
 				<div
 					key={index}
+					// style={{ height: expandedIndex === index ? '100px' : '60px' }}
 					className={`sim-history-item ${index % 2 === 0 ? 'even' : 'odd'} ${
 						editingIndex === index ? 'editing' : ''
 					} ${expandedIndex === index ? 'expanded' : ''}${
 						removeLastBorder ? 'remove-border' : ''
 					}`}>
-					<div className="sim-history-item-text">
-						<div className="sim-history-item-name">
+					<div className="sim-history-item-content">
+						<div className="sim-history-item-text">
+							<div className="sim-history-item-name">
+								{editingIndex === index ? (
+									<input
+										type="text"
+										value={editedName}
+										className="sim-history-item-name-edit-field"
+										onChange={handleNameChange}
+										onKeyUp={handleNameKeyUp}
+										autoFocus
+									/>
+								) : simulation.name ? (
+									simulation.name
+								) : (
+									'Unnamed Simulation'
+								)}
+							</div>
+							<div className="sim-history-item-time">
+								{formatTimestamp(simulation.timestamp)}
+							</div>
+						</div>
+						<div className="sim-history-item-edit-name">
 							{editingIndex === index ? (
-								<input
-									type="text"
-									value={editedName}
-									className="sim-history-item-name-edit-field"
-									onChange={handleNameChange}
-									onKeyUp={handleNameKeyUp}
-									autoFocus
-								/>
-							) : simulation.name ? (
-								simulation.name
+								<button
+									className="sim-history-item-edit-save"
+									onClick={() => handleNameSubmit(index)}>
+									Save
+								</button>
 							) : (
-								'Unnamed Simulation'
+								<img
+									src={editSVG}
+									onClick={() => handleEditClick(index)}
+									className="sim-history-item-edit-icon"
+								/>
 							)}
 						</div>
-						<div className="sim-history-item-time">
-							{formatTimestamp(simulation.timestamp)}
-						</div>
-					</div>
-					<div className="sim-history-item-edit-name">
-						{editingIndex === index ? (
-							<button
-								className="sim-history-item-edit-save"
-								onClick={() => handleNameSubmit(index)}>
-								Save
-							</button>
-						) : (
+						<div className="sim-history-item-delete">
 							<img
-								src={editSVG}
-								onClick={() => handleEditClick(index)}
-								className="sim-history-item-edit-icon"
+								src={trashSVG}
+								onClick={() => handleDeleteClick(index)}
+								className="sim-history-item-delete-icon"
 							/>
-						)}
-					</div>
-					<div className="sim-history-item-delete">
-						<img
-							src={trashSVG}
-							onClick={() => handleDeleteClick(index)}
-							className="sim-history-item-delete-icon"
-						/>
-					</div>
-					<div className="sim-history-expand">
-						<img
-							src={expandedIndex === index ? downSVG : rightSVG}
-							onClick={() => handleExpandClick(index)}
-							className="sim-history-item-expand-icon"
-						/>
+						</div>
+						<div className="sim-history-expand">
+							<img
+								src={expandedIndex === index ? downSVG : rightSVG}
+								onClick={() => handleExpandClick(index)}
+								className="sim-history-item-expand-icon"
+							/>
+						</div>
+						{/* <div className="test">Hi</div> */}
 					</div>
 				</div>
 			))}
