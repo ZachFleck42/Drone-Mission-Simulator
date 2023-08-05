@@ -24,6 +24,7 @@ function GridDisplay({
 		simulation.frames[currentFrameIndex].drone.visible_tiles;
 
 	const currentGrid = terrainGrids[currentFrameIndex];
+	const gridSize = simulation.frames[0].environment.terrain.size;
 
 	return (
 		<div className="sim-grid-display">
@@ -37,15 +38,28 @@ function GridDisplay({
 						const isCellVisible = visibleTiles.some(
 							([x, y]) => rowIndex === x && colIndex === y,
 						);
-						const cellClassName = `sim-grid-display-cell${
-							cell.hostile ? ' hostile' : ''
-						}${isCellVisible ? ' visible' : ''}${
-							isCellVisible && cell.hostile ? ' visible-hostile' : ''
-						}${isTargetCell ? ' target' : ''}`;
+
+						const cellClassName = `sim-grid-display-cell
+				  			${cell.hostile ? ' hostile' : ''}
+				  			${isCellVisible ? ' visible' : ''}
+				  			${isTargetCell ? ' target' : ''}
+				  			${isCellVisible && cell.hostile ? ' visible-hostile' : ''}
+							${gridSize > 32 ? 'small-font' : ''}`;
+
+						const tileSize = 600 / gridSize;
+
 						return (
-							<div className={cellClassName} key={colIndex}>
-								{isTargetCell ? 'T' : ''}
-								{isDroneCell ? 'D' : ''}
+							<div
+								style={{
+									width: `${tileSize}px`,
+									height: `${tileSize}px`,
+								}}
+								className={cellClassName}
+								key={colIndex}>
+								<div className={'sim-grid-display-cell-content'}>
+									{isTargetCell ? 'T' : ''}
+									{isDroneCell ? 'D' : ''}
+								</div>
 							</div>
 						);
 					})}

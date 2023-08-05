@@ -171,10 +171,13 @@ html {
 	justify-content: center;
 	align-items: center;
 	border: 1px solid #666;
-	width: 20px;
-	height: 20px;
 	font-weight: bold;
 	user-select: none;
+	box-sizing: border-box;
+}
+
+.sim-grid-display-cell.small-font {
+	font-size: 10px;
 }
 
 .sim-grid-display-cell.hostile {
