@@ -79,7 +79,21 @@ function App() {
 					</div>
 				</div>
 				<div className="sim-display">
-					<div className="sim-display-header">Simulation</div>
+					<div className="sim-display-header">
+						Simulation
+						{simHistory.length === 0 ? (
+							''
+						) : (
+							<>
+								{activeData.name ? (
+									<span>: {activeData.name}</span>
+								) : (
+									<span>: {activeData.id}</span>
+								)}
+							</>
+						)}
+					</div>
+
 					<div className="sim-display-container">
 						{simHistory.length === 0 ? (
 							<div className="sim-display-loading">Waiting for data...</div>
