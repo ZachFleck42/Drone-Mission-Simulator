@@ -39,6 +39,10 @@ html {
 	user-select: none;
 }
 
+.sim-display-name {
+	user-select: text !important;
+}
+
 .sim-inputs {
 	width: 300px;
 }

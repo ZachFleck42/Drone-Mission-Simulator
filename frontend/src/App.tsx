@@ -84,13 +84,14 @@ function App() {
 						{simHistory.length === 0 ? (
 							''
 						) : (
-							<>
+							<span>
+								:{' '}
 								{activeData.name ? (
-									<span>: {activeData.name}</span>
+									<span className="sim-display-name">{activeData.name}</span>
 								) : (
-									<span>: {activeData.id}</span>
+									<span className="sim-display-name">{activeData.id}</span>
 								)}
-							</>
+							</span>
 						)}
 					</div>
 
