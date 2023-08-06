@@ -69,6 +69,7 @@ async fn sim(simulation_request: web::Json<SimulationParameters>) -> impl Respon
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    println!("Starting Web server!");
     HttpServer::new(|| {
         App::new()
             .wrap(Cors::permissive())
@@ -76,7 +77,7 @@ async fn main() -> std::io::Result<()> {
             .service(echo)
             .service(sim)
     })
-    .bind(("127.0.0.1", 8080))?
+    .bind("0.0.0.0:8080")?
     .run()
     .await
 }
