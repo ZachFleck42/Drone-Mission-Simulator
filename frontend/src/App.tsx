@@ -28,6 +28,7 @@ function App() {
 	const [pathHistory, setPathHistory] = useState<boolean>(false);
 	const [unknownTiles, setUnknownTiles] = useState<boolean>(false);
 
+	// Upon API response from backend; triggered by submit from ParamInputs
 	const handleServerResponse = (responseData: Simulation) => {
 		setSimHistory((oldData) => [responseData, ...oldData]);
 		setActiveData(responseData);
@@ -35,6 +36,7 @@ function App() {
 		setIsPlaying(false);
 	};
 
+	// When simulation history is modified, ensure array is sorted chronologically
 	useEffect(() => {
 		const sortedHistory = [...simHistory].sort(
 			(a, b) => Number(b.timestamp) - Number(a.timestamp),
