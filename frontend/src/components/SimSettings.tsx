@@ -45,6 +45,7 @@ export default function SimSettings({
 				<p>'Smooth' animation:</p>
 				<Toggle
 					icons={false}
+					disabled={!threeD}
 					defaultChecked={animated}
 					onChange={() => {
 						setAnimated(!animated);
@@ -55,6 +56,7 @@ export default function SimSettings({
 				<p>Show visible tiles:</p>
 				<Toggle
 					icons={false}
+					disabled={!threeD}
 					defaultChecked={visTiles}
 					onChange={() => {
 						setVisTiles(!visTiles);
@@ -65,6 +67,7 @@ export default function SimSettings({
 				<p>Show hostile tiles:</p>
 				<Toggle
 					icons={false}
+					disabled={!threeD}
 					defaultChecked={hostileTiles}
 					onChange={() => {
 						setHostileTiles(!hostileTiles);
@@ -75,6 +78,7 @@ export default function SimSettings({
 				<p>Show unrevealed tiles:</p>
 				<Toggle
 					icons={false}
+					disabled={!threeD}
 					defaultChecked={unrevealedTiles}
 					onChange={() => {
 						setUnrevealedTiles(!unrevealedTiles);
@@ -85,6 +89,7 @@ export default function SimSettings({
 				<p>Show path history:</p>
 				<Toggle
 					icons={false}
+					disabled={!threeD}
 					defaultChecked={pathHistory}
 					onChange={() => {
 						setPathHistory(!pathHistory);

@@ -38,7 +38,7 @@ function SimulationRender(props: SimulationCanvasProps) {
 			<PerspectiveCamera
 				makeDefault
 				fov={75}
-				position={[grid_center_x * 3, grid_size / 2, grid_center_z]}
+				position={[grid_size * 1.2, grid_size / 2, -grid_size * 1.2]}
 			/>
 			<OrbitControls
 				maxPolarAngle={Math.PI / 2}
