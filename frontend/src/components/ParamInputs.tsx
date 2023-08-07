@@ -116,10 +116,12 @@ export default function ParamInputs({
 	const handleSubmit = async () => {
 		let params = userInput;
 
+		// Grid size should not be less than 2
 		if (params.terrain_grid_size < 2) {
 			params.terrain_grid_size = 2;
 		}
 
+		// Hostile rate and target rate shouldn not exceed 98/99
 		if (params.terrain_hostile_rate > 98) {
 			params.terrain_hostile_rate = 98;
 		}
@@ -128,6 +130,7 @@ export default function ParamInputs({
 			params.target_move_rate = 99;
 		}
 
+		// Drone_vis_range shouldn't exceed the size of the grid
 		if (params.drone_vis_range > params.terrain_grid_size) {
 			params.drone_vis_range = params.terrain_grid_size;
 		}

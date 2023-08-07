@@ -42,6 +42,9 @@ export default function HistoryList({
 	const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 	const [removeLastBorder, setRemoveLastBorder] = useState(false);
 
+	// If SimHistory is modified, clear any active edit fields or expansions
+	// Also remove the bottom-border of the final list element to prevent overlap with
+	// the container border
 	useEffect(() => {
 		setRemoveLastBorder(simHistory.length > 5);
 		setEditingIndex(null);
@@ -53,6 +56,9 @@ export default function HistoryList({
 		setEditedName(simHistory[index].name);
 	};
 
+	// Character limit of 20 to prevent visual overflow. Still possible if someone
+	// enters all capital Ws. They can suffer the consequences of their actions if they
+	// choose to do so.
 	const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const inputValue = event.target.value;
 		if (inputValue.length <= 20) {
@@ -60,6 +66,7 @@ export default function HistoryList({
 		}
 	};
 
+	// Enable enter and escape keys on edit field
 	const handleNameKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
 		if (event.key === 'Enter' && editingIndex !== null) {
 			handleNameSubmit(editingIndex);
@@ -89,10 +96,12 @@ export default function HistoryList({
 		}
 	};
 
+	// Double-click on a list item will set it to active data
 	const handleDoubleClick = (index: number) => {
 		setActiveData(simHistory[index]);
 	};
 
+	// Only one list item can be expanded at a time
 	const handleExpandClick = (index: number) => {
 		setExpandedIndex((prevIndex) => (prevIndex === index ? null : index));
 	};
