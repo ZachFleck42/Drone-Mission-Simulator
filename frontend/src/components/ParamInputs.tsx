@@ -189,7 +189,7 @@ export default function ParamInputs({
 					Reset to Default
 				</button>
 				<button className="sim-params-submit" onClick={handleSubmit}>
-					Run simulation
+					Get simulation
 				</button>
 			</div>
 		</div>

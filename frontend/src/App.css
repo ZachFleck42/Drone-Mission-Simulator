@@ -109,6 +109,7 @@ html {
 }
 
 .sim-params-submit {
+	width: 112px;
 	background-color: #2563eb;
 }
 

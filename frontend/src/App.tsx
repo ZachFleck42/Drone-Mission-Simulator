@@ -32,7 +32,7 @@ function App() {
 		setSimHistory((oldData) => [responseData, ...oldData]);
 		setActiveData(responseData);
 		setCurrentFrameIndex(0);
-		setIsPlaying(true);
+		setIsPlaying(false);
 	};
 
 	useEffect(() => {
