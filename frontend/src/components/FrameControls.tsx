@@ -50,7 +50,7 @@ export default function FrameControls({
 					}
 					return nextIndex;
 				});
-			}, 500);
+			}, 750);
 		}
 
 		return () => {
