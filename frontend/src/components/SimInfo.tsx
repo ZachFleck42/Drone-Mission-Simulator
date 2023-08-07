@@ -17,6 +17,7 @@ export default function CurrentSimInfo({
 		frame.environment.target.y,
 	];
 
+	const grid_size = frame.environment.terrain.size;
 	const [drone_x, drone_y] = [frame.drone.x, frame.drone.y];
 	const drone_status = frame.drone.status;
 
@@ -35,13 +36,13 @@ export default function CurrentSimInfo({
 			<div className="sim-info-item">
 				<div className="sim-info-item-name">Drone position:</div>
 				<div className="sim-info-item-value">
-					{drone_x}, {drone_y}
+					{drone_y + 1}, {grid_size - drone_x}
 				</div>
 			</div>
 			<div className="sim-info-item">
 				<div className="sim-info-item-name">Target position:</div>
 				<div className="sim-info-item-value">
-					{target_x}, {target_y}
+					{target_y + 1}, {grid_size - target_x}
 				</div>
 			</div>
 		</div>
