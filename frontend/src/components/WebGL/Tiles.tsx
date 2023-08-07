@@ -3,6 +3,20 @@ interface TileProps {
 	visible: boolean;
 }
 
+interface GridCenter {
+	center_x: number;
+	center_y: number;
+}
+
+export function CenterTile({ ...props }) {
+	return (
+		<mesh visible={false}>
+			<planeGeometry args={[]} />
+			<meshStandardMaterial />
+		</mesh>
+	);
+}
+
 export function VisibleTiles({ visible, ...props }: TileProps) {
 	return (
 		<group name="visible-tiles" visible={visible}>

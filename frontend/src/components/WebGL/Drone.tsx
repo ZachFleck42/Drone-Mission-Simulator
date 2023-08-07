@@ -37,6 +37,6 @@ export default function DroneMesh({
 		// 	<sphereGeometry args={[0.25, 32, 16]} />
 		// 	<meshStandardMaterial color={'blue'} />
 		// </mesh>
-		<primitive object={model.scene} ref={droneRef} scale={0.75} />
+		<primitive object={model.scene} ref={droneRef} scale={0.5} castShadow />
 	);
 }
