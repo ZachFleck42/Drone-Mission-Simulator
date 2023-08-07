@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useState, useRef } from 'react';
 import * as THREE from 'three';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
@@ -28,6 +28,8 @@ function SimulationRender(props: SimulationCanvasProps) {
 		(grid_size - 1) / 2,
 		-(grid_size - 1) / 2,
 	];
+
+	const [LightTarget] = useState(() => new THREE.Object3D());
 	const targetRef = useRef<THREE.Mesh>(null!);
 	const droneRef = useRef<THREE.Mesh>(null!);
 
@@ -46,16 +48,18 @@ function SimulationRender(props: SimulationCanvasProps) {
 			<directionalLight
 				castShadow
 				position={[-grid_size, 20, -grid_size * 2]}
+				target={LightTarget}
 				intensity={2}
 				color={'white'}
 				shadow-mapSize-height={2048}
 				shadow-mapSize-width={2048}
-				shadow-camera-far={100}
+				shadow-camera-far={500}
 				shadow-camera-top={10}
 				shadow-camera-right={10}
-				shadow-camera-bottom={-50}
-				shadow-camera-left={-50}
+				shadow-camera-bottom={-10}
+				shadow-camera-left={-10}
 			/>
+			<primitive object={LightTarget} position={[grid_size, -1, 0]} />
 			<SkyBox />
 			<GroundMesh
 				size={grid_size}
