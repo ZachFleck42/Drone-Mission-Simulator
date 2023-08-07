@@ -18,6 +18,12 @@ export default function TargetMesh({
 	const model: any = useGLTF(ToyTankModel);
 	const [position, setPosition] = useState({ x: 0, y: 0 });
 
+	model.scene.traverse(function (node: any) {
+		if (node.isMesh) {
+			node.castShadow = true;
+		}
+	});
+
 	useFrame((_, delta) => {
 		const { x, y } = environment.target;
 		if (showAnimation) {

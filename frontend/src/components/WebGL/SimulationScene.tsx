@@ -44,14 +44,17 @@ function SimulationRender(props: SimulationCanvasProps) {
 			/>
 			<ambientLight />
 			<directionalLight
-				position={[grid_center_x, 20, grid_center_z]}
-				intensity={1}
-				color={'white'}
 				castShadow
-				shadow-camera-bottom={-grid_size * 2}
-				shadow-camera-left={-grid_size * 2}
-				shadow-camera-right={grid_size * 2}
-				shadow-camera-top={grid_size * 2}
+				position={[-grid_size, 20, -grid_size * 2]}
+				intensity={2}
+				color={'white'}
+				shadow-mapSize-height={2048}
+				shadow-mapSize-width={2048}
+				shadow-camera-far={100}
+				shadow-camera-top={10}
+				shadow-camera-right={10}
+				shadow-camera-bottom={-50}
+				shadow-camera-left={-50}
 			/>
 			<SkyBox />
 			<GroundMesh

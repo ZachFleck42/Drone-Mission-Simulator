@@ -15,8 +15,14 @@ export default function DroneMesh({
 	droneRef,
 	showAnimation,
 }: DroneProps) {
-	const [position, setPosition] = useState({ x: 0, y: 0 });
 	const model: any = useGLTF(DroneModel);
+	const [position, setPosition] = useState({ x: 0, y: 0 });
+
+	model.scene.traverse(function (node: any) {
+		if (node.isMesh) {
+			node.castShadow = true;
+		}
+	});
 
 	useFrame((_, delta) => {
 		const { x, y } = drone;
