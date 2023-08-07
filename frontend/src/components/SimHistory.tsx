@@ -146,12 +146,14 @@ export default function HistoryList({
 							{editingIndex === index ? (
 								<img
 									src={saveSVG}
+									alt="Save edit"
 									className="sim-history-item-save-icon"
 									onClick={() => handleNameSubmit(index)}
 								/>
 							) : (
 								<img
 									src={editSVG}
+									alt="Edit item"
 									onClick={() => handleEditClick(index)}
 									className="sim-history-item-edit-icon"
 								/>
@@ -160,6 +162,7 @@ export default function HistoryList({
 						<div className="sim-history-item-delete">
 							<img
 								src={trashSVG}
+								alt="Delete item"
 								onClick={() => handleDeleteClick(index)}
 								className="sim-history-item-delete-icon"
 							/>
@@ -167,6 +170,7 @@ export default function HistoryList({
 						<div className="sim-history-item-expand">
 							<img
 								src={expandedIndex === index ? downSVG : rightSVG}
+								alt="Expand item"
 								onClick={() => handleExpandClick(index)}
 								className="sim-history-item-expand-icon"
 							/>

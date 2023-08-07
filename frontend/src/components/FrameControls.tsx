@@ -56,7 +56,7 @@ export default function FrameControls({
 		return () => {
 			clearInterval(intervalId);
 		};
-	}, [isPlaying, frameLimit, setCurrentFrameIndex]);
+	}, [isPlaying, setIsPlaying, frameLimit, setCurrentFrameIndex]);
 
 	return (
 		<div className="sim-frame-controls">
@@ -80,16 +80,19 @@ export default function FrameControls({
 						<img
 							className="sim-frame-controls-button-replay-icon"
 							src={replaySVG}
+							alt="Replay"
 						/>
 					) : isPlaying ? (
 						<img
 							className="sim-frame-controls-button-pause-icon"
 							src={pauseSVG}
+							alt="Pause"
 						/>
 					) : (
 						<img
 							className="sim-frame-controls-button-play-icon"
 							src={playSVG}
+							alt="Play"
 						/>
 					)}
 				</button>

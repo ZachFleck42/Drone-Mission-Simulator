@@ -47,6 +47,8 @@ export function TerrainTiles({ environment, visible }: TerrainTileProps) {
 								/>
 							</mesh>
 						);
+					} else {
+						return null;
 					}
 				});
 			})}

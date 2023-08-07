@@ -160,7 +160,7 @@ export default function ParamInputs({
 	return (
 		<div className="sim-params-container">
 			<div className="sim-params-fields">
-				{inputFields.map((field, index) => (
+				{inputFields.map((field) => (
 					<div key={field.key} className="sim-param-input-field">
 						<input
 							type="number"
@@ -171,7 +171,7 @@ export default function ParamInputs({
 						/>
 						<img
 							src={tooltipSVG}
-							alt="icon"
+							alt={`${field.label}`}
 							className="sim-param-tooltip-icon"
 							id={field.key}
 						/>
