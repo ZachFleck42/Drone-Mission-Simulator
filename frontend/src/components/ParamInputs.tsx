@@ -76,16 +76,20 @@ export default function ParamInputs({
 		sim_max_frames: false,
 	});
 
+	// User interaction is tracked in order to display placeholder text instead of
+	// the default values
 	const userInteraction = Object.values(interactedFields).some(
 		(value) => value,
 	);
 
+	// Initialize the input values with defaults to allow blank-form submission
 	const [userInput, setInputData] = useState<SimParams>(() => {
 		const initialData: SimParams = {} as SimParams;
 		inputFields.forEach((field) => (initialData[field.key] = field.default));
 		return initialData;
 	});
 
+	// Only allow numerical values greater than 0 in all fields
 	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
 		const numValue = parseInt(value, 10);
