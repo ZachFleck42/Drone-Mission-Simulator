@@ -1,4 +1,4 @@
-# Drone Seeking / Tracking Simulation
+# Drone Seeking / Tracking Mission Simulator
 A Rust program that dynamically generates simulations of a drone searching for / tracking a target across randomly-generated hostile terrain. Uses Actix Web as a backend API to serve HTTP requests to and from the React UI. The simulations are rendered and animated in 3D on a WebGL canvas.
 
 <br>
