@@ -1,10 +1,6 @@
-FROM rust:1.67 as builder
+FROM rust:1.67
 WORKDIR /simulator
 COPY . .
-RUN cargo build --release
-
-FROM debian:bullseye-slim
-RUN apt-get update && apt-get install -y && rm -rf /var/lib/apt/lists/*
-COPY --from=builder /simulator/target/release/simulator /usr/local/bin/simulator
+RUN cargo install diesel_cli --no-default-features --features postgres && cargo build --release
 EXPOSE 8080
-CMD ["simulator"]
+CMD ["./target/release/simulator"]
