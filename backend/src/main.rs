@@ -37,6 +37,20 @@ async fn echo(req_body: String) -> impl Responder {
 
 #[post("/sim")]
 async fn sim(simulation_request: web::Json<SimulationParameters>) -> impl Responder {
+    if simulation_request.terrain_grid_size < 2
+        || simulation_request.terrain_grid_size > 64
+        || simulation_request.terrain_hostile_rate < 0
+        || simulation_request.terrain_hostile_rate > 30
+        || simulation_request.target_move_rate < 0
+        || simulation_request.target_move_rate > 99
+        || simulation_request.drone_move_range < 0
+        || simulation_request.drone_vis_range < 0
+        || simulation_request.sim_max_frames < 0
+        || simulation_request.sim_max_frames > 1024
+    {
+        return HttpResponse::BadRequest().json("Invalid params");
+    }
+
     let environment = simulator::env::Environment::new(
         simulation_request.terrain_grid_size,
         simulation_request.terrain_hostile_rate,
@@ -64,7 +78,7 @@ async fn sim(simulation_request: web::Json<SimulationParameters>) -> impl Respon
         frames: sim.run(),
     };
 
-    HttpResponse::Ok().json(response)
+    return HttpResponse::Ok().json(response);
 }
 
 #[actix_web::main]
