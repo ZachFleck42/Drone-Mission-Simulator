@@ -10,10 +10,10 @@ services:
     ports:
       - 8080:8080
 
-  database:
-    build: ./database
+  postgres:
+    image: postgres:15.4
     volumes:
-      - ./database/data:/var/lib/postgresql/data/
+      - ./data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_DB=simulator
       - POSTGRES_USER=postgres
