@@ -1,7 +1,11 @@
 [package]
-name = "drone-database"
+name = "database"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+actix-cors = "0.6.4"
+actix-web = "4.3.1"
 diesel = { version = "2.1.0", features = ["postgres"] }
+serde = { version = "1.0.178", features = ["derive"] }
+serde_json = "1.0"

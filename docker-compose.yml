@@ -9,3 +9,14 @@ services:
     build: ./backend
     ports:
       - 8080:8080
+
+  database:
+    build: ./database
+    volumes:
+      - ./database/data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=simulator
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
