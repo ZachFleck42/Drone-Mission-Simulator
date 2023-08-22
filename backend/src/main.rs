@@ -1,13 +1,10 @@
 #![allow(dead_code, unused_comparisons)]
-mod db_utils;
 mod models;
 mod schema;
 mod services;
 mod simulator;
-use db_utils::{get_pool, AppState, DbActor};
 use services::{echo, hello, sim};
 
-use actix::SyncArbiter;
 use actix_cors::Cors;
 use actix_web::{web, App, HttpServer};
 use diesel::{
@@ -16,19 +13,21 @@ use diesel::{
 };
 use std::env;
 
+type DbPool = Pool<ConnectionManager<PgConnection>>;
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let db_url: String = env::var("DATABASE_URL").expect("Could not find DATABASE_URL");
-    let pool: Pool<ConnectionManager<PgConnection>> = get_pool(&db_url);
-    let db_addr = SyncArbiter::start(5, move || DbActor(pool.clone()));
+    let manager: ConnectionManager<PgConnection> = ConnectionManager::<PgConnection>::new(db_url);
+    let pool = Pool::builder()
+        .build(manager)
+        .expect("Error building a connection pool");
 
     println!("Starting Web server!");
     HttpServer::new(move || {
         App::new()
             .wrap(Cors::permissive())
-            .app_data(web::Data::new(AppState {
-                db: db_addr.clone(),
-            }))
+            .app_data(web::Data::new(pool.clone()))
             .service(hello)
             .service(echo)
             .service(sim)

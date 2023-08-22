@@ -1,8 +1,7 @@
 use crate::schema;
-use diesel::{Insertable, Queryable};
-use serde::Serialize;
+use diesel::{Insertable, Queryable, Selectable};
 
-#[derive(Clone, Insertable, Queryable, Serialize)]
+#[derive(Queryable, Selectable)]
 #[diesel(table_name = schema::simulations)]
 pub struct Simulation {
     pub id: i32,
@@ -16,7 +15,20 @@ pub struct Simulation {
     pub drone_vis_range: i16,
 }
 
-#[derive(Clone, Insertable, Queryable, Serialize)]
+#[derive(Insertable)]
+#[diesel(table_name = schema::simulations)]
+pub struct NewSimulation {
+    pub generated_id: String,
+    pub generated_time: i64,
+    pub no_frames: i32,
+    pub grid_size: i32,
+    pub hostile_rate: i16,
+    pub move_rate: i16,
+    pub drone_move_range: i16,
+    pub drone_vis_range: i16,
+}
+
+#[derive(Queryable, Selectable)]
 #[diesel(table_name = schema::simulation_frames)]
 pub struct SimulationFrame {
     pub id: i32,
