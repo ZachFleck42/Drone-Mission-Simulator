@@ -12,7 +12,7 @@ CREATE TABLE simulations (
 
 CREATE TABLE simulation_frames (
     id SERIAL PRIMARY KEY,
-    sim_id INT REFERENCES simulations(id),
+    sim_id INT REFERENCES simulations(id) NOT NULL,
     frame_no INT NOT NULL,
     environment JSONB NOT NULL,
     drone JSONB NOT NULL

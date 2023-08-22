@@ -4,6 +4,9 @@ use diesel::{
     PgConnection,
 };
 
+// use crate::models::{Simulation, SimulationFrame};
+// use crate::schema::{simulation_frames, simulations};
+
 pub struct AppState {
     pub db: Addr<DbActor>,
 }

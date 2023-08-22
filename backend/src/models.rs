@@ -1,25 +1,27 @@
-use diesel::prelude::*;
+use crate::schema;
+use diesel::{Insertable, Queryable};
+use serde::Serialize;
 
-#[derive(Queryable, Selectable)]
-#[diesel(table_name = 'simulations')]
+#[derive(Clone, Insertable, Queryable, Serialize)]
+#[diesel(table_name = schema::simulations)]
 pub struct Simulation {
-    pub id: i64,
+    pub id: i32,
     pub generated_id: String,
     pub generated_time: i64,
-    pub no_frames: i64,
-    pub grid_size: i64,
-    pub hostile_rate: i64,
-    pub move_rate: i64,
-    pub drone_move_range: i64,
-    pub drone_vis_range: i64,
+    pub no_frames: i32,
+    pub grid_size: i32,
+    pub hostile_rate: i16,
+    pub move_rate: i16,
+    pub drone_move_range: i16,
+    pub drone_vis_range: i16,
 }
 
-#[derive(Queryable, Selectable)]
-#[diesel(table_name = 'simulation_frames')]
+#[derive(Clone, Insertable, Queryable, Serialize)]
+#[diesel(table_name = schema::simulation_frames)]
 pub struct SimulationFrame {
-    pub id: i64,
-    pub sim_id: i64,
-    pub frame_no: i64,
-    pub environment: String,
-    pub drone: String,
+    pub id: i32,
+    pub sim_id: i32,
+    pub frame_no: i32,
+    pub environment: serde_json::Value,
+    pub drone: serde_json::Value,
 }
