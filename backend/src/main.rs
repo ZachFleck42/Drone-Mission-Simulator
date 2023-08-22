@@ -1,12 +1,20 @@
-#[allow(dead_code)]
+#![allow(dead_code, unused_comparisons)]
+mod db_utils;
 mod simulator;
+use db_utils::{get_pool, AppState, DbActor};
 use simulator::simulation::Frame;
 use simulator::utils::get_timestamp;
 
+use actix::SyncArbiter;
 use actix_cors::Cors;
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use diesel::{
+    r2d2::{ConnectionManager, Pool},
+    PgConnection,
+};
 use nanoid::nanoid;
 use serde::{Deserialize, Serialize};
+use std::env;
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 struct SimulationParameters {
@@ -37,6 +45,7 @@ async fn echo(req_body: String) -> impl Responder {
 
 #[post("/sim")]
 async fn sim(simulation_request: web::Json<SimulationParameters>) -> impl Responder {
+    // API checks to prevent misuse /abuse of resources
     if simulation_request.terrain_grid_size < 2
         || simulation_request.terrain_grid_size > 64
         || simulation_request.terrain_hostile_rate < 0
@@ -51,6 +60,7 @@ async fn sim(simulation_request: web::Json<SimulationParameters>) -> impl Respon
         return HttpResponse::BadRequest().json("Invalid params");
     }
 
+    // Build the simulation from the provided params
     let environment = simulator::env::Environment::new(
         simulation_request.terrain_grid_size,
         simulation_request.terrain_hostile_rate,
@@ -83,10 +93,17 @@ async fn sim(simulation_request: web::Json<SimulationParameters>) -> impl Respon
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    let db_url: String = env::var("DATABASE_URL").expect("Could not find DATABASE_URL");
+    let pool: Pool<ConnectionManager<PgConnection>> = get_pool(&db_url);
+    let db_addr = SyncArbiter::start(5, move || DbActor(pool.clone()));
+
     println!("Starting Web server!");
-    HttpServer::new(|| {
+    HttpServer::new(move || {
         App::new()
             .wrap(Cors::permissive())
+            .app_data(web::Data::new(AppState {
+                db: db_addr.clone(),
+            }))
             .service(hello)
             .service(echo)
             .service(sim)

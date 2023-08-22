@@ -11,7 +11,7 @@ services:
       - ./data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_DB=simulator
-      - POSTGRES_USER=user
+      - POSTGRES_USER=username
       - POSTGRES_PASSWORD=password
     ports:
       - 5432:5432
@@ -20,6 +20,8 @@ services:
     build: ./backend
     ports:
       - 8080:8080
+    enviornment:
+      - DATABASE_URL=postgres://username:password@database/simulator
     depends_on:
       - database
     restart: on-failure
