@@ -11,7 +11,7 @@ pub struct Simulation {
     pub current_frame: usize,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Clone)]
 pub struct Frame {
     pub frame_no: usize,
     pub environment: Environment,

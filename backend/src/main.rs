@@ -1,9 +1,9 @@
-#![allow(dead_code, unused_comparisons)]
+#![allow(dead_code)]
 mod models;
 mod schema;
 mod services;
 mod simulator;
-use services::{echo, hello, sim};
+use services::sim;
 
 use actix_cors::Cors;
 use actix_web::{web, App, HttpServer};
@@ -11,13 +11,12 @@ use diesel::{
     r2d2::{ConnectionManager, Pool},
     PgConnection,
 };
-use std::env;
 
 type DbPool = Pool<ConnectionManager<PgConnection>>;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let db_url: String = env::var("DATABASE_URL").expect("Could not find DATABASE_URL");
+    let db_url: String = std::env::var("DATABASE_URL").expect("Could not find DATABASE_URL");
     let manager: ConnectionManager<PgConnection> = ConnectionManager::<PgConnection>::new(db_url);
     let pool = Pool::builder()
         .build(manager)
@@ -28,8 +27,6 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(Cors::permissive())
             .app_data(web::Data::new(pool.clone()))
-            .service(hello)
-            .service(echo)
             .service(sim)
     })
     .bind("0.0.0.0:8080")?

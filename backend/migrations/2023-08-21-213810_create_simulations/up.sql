@@ -7,13 +7,6 @@ CREATE TABLE simulations (
   hostile_rate SMALLINT NOT NULL,
   move_rate SMALLINT NOT NULL,
   drone_move_range SMALLINT NOT NULL,
-  drone_vis_range SMALLINT NOT NULL
+  drone_vis_range SMALLINT NOT NULL,
+  frames JSONB NOT NULL
 );
-
-CREATE TABLE simulation_frames (
-    id SERIAL PRIMARY KEY,
-    sim_id INT REFERENCES simulations(id) NOT NULL,
-    frame_no INT NOT NULL,
-    environment JSONB NOT NULL,
-    drone JSONB NOT NULL
-)
