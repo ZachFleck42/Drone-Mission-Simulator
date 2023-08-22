@@ -12,6 +12,7 @@ use diesel::{
     r2d2::{ConnectionManager, Pool},
     PgConnection,
 };
+use dotenvy::dotenv;
 use nanoid::nanoid;
 use serde::{Deserialize, Serialize};
 use std::env;
@@ -88,11 +89,19 @@ async fn sim(simulation_request: web::Json<SimulationParameters>) -> impl Respon
         frames: sim.run(),
     };
 
+    // Add simulation and parameters to simulations table
+
+    for frame in &response.frames {
+        // Add each frame from the simulation to the simulation_frames table
+    }
+
     return HttpResponse::Ok().json(response);
 }
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    dotenv().ok();
+
     let db_url: String = env::var("DATABASE_URL").expect("Could not find DATABASE_URL");
     let pool: Pool<ConnectionManager<PgConnection>> = get_pool(&db_url);
     let db_addr = SyncArbiter::start(5, move || DbActor(pool.clone()));
