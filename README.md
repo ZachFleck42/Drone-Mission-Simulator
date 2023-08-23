@@ -3,6 +3,10 @@ A Rust program that dynamically generates simulations of a drone searching for /
 <br>
 
 ## Installation:
+You can try it out without installation here: https://zfleck-drone-sim.web.app/
+
+To install and run locally:
+
 1. Run ```docker-compose up``` in the directory and wait for containers to start.
 2. Application is now running. View the UI at http://localhost:3000 or send API requests directly to http://localhost:8080/sim<br>
 
