@@ -7,6 +7,8 @@ A Rust program that dynamically generates simulations of a drone searching for /
 2. Application is now running. View the UI at http://localhost:3000 or send API requests directly to http://localhost:8080/sim<br>
 
 ## Usage / Tips:
-Click & drag scroll on the 3D simulation to pan the camera; hold shift + click & drag to move. Scroll to zoom in/out.
+See the tooltips next to each input field for a description of what each parameter will change.
+
+Click & drag on the 3D simulation to pan the camera; hold shift + click & drag to move. Scroll to zoom in/out.
 
 You can double-click any simulation in the history tab to set it as the active simulation.
